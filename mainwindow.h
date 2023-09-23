@@ -6,6 +6,9 @@
 #include "keyboard.h"
 #include <QGridLayout>
 #include <QScroller>
+#include <pi2c.h>
+#include <ADS1263.h>
+#include <DEV_Config.h>
 
 namespace Ui {
 class MainWindow;
@@ -128,6 +131,7 @@ private slots:
     int cut_check();
     void test_menu();
     void sig_button();
+    void accle(ulong,ulong);
 
 
     void on_toolButton_7_clicked();
@@ -144,6 +148,55 @@ private slots:
     void on_comboBox_12_currentIndexChanged(int index);
 
     void on_pushButton_49_clicked();
+
+    void on_pushButton_50_clicked();
+
+    void on_comboBox_11_currentIndexChanged(int index);
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_7_clicked();
+
+    void on_pushButton_8_clicked();
+
+    void on_pushButton_9_clicked();
+
+    void on_pushButton_11_clicked();
+
+    void on_toolButton_4_clicked();
+
+    void on_pushButton_14_clicked();
+
+    void on_pushButton_13_clicked();
+
+    void on_pushButton_12_clicked();
+
+    void on_pushButton_17_clicked();
+
+    void on_pushButton_15_clicked();
+
+    void on_pushButton_16_clicked();
+
+    void on_pushButton_18_clicked();
+
+    void on_pushButton_19_clicked();
+
+    void on_toolButton_18_clicked();
+
+    void led_control(int);
+
+    void mot_forward(ulong);
+    void mot_backward(ulong);
+
+    void on_toolButton_21_clicked();
+
+    void on_toolButton_26_clicked();
+
+    void on_toolButton_25_clicked();
+
+    void on_toolButton_20_clicked();
+    void result_page();
+    void process_average();
 
 private:
     Ui::MainWindow *ui;

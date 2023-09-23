@@ -27,11 +27,17 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    keyboard.cpp
+    keyboard.cpp \
+    ADS1263.cpp \
+    DEV_Config.cpp \
+    pi2c.cpp
 
 HEADERS += \
         mainwindow.h \
-    keyboard.h
+    keyboard.h \
+    ADS1263.h \
+    DEV_Config.h \
+    pi2c.h
 
 FORMS += \
         mainwindow.ui \
@@ -41,3 +47,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+INCLUDEPATH    += /usr/local/include
+LIBS += -L/usr/local/lib -lwiringPi
