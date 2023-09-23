@@ -30,14 +30,16 @@ SOURCES += \
     keyboard.cpp \
     ADS1263.cpp \
     DEV_Config.cpp \
-    pi2c.cpp
+    pi2c.cpp \
+    regressionline.cpp
 
 HEADERS += \
         mainwindow.h \
     keyboard.h \
     ADS1263.h \
     DEV_Config.h \
-    pi2c.h
+    pi2c.h \
+    regressionline.h
 
 FORMS += \
         mainwindow.ui \

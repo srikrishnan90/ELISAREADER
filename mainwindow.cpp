@@ -1815,9 +1815,9 @@ void MainWindow::on_toolButton_20_clicked()
     {
         ui->tableWidget->setColumnWidth(i,65);
     }
-//    ui->tableWidget->setColumnCount(8);
-//    ui->tableWidget->setColumnWidth(0,50);
-//    ui->tableWidget->setColumnWidth(3,100);
+    //    ui->tableWidget->setColumnCount(8);
+    //    ui->tableWidget->setColumnWidth(0,50);
+    //    ui->tableWidget->setColumnWidth(3,100);
 
     double len = std::ceil(double(total)/8);
     int length=int(len);
@@ -1997,4 +1997,29 @@ void MainWindow::process_average()
             abs_avg[i]=abs_avg[i+1]=(abs_avg[i]+abs_avg[i+1])/2;
     }
 
+}
+
+void MainWindow::on_toolButton_30_clicked()
+{
+    const int count = 10;
+    double x_conc[count] = {0,2,5,10,15,20,25,30,35,40};
+    double y_abs[count] = {0.012,0.2,0.6,1.2,1.5,1.9,2.4,2.6,2.9,3.1};
+
+
+    RegressionLine::Points pnts;
+
+    for (int i = 0; i < count; i++)
+    {
+        pnts[x_conc[i]] = y_abs[i];
+    }
+
+    RegressionLine myLine(pnts);
+
+    qDebug() << "Slope = " << myLine.slope() << endl;
+    qDebug() << "yIntercept = " << myLine.yIntercept() << endl;
+    qDebug() << "Regression Coefficient = " << myLine.regressionCoefficient() << endl;
+
+    double y=2.5;
+    double x=(y-myLine.yIntercept())/myLine.slope();
+    qDebug()<<x;
 }

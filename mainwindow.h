@@ -9,6 +9,7 @@
 #include <pi2c.h>
 #include <ADS1263.h>
 #include <DEV_Config.h>
+#include "regressionline.h"
 
 namespace Ui {
 class MainWindow;
@@ -197,6 +198,8 @@ private slots:
     void on_toolButton_20_clicked();
     void result_page();
     void process_average();
+
+    void on_toolButton_30_clicked();
 
 private:
     Ui::MainWindow *ui;
