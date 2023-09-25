@@ -3974,7 +3974,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>ALN</string>
+       <string>LN</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_247">
@@ -4006,7 +4006,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>ALG</string>
+       <string>LOG</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_248">
@@ -4038,7 +4038,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>LOG</string>
+       <string>SQRT</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_249">
@@ -4102,7 +4102,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>-</string>
+       <string>ALN</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_251">
@@ -4134,7 +4134,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>+</string>
+       <string>ALG</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_252">
@@ -4166,7 +4166,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>/</string>
+       <string>)</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_253">
@@ -4198,7 +4198,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>*</string>
+       <string>(</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_254">
@@ -4230,7 +4230,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>)</string>
+       <string>-</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_255">
@@ -4262,7 +4262,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>(</string>
+       <string>+</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_257">
@@ -4294,7 +4294,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>%</string>
+       <string>*</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_256">
@@ -4322,7 +4322,7 @@ color:rgb(255, 255, 255);
 }</string>
       </property>
       <property name="text">
-       <string>.</string>
+       <string>/</string>
       </property>
      </widget>
     </widget>

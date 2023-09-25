@@ -2023,3 +2023,28 @@ void MainWindow::on_toolButton_30_clicked()
     double x=(y-myLine.yIntercept())/myLine.slope();
     qDebug()<<x;
 }
+
+void MainWindow::on_toolButton_31_clicked()
+{
+    QString str;
+    QSqlQuery Query;
+    Query.prepare("select cutoff FROM tests WHERE name = :bname");
+    Query.bindValue(":bname", btn_name);
+    Query.exec();
+    while(Query.next())
+    {
+        str=Query.value("cutoff").toString();
+    }
+    str.replace("ABS","Math.abs");
+    str.replace("LOG","0.434294482*Math.log");
+    str.replace("ALG(","Math.pow(10,");
+    str.replace("ALN","Math.exp");
+    str.replace("LN","Math.log");
+    str.replace("SQRT","Math.sqrt");
+
+    QJSEngine parsexpression;
+    double result=parsexpression.evaluate(str).toNumber();
+    qDebug()<<result;
+
+
+}
