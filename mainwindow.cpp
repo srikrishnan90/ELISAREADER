@@ -2001,11 +2001,29 @@ void MainWindow::process_result_multistandard()
     int start=blank+nc+pc+lc+cc;
     int end=blank+nc+pc+lc+cc+total_cal;
     int graph=0;
-    double test[8]={0.150, 0.5, 1, 1.5, 2 , 0.1, 1.3, 2.5};//test conc
+
+    double test[8]={2, 1.5, 1, 0.5, 0.15 , 0.1, 1.3, 2.5};//test conc
     for(int i=0;i<8;i++)//test conc
     {
         abs_avg[i]=test[i];
     }
+
+    QString absstr[10]={"abs1","abs2","abs3","abs4","abs5","abs6","abs7","abs8","abs9","abs10"};
+    QString constr[10]={"conc1","conc2","conc3","conc4","conc5","conc6","conc7","conc8","conc9","conc10"};
+    QSqlQuery Query;
+    Query.prepare("select * FROM tests WHERE name = :bname");
+    Query.bindValue(":bname", btn_name);
+    Query.exec();
+    while(Query.next())
+    {
+        graph=Query.value("graph").toInt();
+        for(int i=0;i<nostd;i++)
+        {
+            y_abs[i]=Query.value(absstr[i]).toDouble();
+            x_conc[i]=Query.value(constr[i]).toDouble();
+        }
+    }
+
     if(cal!=0)//take cal abs from new reading
     {
         for(int i=start,j=0;i<end;i++,j++)
@@ -2015,24 +2033,7 @@ void MainWindow::process_result_multistandard()
                 i++;
         }
     }
-    else//take cal abs from saved reading
-    {
-        QString absstr[10]={"abs1","abs2","abs3","abs4","abs5","abs6","abs7","abs8","abs9","abs10"};
-        QString constr[10]={"conc1","conc2","conc3","conc4","conc5","conc6","conc7","conc8","conc9","conc10"};
-        QSqlQuery Query;
-        Query.prepare("select * FROM tests WHERE name = :bname");
-        Query.bindValue(":bname", btn_name);
-        Query.exec();
-        while(Query.next())
-        {
-            graph=Query.value("graph").toInt();
-            for(int i=0;i<nostd;i++)
-            {
-                y_abs[i]=Query.value(absstr[i]).toDouble();
-                x_conc[i]=Query.value(constr[i]).toDouble();
-            }
-        }
-    }
+
     int inc=0,dec=0;
     for(int i=0;i<nostd-1;i++)
     {
@@ -2080,6 +2081,7 @@ void MainWindow::process_result_multistandard()
 QString MainWindow::calculate_regression(double val, int graph)
 {
     RegressionLine::Points pnts;
+    QString result;
     if(graph==0)//point to point
     {
         double min=y_abs[0],max=y_abs[0];
@@ -2103,34 +2105,22 @@ QString MainWindow::calculate_regression(double val, int graph)
             {
                 if(min_index==0)
                 {
-                    if(x_conc[0]<x_conc[nostd-1])
-                        return "<"+QString::number(x_conc[0],'f',3);
-                    else
-                        return ">"+QString::number(x_conc[0],'f',3);
+                    return (x_conc[0]<x_conc[nostd-1]) ? "<"+QString::number(x_conc[0],'f',3) : ">"+QString::number(x_conc[0],'f',3);
                 }
                 else
                 {
-                    if(x_conc[0]<x_conc[nostd-1])
-                        return ">"+QString::number(x_conc[nostd-1],'f',3);
-                    else
-                        return "<"+QString::number(x_conc[nostd-1],'f',3);
+                    return (x_conc[0]<x_conc[nostd-1]) ? ">"+QString::number(x_conc[nostd-1],'f',3) : "<"+QString::number(x_conc[nostd-1],'f',3);
                 }
             }
             else
             {
                 if(max_index==0)
                 {
-                    if(x_conc[0]<x_conc[nostd-1])
-                        return "<"+QString::number(x_conc[0],'f',3);
-                    else
-                        return ">"+QString::number(x_conc[0],'f',3);
+                    return (x_conc[0]<x_conc[nostd-1]) ? "<"+QString::number(x_conc[0],'f',3) : ">"+QString::number(x_conc[0],'f',3);
                 }
                 else
                 {
-                    if(x_conc[0]<x_conc[nostd-1])
-                        return ">"+QString::number(x_conc[nostd-1],'f',3);
-                    else
-                        return "<"+QString::number(x_conc[nostd-1],'f',3);
+                    return (x_conc[0]<x_conc[nostd-1]) ? ">"+QString::number(x_conc[nostd-1],'f',3) : "<"+QString::number(x_conc[nostd-1],'f',3);
                 }
             }
         }
@@ -2146,8 +2136,7 @@ QString MainWindow::calculate_regression(double val, int graph)
                 }
             }
             RegressionLine myLine(pnts);
-            double result=(val-myLine.yIntercept())/myLine.slope();
-            return QString::number(result,'f',3);
+            return QString::number((val-myLine.yIntercept())/myLine.slope(),'f',3);
         }
     }
     else// linear
@@ -2157,8 +2146,7 @@ QString MainWindow::calculate_regression(double val, int graph)
             pnts[x_conc[i]] = y_abs[i];
         }
         RegressionLine myLine(pnts);
-        double result=(val-myLine.yIntercept())/myLine.slope();
-        return QString::number(result,'f',3);
+        return QString::number((val-myLine.yIntercept())/myLine.slope(),'f',3);
     }
 }
 
@@ -2240,3 +2228,4 @@ void MainWindow::on_toolButton_33_clicked()
 {
     on_toolButton_32_clicked();
 }
+
