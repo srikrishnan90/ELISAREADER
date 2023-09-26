@@ -201,12 +201,16 @@ private slots:
     void on_toolButton_20_clicked();
     void result_page();
     void process_average();
-    void process_result();
-    QString calculate_regression(double*, double*, double, int);
+    void process_result_multistandard();
+    QString calculate_regression(double, int);
 
     void on_toolButton_30_clicked();
 
     void on_toolButton_31_clicked();
+
+    void on_toolButton_32_clicked();
+
+    void on_toolButton_33_clicked();
 
 private:
     Ui::MainWindow *ui;

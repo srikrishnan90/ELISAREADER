@@ -79,7 +79,7 @@
      <string notr="true">background:rgba(255,255,255,1)</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QScrollArea" name="scrollArea">
@@ -6298,6 +6298,19 @@
         </rect>
        </property>
       </widget>
+      <widget class="QToolButton" name="toolButton_32">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>130</width>
+         <height>60</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Accept Test</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QToolButton" name="toolButton_22">
       <property name="geometry">
@@ -6389,6 +6402,19 @@
          <width>131</width>
          <height>41</height>
         </rect>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="toolButton_33">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>130</width>
+         <height>60</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Accept Test</string>
        </property>
       </widget>
      </widget>

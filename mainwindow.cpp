@@ -10,11 +10,11 @@
 static int test_mode=0;
 static int test_entry=0;
 static QString btn_name="";
-static int blank=0,cal=0,dup_cal=1,nc=0,pc=0,cc=0,lc=0,samp=0,dup_samp=1,total=0,total_cal=0,total_samp=0;
+static int blank=0,cal=0,dup_cal=1,nc=0,pc=0,cc=0,lc=0,samp=0,dup_samp=1,total=0,total_cal=0,total_samp=0,nostd=0;
 static int led_freq=10000;
 static double offset[8], blnk[8], od[8];
 static int pri_wave=0,sec_wave=0;
-static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[96];
+static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[96],x_conc[10],y_abs[10];
 static QString dis[96],res[96];
 static Pi2c arduino(7);
 
@@ -602,9 +602,6 @@ void MainWindow::on_toolButton_12_clicked()
 
     QPushButton* concb[] = { ui->c1,ui->c2,ui->c3,ui->c4,ui->c5,ui->c6,ui->c7,ui->c8,ui->c9,ui->c10};
     QPushButton* absb[] = { ui->a1,ui->a2,ui->a3,ui->a4,ui->a5,ui->a6,ui->a7,ui->a8,ui->a9,ui->a10};
-
-    QString calbindstring[10]={":c1",":c2",":c3",":c4",":c5",":c6",":c7",":c8",":c9",":c10"};
-    QString absbindstring[10]={":a1",":a2",":a3",":a4",":a5",":a6",":a7",":a8",":a9",":a10"};
     QString qry;
     if(test_entry==0)
         qry="insert into tests(name,mode,pri,sec,std,graph,axis,norl,norh,unit,conc1,conc2,conc3,conc4,conc5,conc6,conc7,conc8,conc9,conc10,abs1,abs2,abs3,abs4,abs5,abs6,abs7,abs8,abs9,abs10) values(:name,:mode,:pri,:sec,:std,:graph,:axis,:norl,:norh,:unit,:c1,:c2,:c3,:c4,:c5,:c6,:c7,:c8,:c9,:c10,:a1,:a2,:a3,:a4,:a5,:a6,:a7,:a8,:a9,:a10)";
@@ -648,22 +645,8 @@ void MainWindow::on_toolButton_12_clicked()
     insertQuery.bindValue(":a8",abs[7]);
     insertQuery.bindValue(":a9",abs[8]);
     insertQuery.bindValue(":a10",abs[9]);
+    insertQuery.exec();
 
-
-    /*for(int i=0;i<10;i++)
-    {
-        insertQuery.bindValue(calbindstring[i],cal[i]);
-        qDebug()<<calbindstring[i]<<cal[i];
-        insertQuery.bindValue(absbindstring[i],abs[i]);
-    }*/
-
-
-    //insertQuery.exec();
-    if (!insertQuery.exec())
-    {
-        qDebug() << "Failed to insert data into the database!";
-        qDebug() << "Error details:" << insertQuery.lastError().text();
-    }
 
     //update test menu
     while(mainLayout->count() > 0)
@@ -683,6 +666,7 @@ void MainWindow::on_toolButton_8_clicked()
 {
     blank=cal=nc=pc=cc=lc=samp=total=total_cal=total_samp=0;
     dup_cal=dup_samp=1;
+    double abs1=0,abs2=0,cutabs=0;
     ui->stackedWidget->setCurrentIndex(5);
     ui->stackedWidget->raise();
     ui->label_4->setText(btn_name);
@@ -699,19 +683,22 @@ void MainWindow::on_toolButton_8_clicked()
     ui->textBrowser_6->setText("");
 
     QSqlQuery Query;
-    Query.prepare("select mode,std,nc,pc,lc,cc,pri,sec FROM tests WHERE name = :bname");
+    Query.prepare("select mode,std,abs1,abs2,nc,pc,lc,cc,pri,sec,cutabs FROM tests WHERE name = :bname");
     Query.bindValue(":bname", btn_name);
     Query.exec();
     while(Query.next())
     {
         test_mode=Query.value("mode").toInt();
-        cal=Query.value("std").toInt();
+        nostd=cal=Query.value("std").toInt();
+        abs1=Query.value("abs1").toDouble();
+        abs2=Query.value("abs2").toDouble();
         nc=Query.value("nc").toInt();
         pc=Query.value("pc").toInt();
         lc=Query.value("lc").toInt();
         cc=Query.value("cc").toInt();
         pri_wave=Query.value("pri").toInt();
         sec_wave=Query.value("sec").toInt();
+        cutabs=Query.value("cutabs").toDouble();
     }
     led_control(pri_wave);
 
@@ -724,39 +711,15 @@ void MainWindow::on_toolButton_8_clicked()
     }
     if(test_mode==2)
     {
-        Query.prepare("select std, abs1, abs2 FROM tests WHERE name = :bname");
-        Query.bindValue(":bname", btn_name);
-        Query.exec();
-        double abs1=0,abs2=0;
-        while(Query.next())
-        {
-            cal=Query.value("std").toInt();
-            abs1=Query.value("abs1").toDouble();
-            abs2=Query.value("abs2").toDouble();
-        }
         if(abs1==0.0 && abs2==0.0)
         {
             ui->label_15->setDisabled(true);
             ui->comboBox_11->setDisabled(true);
         }
         ui->label_15->setText("Cal.");
-
     }
     if(test_mode==3)
     {
-        Query.prepare("select nc, pc, lc, cc, cutabs FROM tests WHERE name = :bname");
-        Query.bindValue(":bname", btn_name);
-        Query.exec();
-        double cutabs=0;
-        while(Query.next())
-        {
-            nc=Query.value("nc").toInt();
-            pc=Query.value("pc").toInt();
-            lc=Query.value("lc").toInt();
-            cc=Query.value("cc").toInt();
-            cutabs=Query.value("cutabs").toDouble();
-
-        }
         if(!(cutabs>0.0))
         {
             ui->label_15->setDisabled(true);
@@ -1221,7 +1184,14 @@ void MainWindow::update_sample_page()
     total_cal=cal*dup_cal;
     total_samp=samp*dup_samp;
     total=blank+nc+pc+lc+cc+total_cal+total_samp;
-    qDebug()<<total_cal<<total_samp<<total;
+    if(total==0)
+    {
+        ui->toolButton_18->setDisabled(true);
+    }
+    else
+    {
+        ui->toolButton_18->setDisabled(false);
+    }
     if (total>96)
     {
         total=96;
@@ -1338,6 +1308,8 @@ void MainWindow::on_comboBox_11_currentIndexChanged(int index)
     if(index==1)
     {
         nc=pc=lc=cc=cal=0;
+        ui->toolButton_32->setDisabled(true);
+        ui->toolButton_33->setDisabled(true);
     }
     else
     {
@@ -1353,6 +1325,8 @@ void MainWindow::on_comboBox_11_currentIndexChanged(int index)
             lc=Query.value("lc").toInt();
             cc=Query.value("cc").toInt();
         }
+        ui->toolButton_32->setDisabled(false);
+        ui->toolButton_33->setDisabled(false);
     }
     update_sample_page();
 }
@@ -1747,6 +1721,8 @@ void MainWindow::on_toolButton_18_clicked()
             for(int k=0;k<8;k++)
                 fin_res[i][k]=pri_res[i][k]-sec_res[i][k];
     }
+    ui->toolButton_32->setDisabled(false);
+    ui->toolButton_33->setDisabled(false);
     result_page();
 }
 
@@ -1907,8 +1883,7 @@ void MainWindow::result_page()
     }
     process_average();
     if(test_mode==2)
-        process_result();
-
+        process_result_multistandard();
     for(int i=0;i<total;i++)
     {
         samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_avg[i],'f', 3));
@@ -2021,128 +1996,149 @@ void MainWindow::process_average()
 
 }
 
-void MainWindow::process_result()
+void MainWindow::process_result_multistandard()
 {
-
-        double x_conc[96], y_abs[96];
-        int start=blank+nc+pc+lc+cc;
-        int end=blank+nc+pc+lc+cc+total_cal;
-        int graph=0;
-        double test[8]={0.2,0.5,1,1.5,2,0.1,1.3,2.5};//test conc
-        for(int i=0;i<8;i++)//test conc
-        {
-            abs_avg[i]=test[i];
-        }
+    int start=blank+nc+pc+lc+cc;
+    int end=blank+nc+pc+lc+cc+total_cal;
+    int graph=0;
+    double test[8]={0.150, 0.5, 1, 1.5, 2 , 0.1, 1.3, 2.5};//test conc
+    for(int i=0;i<8;i++)//test conc
+    {
+        abs_avg[i]=test[i];
+    }
+    if(cal!=0)//take cal abs from new reading
+    {
         for(int i=start,j=0;i<end;i++,j++)
         {
             y_abs[j]=abs_avg[i];
             if(dup_cal==2)
                 i++;
         }
-
-        int inc=0,dec=0;
-        for(int i=0;i<cal-1;i++)
+    }
+    else//take cal abs from saved reading
+    {
+        QString absstr[10]={"abs1","abs2","abs3","abs4","abs5","abs6","abs7","abs8","abs9","abs10"};
+        QString constr[10]={"conc1","conc2","conc3","conc4","conc5","conc6","conc7","conc8","conc9","conc10"};
+        QSqlQuery Query;
+        Query.prepare("select * FROM tests WHERE name = :bname");
+        Query.bindValue(":bname", btn_name);
+        Query.exec();
+        while(Query.next())
         {
-            if(!(y_abs[i]<y_abs[i+1]))
-                inc=1;
-            if(!(y_abs[i]>y_abs[i+1]))
-                dec=1;
-        }
-        if(inc==1 && dec==1)
-        {
-            ui->textBrowser_5->setText("Invalid");
-            ui->textBrowser_6->setText("Invalid");
-            return;
-        }
-        else
-        {
-
-            QString constr[10]={"conc1","conc2","conc3","conc4","conc5","conc6","conc7","conc8","conc9","conc10"};
-            QSqlQuery Query;
-            Query.prepare("select * FROM tests WHERE name = :bname");
-            Query.bindValue(":bname", btn_name);
-            Query.exec();
-            while(Query.next())
+            graph=Query.value("graph").toInt();
+            for(int i=0;i<nostd;i++)
             {
-                graph=Query.value("graph").toInt();
-                for(int i=0;i<cal;i++)
-                {
-                    x_conc[i]=Query.value(constr[i]).toDouble();
-                }
-
-            }
-            int start=blank+nc+pc+lc+cc;
-            int end=blank+nc+pc+lc+cc+total_cal;
-            for(int i=start,j=0;i<end;i++,j++)
-            {
-                res[i]=QString::number(x_conc[j],'f',3);
-                if(dup_cal==2)
-                {
-                    i++;
-                    res[i]=QString::number(x_conc[j],'f',3);
-                }
-            }
-            start=blank+nc+pc+lc+cc+total_cal;
-            end=blank+nc+pc+lc+cc+total_cal+total_samp;
-            for(int i=start;i<end;i++)
-            {
-                res[i]=calculate_regression(x_conc, y_abs, abs_avg[i], graph);
-                if(dup_samp==2)
-                {
-                    i++;
-                    res[i]=res[i-1];
-                }
+                y_abs[i]=Query.value(absstr[i]).toDouble();
+                x_conc[i]=Query.value(constr[i]).toDouble();
             }
         }
     }
+    int inc=0,dec=0;
+    for(int i=0;i<nostd-1;i++)
+    {
+        if(!(y_abs[i]<y_abs[i+1]))
+            inc=1;
+        if(!(y_abs[i]>y_abs[i+1]))
+            dec=1;
+    }
+    if(inc==1 && dec==1)
+    {
+        ui->textBrowser_5->setText("Invalid");
+        ui->textBrowser_6->setText("Invalid");
+        ui->toolButton_32->setDisabled(true);
+        ui->toolButton_33->setDisabled(true);
+        return;
+    }
+    else
+    {
+        int start=blank+nc+pc+lc+cc;
+        int end=blank+nc+pc+lc+cc+total_cal;
+        for(int i=start,j=0;i<end;i++,j++)
+        {
+            res[i]=QString::number(x_conc[j],'f',3);
+            if(dup_cal==2)
+            {
+                i++;
+                res[i]=QString::number(x_conc[j],'f',3);
+            }
+        }
+        start=blank+nc+pc+lc+cc+total_cal;
+        end=blank+nc+pc+lc+cc+total_cal+total_samp;
+        for(int i=start;i<end;i++)
+        {
+            res[i]=calculate_regression(abs_avg[i], graph);
+            if(dup_samp==2)
+            {
+                i++;
+                res[i]=res[i-1];
+            }
+        }
+    }
+}
 
 
-QString MainWindow::calculate_regression(double *x_conc, double *y_abs, double val, int graph)
+QString MainWindow::calculate_regression(double val, int graph)
 {
     RegressionLine::Points pnts;
-
     if(graph==0)//point to point
     {
-
         double min=y_abs[0],max=y_abs[0];
-        int count=1;
-        for(int i=0;i<cal;i++)
+        int min_index=0,max_index=0;
+        for(int i=0;i<nostd;i++)
         {
             if(min>y_abs[i])
+            {
                 min=y_abs[i];
+                min_index=i;
+            }
             if(max<y_abs[i])
+            {
                 max=y_abs[i];
+                max_index=i;
+            }
         }
         if(val<min || val>max)
         {
-            for(int i=0;i<cal;i++)
+            if(val<min)
             {
-                if(val<y_abs[i])
+                if(min_index==0)
                 {
-                    count=i;
-                    break;
+                    if(x_conc[0]<x_conc[nostd-1])
+                        return "<"+QString::number(x_conc[0],'f',3);
+                    else
+                        return ">"+QString::number(x_conc[0],'f',3);
                 }
-            }
-            if(count==0)
-            {
-                if(x_conc[0]<x_conc[cal-1])
-                    return "<"+QString::number(x_conc[0],'f',3);
                 else
-                    return "<"+QString::number(x_conc[cal-1],'f',3);
+                {
+                    if(x_conc[0]<x_conc[nostd-1])
+                        return ">"+QString::number(x_conc[nostd-1],'f',3);
+                    else
+                        return "<"+QString::number(x_conc[nostd-1],'f',3);
+                }
             }
             else
             {
-                if(x_conc[0]>x_conc[cal-1])
-                    return ">"+QString::number(x_conc[0],'f',3);
+                if(max_index==0)
+                {
+                    if(x_conc[0]<x_conc[nostd-1])
+                        return "<"+QString::number(x_conc[0],'f',3);
+                    else
+                        return ">"+QString::number(x_conc[0],'f',3);
+                }
                 else
-                    return ">"+QString::number(x_conc[cal-1],'f',3);
+                {
+                    if(x_conc[0]<x_conc[nostd-1])
+                        return ">"+QString::number(x_conc[nostd-1],'f',3);
+                    else
+                        return "<"+QString::number(x_conc[nostd-1],'f',3);
+                }
             }
         }
         else
         {
-            for(int i=0;i<cal-1;i++)
+            for(int i=0;i<nostd-1;i++)
             {
-                if(val>=y_abs[i] && val<=y_abs[i+1])
+                if((val>=y_abs[i] && val<=y_abs[i+1]) || (val<=y_abs[i] && val>=y_abs[i+1]))
                 {
                     pnts[x_conc[i]]=y_abs[i];
                     pnts[x_conc[i+1]]=y_abs[i+1];
@@ -2156,7 +2152,7 @@ QString MainWindow::calculate_regression(double *x_conc, double *y_abs, double v
     }
     else// linear
     {
-        for (int i = 0; i < cal; i++)
+        for (int i = 0; i < nostd; i++)
         {
             pnts[x_conc[i]] = y_abs[i];
         }
@@ -2171,21 +2167,15 @@ void MainWindow::on_toolButton_30_clicked()
     const int count = 10;
     double x_conc[count] = {0,2,5,10,15,20,25,30,35,40};
     double y_abs[count] = {0.012,0.2,0.6,1.2,1.5,1.9,2.4,2.6,2.9,3.1};
-
-
     RegressionLine::Points pnts;
-
     for (int i = 0; i < count; i++)
     {
         pnts[x_conc[i]] = y_abs[i];
     }
-
     RegressionLine myLine(pnts);
-
     qDebug() << "Slope = " << myLine.slope() << endl;
     qDebug() << "yIntercept = " << myLine.yIntercept() << endl;
     qDebug() << "Regression Coefficient = " << myLine.regressionCoefficient() << endl;
-
     double y=2.5;
     double x=(y-myLine.yIntercept())/myLine.slope();
     qDebug()<<x;
@@ -2208,10 +2198,45 @@ void MainWindow::on_toolButton_31_clicked()
     str.replace("ALN","Math.exp");
     str.replace("LN","Math.log");
     str.replace("SQRT","Math.sqrt");
-
     QJSEngine parsexpression;
     double result=parsexpression.evaluate(str).toNumber();
     qDebug()<<result;
 
 
+}
+
+void MainWindow::on_toolButton_32_clicked()
+{
+    double y_abs[10];
+    int start=blank+nc+pc+lc+cc;
+    int end=blank+nc+pc+lc+cc+total_cal;
+    for(int i=start,j=0;i<end;i++,j++)
+    {
+        y_abs[j]=abs_avg[i];
+        if(dup_cal==2)
+            i++;
+    }
+    QString qry;
+    qry="update tests set abs1=:a1,abs2=:a2,abs3=:a3,abs4=:a4,abs5=:a5, abs6=:a6, abs7=:a7, abs8=:a8, abs9=:a9, abs10=:a10 where name=:name";
+    QSqlQuery Query;
+    Query.prepare(qry);
+    Query.bindValue(":name",btn_name);
+    Query.bindValue(":a1",y_abs[0]);
+    Query.bindValue(":a2",y_abs[1]);
+    Query.bindValue(":a3",y_abs[2]);
+    Query.bindValue(":a4",y_abs[3]);
+    Query.bindValue(":a5",y_abs[4]);
+    Query.bindValue(":a6",y_abs[0]);
+    Query.bindValue(":a7",y_abs[1]);
+    Query.bindValue(":a8",y_abs[2]);
+    Query.bindValue(":a9",y_abs[3]);
+    Query.bindValue(":a10",y_abs[4]);
+    Query.exec();
+    ui->toolButton_32->setDisabled(true);
+    ui->toolButton_33->setDisabled(true);
+}
+
+void MainWindow::on_toolButton_33_clicked()
+{
+    on_toolButton_32_clicked();
 }
