@@ -202,7 +202,7 @@ void keyboard::on_pushButton_76_clicked()
 
 void keyboard::on_pushButton_100_clicked()
 {
-    ui->lineEdit->setText(ui->lineEdit->text()+"&");
+    ui->lineEdit->setText(ui->lineEdit->text()+ui->pushButton_100->text());
 }
 
 void keyboard::on_pushButton_77_clicked()

@@ -202,6 +202,7 @@ private slots:
     void result_page();
     void process_average();
     void process_result_multistandard();
+    void process_result_cutoff();
     QString calculate_regression(double, int);
 
     void on_toolButton_30_clicked();

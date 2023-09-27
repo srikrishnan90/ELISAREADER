@@ -14,7 +14,7 @@ static int blank=0,cal=0,dup_cal=1,nc=0,pc=0,cc=0,lc=0,samp=0,dup_samp=1,total=0
 static int led_freq=10000;
 static double offset[8], blnk[8], od[8];
 static int pri_wave=0,sec_wave=0;
-static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[96],x_conc[10],y_abs[10];
+static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0;
 static QString dis[96],res[96];
 static Pi2c arduino(7);
 
@@ -745,10 +745,10 @@ void MainWindow::on_toolButton_14_clicked()
     int pc=ui->pushButton_41->text().toInt();
     int lc=ui->pushButton_42->text().toInt();
     int cc=ui->pushButton_67->text().toInt();
-    double ncq=ui->pushButton_64->text().toDouble();
-    double pcq=ui->pushButton_65->text().toDouble();
-    double lcq=ui->pushButton_66->text().toDouble();
-    double ccq=ui->pushButton_68->text().toDouble();
+    QString ncq=ui->pushButton_64->text();
+    QString pcq=ui->pushButton_65->text();
+    QString lcq=ui->pushButton_66->text();
+    QString ccq=ui->pushButton_68->text();
     QString cut=ui->pushButton_43->text();
     int thresh=ui->comboBox_7->currentIndex();
     double pos=ui->pushButton_44->text().toDouble();
@@ -1086,8 +1086,8 @@ void MainWindow::on_toolButton_6_clicked()
         on_toolButton_11_clicked();
         ui->pushButton_39->setDisabled(true);
         int pri=0,sec=0,nc=0,pc=0,lc=0,cc=0,thresh=0;
-        double ncq=0,pcq=0,lcq=0,ccq=0,pos=0,neg=0,grey=0,cuta=0;;
-        QString cut;
+        double pos=0,neg=0,grey=0,cuta=0;;
+        QString cut,ncq,pcq,lcq,ccq;
 
         Query.prepare("select * FROM tests WHERE name = :bname");
         Query.bindValue(":bname", btn_name);
@@ -1101,10 +1101,10 @@ void MainWindow::on_toolButton_6_clicked()
             lc=Query.value("lc").toInt();
             cc=Query.value("cc").toInt();
             thresh=Query.value("threshold").toInt();
-            ncq=Query.value("ncqc").toDouble();
-            pcq=Query.value("pcqc").toDouble();
-            lcq=Query.value("lcqc").toDouble();
-            ccq=Query.value("ccqc").toDouble();
+            ncq=Query.value("ncqc").toString();
+            pcq=Query.value("pcqc").toString();
+            lcq=Query.value("lcqc").toString();
+            ccq=Query.value("ccqc").toString();
             pos=Query.value("pos").toDouble();
             neg=Query.value("neg").toDouble();
             grey=Query.value("grey").toDouble();
@@ -1119,10 +1119,10 @@ void MainWindow::on_toolButton_6_clicked()
         ui->pushButton_41->setText(QString::number(pc));
         ui->pushButton_42->setText(QString::number(lc));
         ui->pushButton_67->setText(QString::number(cc));
-        ui->pushButton_64->setText(QString::number(ncq));
-        ui->pushButton_65->setText(QString::number(pcq));
-        ui->pushButton_66->setText(QString::number(lcq));
-        ui->pushButton_68->setText(QString::number(ccq));
+        ui->pushButton_64->setText(ncq);
+        ui->pushButton_65->setText(pcq);
+        ui->pushButton_66->setText(lcq);
+        ui->pushButton_68->setText(ccq);
         ui->pushButton_43->setText(cut);
         ui->comboBox_7->setCurrentIndex(thresh);
         ui->pushButton_44->setText(QString::number(pos));
@@ -1883,7 +1883,17 @@ void MainWindow::result_page()
     }
     process_average();
     if(test_mode==2)
+    {
         process_result_multistandard();
+        ui->tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem("Result"));
+    }
+    if(test_mode==3)
+    {
+        process_result_cutoff();
+        ui->tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem("S/Co"));
+    }
+
+
     for(int i=0;i<total;i++)
     {
         samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_avg[i],'f', 3));
@@ -2054,7 +2064,7 @@ void MainWindow::process_result_multistandard()
     {
         int start=blank+nc+pc+lc+cc;
         int end=blank+nc+pc+lc+cc+total_cal;
-        for(int i=start,j=0;i<end;i++,j++)
+        for(int i=start,j=0;i<end;i++,j++)// copying standard conc to the result array
         {
             res[i]=QString::number(x_conc[j],'f',3);
             if(dup_cal==2)
@@ -2065,7 +2075,7 @@ void MainWindow::process_result_multistandard()
         }
         start=blank+nc+pc+lc+cc+total_cal;
         end=blank+nc+pc+lc+cc+total_cal+total_samp;
-        for(int i=start;i<end;i++)
+        for(int i=start;i<end;i++)// copying result conc to the result array
         {
             res[i]=calculate_regression(abs_avg[i], graph);
             if(dup_samp==2)
@@ -2076,6 +2086,184 @@ void MainWindow::process_result_multistandard()
         }
     }
 }
+
+void MainWindow::process_result_cutoff()
+{
+    int controls=nc+pc+lc+cc;
+    double abs=0,ncabs=0,pcabs=0,lcabs=0,ccabs=0;
+    QString msg="";
+    QJSEngine parsexpression;
+
+    double test[8]={0.1, 0.1, 1, 0.15, 0.25 ,0.35, 0.5, 2};//test conc
+    for(int i=0;i<8;i++)//test conc
+    {
+        abs_avg[i]=test[i];
+    }
+
+    if(controls!=0)//take cutabs from new reading
+    {
+        QString ncqc,pcqc,lcqc,ccqc,qcval,qcstring;
+        QRegExp rx("(\\>|\\<|\\=)");
+        QStringList qc;
+        QSqlQuery Query;
+        Query.prepare("select * FROM tests WHERE name = :bname");
+        Query.bindValue(":bname", btn_name);
+        Query.exec();
+        while(Query.next())
+        {
+            ncqc=Query.value("ncqc").toString();
+            pcqc=Query.value("pcqc").toString();
+            lcqc=Query.value("lcqc").toString();
+            ccqc=Query.value("ccqc").toString();
+        }
+
+        if(nc>0)
+        {
+            qcval=ncqc;
+            int start=blank;
+            int end=blank+nc;
+            for(int i=start;i<end;i++)
+                ncabs=abs=abs_avg[i];
+            qc=qcval.split(rx);
+            if(qc.last().toDouble()>0.0)
+            {
+                qcstring="abscon1con2qc";
+                qcstring.replace("con1",QString(qcval[0]));
+                if(qc.length()==3)
+                    qcstring.replace("con2",QString(qcval[1]));
+                else
+                    qcstring.replace("con2","");
+                parsexpression.globalObject().setProperty("abs",abs);
+                parsexpression.globalObject().setProperty("qc",qc.last().toDouble());
+                if(!parsexpression.evaluate(qcstring).toBool())
+                    msg+="NC Failed";
+            }
+        }
+        if(pc>0)
+        {
+            qcval=pcqc;
+            int start=blank+nc;
+            int end=blank+nc+pc;
+            for(int i=start;i<end;i++)
+                pcabs=abs=abs_avg[i];
+            qc=qcval.split(rx);
+            if(qc.last().toDouble()>0.0)
+            {
+                qcstring="abscon1con2qc";
+                qcstring.replace("con1",QString(qcval[0]));
+                if(qc.length()==3)
+                    qcstring.replace("con2",QString(qcval[1]));
+                else
+                    qcstring.replace("con2","");
+                parsexpression.globalObject().setProperty("abs",abs);
+                parsexpression.globalObject().setProperty("qc",qc.last().toDouble());
+                if(!parsexpression.evaluate(qcstring).toBool())
+                    msg+="PC Failed";
+            }
+        }
+        if(lc>0)
+        {
+            qcval=lcqc;
+            int start=blank+nc+pc;
+            int end=blank+nc+pc+lc;
+            for(int i=start;i<end;i++)
+                lcabs=abs=abs_avg[i];
+            qc=qcval.split(rx);
+            if(qc.last().toDouble()>0.0)
+            {
+                qcstring="abscon1con2qc";
+                qcstring.replace("con1",QString(qcval[0]));
+                if(qc.length()==3)
+                    qcstring.replace("con2",QString(qcval[1]));
+                else
+                    qcstring.replace("con2","");
+                parsexpression.globalObject().setProperty("abs",abs);
+                parsexpression.globalObject().setProperty("qc",qc.last().toDouble());
+                if(!parsexpression.evaluate(qcstring).toBool())
+                    msg+="LC Failed";
+            }
+        }
+        if(cc>0)
+        {
+            qcval=ccqc;
+            int start=blank+nc+pc+lc;
+            int end=blank+nc+pc+lc+cc;
+            for(int i=start;i<end;i++)
+                ccabs=abs=abs_avg[i];
+            qc=qcval.split(rx);
+            if(qc.last().toDouble()>0.0)
+            {
+                qcstring="abscon1con2qc";
+                qcstring.replace("con1",QString(qcval[0]));
+                if(qc.length()==3)
+                    qcstring.replace("con2",QString(qcval[1]));
+                else
+                    qcstring.replace("con2","");
+                parsexpression.globalObject().setProperty("abs",abs);
+                parsexpression.globalObject().setProperty("qc",qc.last().toDouble());
+                if(!parsexpression.evaluate(qcstring).toBool())
+                    msg+="CC Failed";
+            }
+        }
+        if(msg.length()>1)
+        {
+            ui->textBrowser_5->setText(msg);
+            ui->textBrowser_6->setText(msg);
+            ui->toolButton_32->setDisabled(true);
+            ui->toolButton_33->setDisabled(true);
+            return;
+        }
+        else
+        {
+            QString str;
+            QSqlQuery Query;
+            Query.prepare("select cutoff FROM tests WHERE name = :bname");
+            Query.bindValue(":bname", btn_name);
+            Query.exec();
+            while(Query.next())
+            {
+                str=Query.value("cutoff").toString();
+            }
+            str.replace("ABS","Math.abs");
+            str.replace("LOG","0.434294482*Math.log");
+            str.replace("ALG(","Math.pow(10,");
+            str.replace("ALN","Math.exp");
+            str.replace("LN","Math.log");
+            str.replace("SQRT","Math.sqrt");
+            parsexpression.globalObject().setProperty("NC",ncabs);
+            parsexpression.globalObject().setProperty("PC",pcabs);
+            parsexpression.globalObject().setProperty("LC",lcabs);
+            parsexpression.globalObject().setProperty("CC",ccabs);
+            cutabs=parsexpression.evaluate(str).toNumber();
+            qDebug()<<cutabs;
+        }
+    }
+    else
+    {
+        QSqlQuery Query;
+        Query.prepare("select cutabs FROM tests WHERE name = :bname");
+        Query.bindValue(":bname", btn_name);
+        Query.exec();
+        while(Query.next())
+        {
+            cutabs=Query.value("cutabs").toDouble();
+        }
+        qDebug()<<cutabs;
+    }
+
+    int start=blank+nc+pc+lc+cc+total_cal;
+    int end=blank+nc+pc+lc+cc+total_cal+total_samp;
+    for(int i=start;i<end;i++)
+    {
+        res[i]=QString::number(abs_avg[i]/cutabs,'f',3);
+        if(dup_samp==2)
+        {
+            i++;
+            res[i]=res[i-1];
+        }
+    }
+}
+
 
 
 QString MainWindow::calculate_regression(double val, int graph)
@@ -2189,39 +2377,45 @@ void MainWindow::on_toolButton_31_clicked()
     QJSEngine parsexpression;
     double result=parsexpression.evaluate(str).toNumber();
     qDebug()<<result;
-
-
 }
 
 void MainWindow::on_toolButton_32_clicked()
 {
-    double y_abs[10];
-    int start=blank+nc+pc+lc+cc;
-    int end=blank+nc+pc+lc+cc+total_cal;
-    for(int i=start,j=0;i<end;i++,j++)
+    if(test_mode==2)
     {
-        y_abs[j]=abs_avg[i];
-        if(dup_cal==2)
-            i++;
+        QString qry;
+        qry="update tests set abs1=:a1,abs2=:a2,abs3=:a3,abs4=:a4,abs5=:a5, abs6=:a6, abs7=:a7, abs8=:a8, abs9=:a9, abs10=:a10 where name=:name";
+        QSqlQuery Query;
+        Query.prepare(qry);
+        Query.bindValue(":name",btn_name);
+        Query.bindValue(":a1",y_abs[0]);
+        Query.bindValue(":a2",y_abs[1]);
+        Query.bindValue(":a3",y_abs[2]);
+        Query.bindValue(":a4",y_abs[3]);
+        Query.bindValue(":a5",y_abs[4]);
+        Query.bindValue(":a6",y_abs[5]);
+        Query.bindValue(":a7",y_abs[6]);
+        Query.bindValue(":a8",y_abs[7]);
+        Query.bindValue(":a9",y_abs[8]);
+        Query.bindValue(":a10",y_abs[9]);
+        Query.exec();
+        ui->toolButton_32->setDisabled(true);
+        ui->toolButton_33->setDisabled(true);
     }
-    QString qry;
-    qry="update tests set abs1=:a1,abs2=:a2,abs3=:a3,abs4=:a4,abs5=:a5, abs6=:a6, abs7=:a7, abs8=:a8, abs9=:a9, abs10=:a10 where name=:name";
-    QSqlQuery Query;
-    Query.prepare(qry);
-    Query.bindValue(":name",btn_name);
-    Query.bindValue(":a1",y_abs[0]);
-    Query.bindValue(":a2",y_abs[1]);
-    Query.bindValue(":a3",y_abs[2]);
-    Query.bindValue(":a4",y_abs[3]);
-    Query.bindValue(":a5",y_abs[4]);
-    Query.bindValue(":a6",y_abs[0]);
-    Query.bindValue(":a7",y_abs[1]);
-    Query.bindValue(":a8",y_abs[2]);
-    Query.bindValue(":a9",y_abs[3]);
-    Query.bindValue(":a10",y_abs[4]);
-    Query.exec();
-    ui->toolButton_32->setDisabled(true);
-    ui->toolButton_33->setDisabled(true);
+    if(test_mode==3)
+    {
+        QString qry;
+        qry="update tests set cutabs=:cutabs where name=:name";
+        QSqlQuery Query;
+        Query.prepare(qry);
+        Query.bindValue(":name",btn_name);
+        Query.bindValue(":cutabs",cutabs);
+        Query.exec();
+        ui->toolButton_32->setDisabled(true);
+        ui->toolButton_33->setDisabled(true);
+    }
+
+
 }
 
 void MainWindow::on_toolButton_33_clicked()
