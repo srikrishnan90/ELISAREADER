@@ -15,8 +15,9 @@ static int led_freq=10000;
 static double offset[8], blnk[8], od[8];
 static int pri_wave=0,sec_wave=0;
 static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0;
-static QString dis[96],res[96];
+static QString dis[96],res[96], rem[96];
 static Pi2c arduino(7);
+static QString unit;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -729,6 +730,10 @@ void MainWindow::on_toolButton_8_clicked()
         ui->comboBox_12->setDisabled(true);
         ui->label_15->setText("Cont.");
     }
+    ui->toolButton_32->setDisabled(false);
+    ui->toolButton_33->setDisabled(false);
+    ui->toolButton_23->setDisabled(false);
+    ui->toolButton_29->setDisabled(false);
     update_sample_page();
 }
 
@@ -1305,6 +1310,7 @@ void MainWindow::on_pushButton_50_clicked()
 
 void MainWindow::on_comboBox_11_currentIndexChanged(int index)
 {
+    qDebug()<<index;
     if(index==1)
     {
         nc=pc=lc=cc=cal=0;
@@ -1720,9 +1726,7 @@ void MainWindow::on_toolButton_18_clicked()
         for(int i=0;i<length;i++)
             for(int k=0;k<8;k++)
                 fin_res[i][k]=pri_res[i][k]-sec_res[i][k];
-    }
-    ui->toolButton_32->setDisabled(false);
-    ui->toolButton_33->setDisabled(false);
+    }  
     result_page();
 }
 
@@ -1813,7 +1817,7 @@ void MainWindow::on_toolButton_20_clicked()
     double len = std::ceil(double(total)/8);
     int length=int(len);
     QString wel[8]={"A","B","C","D","E","F","G","H"};
-    QLabel *well,*samp, *absr, *absa, *resl;
+    QLabel *well,*samp, *absr, *absa, *resl, *remk, *unt;
     QPushButton *pb;
     for(int i=0;i<length;i++)
     {
@@ -1839,6 +1843,14 @@ void MainWindow::on_toolButton_20_clicked()
             resl->setAlignment(Qt::AlignCenter);
             resl->setText(res[j+(i*8)]);
 
+            remk = new QLabel();
+            remk->setAlignment(Qt::AlignCenter);
+            remk->setText(rem[j+(i*8)]);
+
+            unt = new QLabel();
+            unt->setAlignment(Qt::AlignCenter);
+            unt->setText(unit);
+
             pb = new QPushButton();
 
 
@@ -1847,6 +1859,8 @@ void MainWindow::on_toolButton_20_clicked()
             ui->tableWidget->setCellWidget(j+(i*8), 2, absr);//absorbance
             ui->tableWidget->setCellWidget(j+(i*8), 3, absa);//average
             ui->tableWidget->setCellWidget(j+(i*8), 4, resl);//result
+            ui->tableWidget->setCellWidget(j+(i*8), 5, unt);//unit
+            ui->tableWidget->setCellWidget(j+(i*8), 6, remk);//remark
             ui->tableWidget->setCellWidget(j+(i*8), 7, pb);//PID
         }
 
@@ -1880,6 +1894,7 @@ void MainWindow::result_page()
         samp_buttons[i]->setText("");
         samp_buttons[i]->setStyleSheet("background-color: rgb(255, 255, 255)");
         abs_avg[i]=0;
+        res[i]=rem[i]="";
     }
     process_average();
     if(test_mode==2)
@@ -2011,6 +2026,7 @@ void MainWindow::process_result_multistandard()
     int start=blank+nc+pc+lc+cc;
     int end=blank+nc+pc+lc+cc+total_cal;
     int graph=0;
+    double norl=0, norh=0;
 
     double test[8]={2, 1.5, 1, 0.5, 0.15 , 0.1, 1.3, 2.5};//test conc
     for(int i=0;i<8;i++)//test conc
@@ -2027,6 +2043,9 @@ void MainWindow::process_result_multistandard()
     while(Query.next())
     {
         graph=Query.value("graph").toInt();
+        norl=Query.value("norl").toDouble();
+        norh=Query.value("norh").toDouble();
+        unit=Query.value("unit").toString();
         for(int i=0;i<nostd;i++)
         {
             y_abs[i]=Query.value(absstr[i]).toDouble();
@@ -2058,6 +2077,8 @@ void MainWindow::process_result_multistandard()
         ui->textBrowser_6->setText("Invalid");
         ui->toolButton_32->setDisabled(true);
         ui->toolButton_33->setDisabled(true);
+        ui->toolButton_23->setDisabled(true);
+        ui->toolButton_29->setDisabled(true);
         return;
     }
     else
@@ -2078,10 +2099,19 @@ void MainWindow::process_result_multistandard()
         for(int i=start;i<end;i++)// copying result conc to the result array
         {
             res[i]=calculate_regression(abs_avg[i], graph);
+            if(res[i][0]==">" or res[i][0]=="<")
+                rem[i]="OOR";
+            else if(res[i].toDouble()>=norl and res[i].toDouble()<=norh)
+                rem[i]="NOR";
+            else if(res[i].toDouble()<norl)
+                rem[i]="LOW";
+            else if(res[i].toDouble()>norh)
+                rem[i]="HIGH";
             if(dup_samp==2)
             {
                 i++;
                 res[i]=res[i-1];
+                rem[i]=rem[i-1];
             }
         }
     }
@@ -2207,10 +2237,12 @@ void MainWindow::process_result_cutoff()
         }
         if(msg.length()>1)
         {
-            ui->textBrowser_5->setText(msg);
-            ui->textBrowser_6->setText(msg);
+            ui->textBrowser_5->setText("Invalid\n"+msg);
+            ui->textBrowser_6->setText("Invalid\n"+msg);
             ui->toolButton_32->setDisabled(true);
             ui->toolButton_33->setDisabled(true);
+            ui->toolButton_23->setDisabled(true);
+            ui->toolButton_29->setDisabled(true);
             return;
         }
         else

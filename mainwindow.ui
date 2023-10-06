@@ -79,7 +79,7 @@
      <string notr="true">background:rgba(255,255,255,1)</string>
     </property>
     <property name="currentIndex">
-     <number>7</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QScrollArea" name="scrollArea">
@@ -4327,9 +4327,9 @@
       <property name="geometry">
        <rect>
         <x>640</x>
-        <y>79</y>
+        <y>70</y>
         <width>150</width>
-        <height>371</height>
+        <height>341</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -4368,7 +4368,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>230</y>
+         <y>200</y>
          <width>131</width>
          <height>130</height>
         </rect>
@@ -6253,7 +6253,7 @@
         <x>640</x>
         <y>60</y>
         <width>150</width>
-        <height>371</height>
+        <height>341</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -6279,7 +6279,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>230</y>
+         <y>220</y>
          <width>130</width>
          <height>60</height>
         </rect>
@@ -6292,9 +6292,9 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>309</y>
+         <y>289</y>
          <width>131</width>
-         <height>51</height>
+         <height>41</height>
         </rect>
        </property>
       </widget>
@@ -6311,6 +6311,19 @@
         <string>Accept Test</string>
        </property>
       </widget>
+      <widget class="QToolButton" name="toolButton_35">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>150</y>
+         <width>130</width>
+         <height>60</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Run Next</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QToolButton" name="toolButton_22">
       <property name="geometry">
@@ -6322,7 +6335,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Save Plate</string>
+       <string>Save Plate Data</string>
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_23">
@@ -6335,7 +6348,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Save Result</string>
+       <string>Save Results</string>
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_24">
@@ -6348,7 +6361,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Print Plate</string>
+       <string>Print Matrix</string>
       </property>
      </widget>
     </widget>
@@ -6359,7 +6372,7 @@
         <x>640</x>
         <y>60</y>
         <width>150</width>
-        <height>371</height>
+        <height>341</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -6385,7 +6398,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>240</y>
+         <y>220</y>
          <width>130</width>
          <height>60</height>
         </rect>
@@ -6398,7 +6411,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>319</y>
+         <y>290</y>
          <width>131</width>
          <height>41</height>
         </rect>
@@ -6417,6 +6430,19 @@
         <string>Accept Test</string>
        </property>
       </widget>
+      <widget class="QToolButton" name="toolButton_36">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>150</y>
+         <width>130</width>
+         <height>60</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Run Next</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QToolButton" name="toolButton_27">
       <property name="geometry">
@@ -6428,7 +6454,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Save Plate</string>
+       <string>Save Plate Data</string>
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_28">
@@ -6441,7 +6467,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Print Plate</string>
+       <string>Print Result</string>
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_29">
@@ -6454,7 +6480,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Save Result</string>
+       <string>Save Results</string>
       </property>
      </widget>
      <widget class="QTableWidget" name="tableWidget">
@@ -6462,8 +6488,8 @@
        <rect>
         <x>20</x>
         <y>60</y>
-        <width>561</width>
-        <height>311</height>
+        <width>591</width>
+        <height>321</height>
        </rect>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
@@ -6515,6 +6541,19 @@
         <string>PID</string>
        </property>
       </column>
+     </widget>
+     <widget class="QToolButton" name="toolButton_34">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>410</y>
+        <width>130</width>
+        <height>60</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Print All</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="page_7">
