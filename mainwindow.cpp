@@ -2584,6 +2584,11 @@ void MainWindow::on_toolButton_33_clicked()
 
 void MainWindow::on_pushButton_20_clicked()
 {
+    Dialog *dia=new Dialog(this);
+    dia->setModal(true);
+    dia->setPage(1);
+    dia->update_data(btn_name,pri_wave,sec_wave,"",cutabs,invalid,x_conc,y_abs, nostd);
+    dia->exec();
 
 }
 

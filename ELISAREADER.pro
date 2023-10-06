@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql qml
+QT       += core gui sql qml charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,7 +31,8 @@ SOURCES += \
     ADS1263.cpp \
     DEV_Config.cpp \
     pi2c.cpp \
-    regressionline.cpp
+    regressionline.cpp \
+    dialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,11 +40,13 @@ HEADERS += \
     ADS1263.h \
     DEV_Config.h \
     pi2c.h \
-    regressionline.h
+    regressionline.h \
+    dialog.h
 
 FORMS += \
         mainwindow.ui \
-    keyboard.ui
+    keyboard.ui \
+    dialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

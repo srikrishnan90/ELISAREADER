@@ -12,7 +12,9 @@
 #include "regressionline.h"
 #include <QJSEngine>
 #include <math.h>
-#include <QDialog>
+#include "dialog.h"
+
+
 
 
 namespace Ui {
