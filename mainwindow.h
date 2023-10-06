@@ -200,6 +200,7 @@ private slots:
 
     void on_toolButton_20_clicked();
     void result_page();
+    void result_table();
     void process_average();
     void process_result_multistandard();
     void process_result_cutoff();

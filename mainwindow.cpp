@@ -599,7 +599,7 @@ void MainWindow::on_toolButton_12_clicked()
     int axis=ui->comboBox_4->currentIndex();
     double nor_low=ui->pushButton_4->text().toDouble();
     double nor_high=ui->pushButton_5->text().toDouble();
-    QString unit=ui->pushButton_6->text();
+    unit=ui->pushButton_6->text();
 
     QPushButton* concb[] = { ui->c1,ui->c2,ui->c3,ui->c4,ui->c5,ui->c6,ui->c7,ui->c8,ui->c9,ui->c10};
     QPushButton* absb[] = { ui->a1,ui->a2,ui->a3,ui->a4,ui->a5,ui->a6,ui->a7,ui->a8,ui->a9,ui->a10};
@@ -684,7 +684,7 @@ void MainWindow::on_toolButton_8_clicked()
     ui->textBrowser_6->setText("");
 
     QSqlQuery Query;
-    Query.prepare("select mode,std,abs1,abs2,nc,pc,lc,cc,pri,sec,cutabs FROM tests WHERE name = :bname");
+    Query.prepare("select mode,std,abs1,abs2,nc,pc,lc,cc,pri,sec,cutabs,unit FROM tests WHERE name = :bname");
     Query.bindValue(":bname", btn_name);
     Query.exec();
     while(Query.next())
@@ -700,6 +700,7 @@ void MainWindow::on_toolButton_8_clicked()
         pri_wave=Query.value("pri").toInt();
         sec_wave=Query.value("sec").toInt();
         cutabs=Query.value("cutabs").toDouble();
+        unit=Query.value("unit").toString();
     }
     led_control(pri_wave);
 
@@ -729,6 +730,7 @@ void MainWindow::on_toolButton_8_clicked()
         ui->label_16->setDisabled(true);
         ui->comboBox_12->setDisabled(true);
         ui->label_15->setText("Cont.");
+        unit="S/Co";
     }
     ui->toolButton_32->setDisabled(false);
     ui->toolButton_33->setDisabled(false);
@@ -1044,7 +1046,6 @@ void MainWindow::on_toolButton_6_clicked()
         ui->pushButton->setDisabled(true);
         int pri=0,sec=0,std=0,graph=0,axis=0;
         double norl=0,norh=0,c[10],a[10];
-        QString unit;
         QString constr[10]={"conc1","conc2","conc3","conc4","conc5","conc6","conc7","conc8","conc9","conc10"};
         QString absstr[10]={"abs1","abs2","abs3","abs4","abs5","abs6","abs7","abs8","abs9","abs10"};
         QPushButton* concb[] = { ui->c1,ui->c2,ui->c3,ui->c4,ui->c5,ui->c6,ui->c7,ui->c8,ui->c9,ui->c10};
@@ -1726,7 +1727,7 @@ void MainWindow::on_toolButton_18_clicked()
         for(int i=0;i<length;i++)
             for(int k=0;k<8;k++)
                 fin_res[i][k]=pri_res[i][k]-sec_res[i][k];
-    }  
+    }
     result_page();
 }
 
@@ -1805,66 +1806,7 @@ void MainWindow::on_toolButton_25_clicked()
 void MainWindow::on_toolButton_20_clicked()
 {
     ui->stackedWidget->setCurrentIndex(7);
-    ui->tableWidget->setRowCount(total);
-    for(int i=0;i<8;i++)
-    {
-        ui->tableWidget->setColumnWidth(i,65);
-    }
-    //    ui->tableWidget->setColumnCount(8);
-    //    ui->tableWidget->setColumnWidth(0,50);
-    //    ui->tableWidget->setColumnWidth(3,100);
 
-    double len = std::ceil(double(total)/8);
-    int length=int(len);
-    QString wel[8]={"A","B","C","D","E","F","G","H"};
-    QLabel *well,*samp, *absr, *absa, *resl, *remk, *unt;
-    QPushButton *pb;
-    for(int i=0;i<length;i++)
-    {
-        for(int j=0;j<8;j++)
-        {
-            well = new QLabel();
-            well->setAlignment(Qt::AlignCenter);
-            well->setText(wel[j]+QString::number(i+1));
-
-            samp = new QLabel();
-            samp->setAlignment(Qt::AlignCenter);
-            samp->setText(dis[j+(i*8)]);
-
-            absr = new QLabel();
-            absr->setAlignment(Qt::AlignCenter);
-            absr->setText(QString::number(abs_res[j+(i*8)],'f',3));
-
-            absa = new QLabel();
-            absa->setAlignment(Qt::AlignCenter);
-            absa->setText(QString::number(abs_avg[j+(i*8)],'f',3));
-
-            resl = new QLabel();
-            resl->setAlignment(Qt::AlignCenter);
-            resl->setText(res[j+(i*8)]);
-
-            remk = new QLabel();
-            remk->setAlignment(Qt::AlignCenter);
-            remk->setText(rem[j+(i*8)]);
-
-            unt = new QLabel();
-            unt->setAlignment(Qt::AlignCenter);
-            unt->setText(unit);
-
-            pb = new QPushButton();
-
-
-            ui->tableWidget->setCellWidget(j+(i*8), 0, well);//well
-            ui->tableWidget->setCellWidget(j+(i*8), 1, samp);//sample
-            ui->tableWidget->setCellWidget(j+(i*8), 2, absr);//absorbance
-            ui->tableWidget->setCellWidget(j+(i*8), 3, absa);//average
-            ui->tableWidget->setCellWidget(j+(i*8), 4, resl);//result
-            ui->tableWidget->setCellWidget(j+(i*8), 5, unt);//unit
-            ui->tableWidget->setCellWidget(j+(i*8), 6, remk);//remark
-            ui->tableWidget->setCellWidget(j+(i*8), 7, pb);//PID
-        }
-
-    }
 }
 
 
@@ -1927,8 +1869,77 @@ void MainWindow::result_page()
         else if(i<total)
             samp_buttons[i]->setStyleSheet("background-color: rgb(20, 160, 10)");
     }
+    result_table();
 
 
+}
+
+void MainWindow::result_table()
+{
+    ui->tableWidget->clear();
+    ui->tableWidget->setRowCount(total);
+    for(int i=0;i<8;i++)
+    {
+        ui->tableWidget->setColumnWidth(i,65);
+    }
+    //    ui->tableWidget->setColumnCount(8);
+    //    ui->tableWidget->setColumnWidth(0,50);
+    //    ui->tableWidget->setColumnWidth(3,100);
+
+    double len = std::ceil(double(total)/8);
+    int length=int(len), start=blank+nc+pc+lc+cc+total_cal;
+    QString wel[8]={"A","B","C","D","E","F","G","H"};
+    QLabel *well,*samp, *absr, *absa, *resl, *remk, *unt;
+    QPushButton *pb;
+    for(int i=0;i<length;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            well = new QLabel();
+            well->setAlignment(Qt::AlignCenter);
+            well->setText(wel[j]+QString::number(i+1));
+
+            samp = new QLabel();
+            samp->setAlignment(Qt::AlignCenter);
+            samp->setText(dis[j+(i*8)]);
+
+            absr = new QLabel();
+            absr->setAlignment(Qt::AlignCenter);
+            absr->setText(QString::number(abs_res[j+(i*8)],'f',3));
+
+            absa = new QLabel();
+            absa->setAlignment(Qt::AlignCenter);
+            absa->setText(QString::number(abs_avg[j+(i*8)],'f',3));
+
+            resl = new QLabel();
+            resl->setAlignment(Qt::AlignCenter);
+            resl->setText(res[j+(i*8)]);
+
+            remk = new QLabel();
+            remk->setAlignment(Qt::AlignCenter);
+            remk->setText(rem[j+(i*8)]);
+
+            unt = new QLabel();
+            unt->setAlignment(Qt::AlignCenter);
+            unt->setText(unit);
+
+            pb = new QPushButton();
+
+
+            ui->tableWidget->setCellWidget(j+(i*8), 0, well);//well
+            ui->tableWidget->setCellWidget(j+(i*8), 1, samp);//sample
+            ui->tableWidget->setCellWidget(j+(i*8), 2, absr);//absorbance
+            ui->tableWidget->setCellWidget(j+(i*8), 3, absa);//average
+            ui->tableWidget->setCellWidget(j+(i*8), 4, resl);//result
+            if(j+(i*8)>=start)
+            {
+            ui->tableWidget->setCellWidget(j+(i*8), 5, unt);//unit
+            ui->tableWidget->setCellWidget(j+(i*8), 6, remk);//remark
+            ui->tableWidget->setCellWidget(j+(i*8), 7, pb);//PID
+            }
+        }
+
+    }
 }
 
 
@@ -2124,7 +2135,7 @@ void MainWindow::process_result_cutoff()
     QString msg="";
     QJSEngine parsexpression;
 
-    double test[8]={0.1, 0.1, 1, 0.15, 0.25 ,0.35, 0.5, 2};//test conc
+    double test[8]={0.1, 1, 1, 0.15, 0.25 ,0.22, 0.27, 0.26};//test conc
     for(int i=0;i<8;i++)//test conc
     {
         abs_avg[i]=test[i];
@@ -2273,7 +2284,7 @@ void MainWindow::process_result_cutoff()
     else
     {
         QSqlQuery Query;
-        Query.prepare("select cutabs FROM tests WHERE name = :bname");
+        Query.prepare("select cutabs, threshold FROM tests WHERE name = :bname");
         Query.bindValue(":bname", btn_name);
         Query.exec();
         while(Query.next())
@@ -2283,15 +2294,85 @@ void MainWindow::process_result_cutoff()
         qDebug()<<cutabs;
     }
 
-    int start=blank+nc+pc+lc+cc+total_cal;
-    int end=blank+nc+pc+lc+cc+total_cal+total_samp;
-    for(int i=start;i<end;i++)
+    int thresh=0;
+    double posidx=0,negidx=0,greyz=0;
+    QSqlQuery Query;
+    Query.prepare("select threshold, pos, neg, grey FROM tests WHERE name = :bname");
+    Query.bindValue(":bname", btn_name);
+    Query.exec();
+    while(Query.next())
     {
-        res[i]=QString::number(abs_avg[i]/cutabs,'f',3);
-        if(dup_samp==2)
+        thresh=Query.value("threshold").toInt();
+        posidx=Query.value("pos").toDouble();
+        negidx=Query.value("neg").toDouble();
+        greyz=Query.value("grey").toDouble();
+    }
+    if(greyz>0.0)
+    {
+        posidx=cutabs+((cutabs/100)*greyz);
+        negidx=cutabs-((cutabs/100)*greyz);
+        int start=blank+nc+pc+lc+cc+total_cal;
+        int end=blank+nc+pc+lc+cc+total_cal+total_samp;
+        for(int i=start;i<end;i++)
         {
-            i++;
-            res[i]=res[i-1];
+            res[i]=QString::number(abs_avg[i]/cutabs,'f',3);
+            if(thresh==0)
+            {
+                if(abs_avg[i]>=negidx and abs_avg[i]<=posidx)
+                    rem[i]="EQV";
+                else if(abs_avg[i]>posidx)
+                    rem[i]="POS";
+                else if(abs_avg[i]<negidx)
+                    rem[i]="NEG";
+            }
+            else
+            {
+                if(abs_avg[i]>=negidx and abs_avg[i]<=posidx)
+                    rem[i]="EQV";
+                else if(abs_avg[i]>posidx)
+                    rem[i]="NEG";
+                else if(abs_avg[i]<negidx)
+                    rem[i]="POS";
+            }
+            if(dup_samp==2)
+            {
+                i++;
+                res[i]=res[i-1];
+                rem[i]=rem[i-1];
+            }
+        }
+    }
+    else
+    {
+        int start=blank+nc+pc+lc+cc+total_cal;
+        int end=blank+nc+pc+lc+cc+total_cal+total_samp;
+        for(int i=start;i<end;i++)
+        {
+            res[i]=QString::number(abs_avg[i]/cutabs,'f',3);
+            if(thresh==0)
+            {
+                if(abs_avg[i]/cutabs>=negidx and abs_avg[i]/cutabs<=posidx)
+                    rem[i]="EQV";
+                else if(abs_avg[i]/cutabs>posidx)
+                    rem[i]="POS";
+                else if(abs_avg[i]/cutabs<negidx)
+                    rem[i]="NEG";
+            }
+            else
+            {
+                if(abs_avg[i]/cutabs>=negidx and abs_avg[i]/cutabs<=posidx)
+                    rem[i]="EQV";
+                else if(abs_avg[i]/cutabs>posidx)
+                    rem[i]="NEG";
+                else if(abs_avg[i]/cutabs<negidx)
+                    rem[i]="POS";
+            }
+            if(dup_samp==2)
+            {
+                i++;
+                res[i]=res[i-1];
+                rem[i]=rem[i-1];
+            }
         }
     }
 }
