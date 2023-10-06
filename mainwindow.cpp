@@ -18,6 +18,7 @@ static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[9
 static QString dis[96],res[96], rem[96];
 static Pi2c arduino(7);
 static QString unit;
+static int invalid=0;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -671,6 +672,8 @@ void MainWindow::on_toolButton_8_clicked()
     ui->stackedWidget->setCurrentIndex(5);
     ui->stackedWidget->raise();
     ui->label_4->setText(btn_name);
+    ui->pushButton_20->setText(btn_name);
+    ui->pushButton_21->setText(btn_name);
     ui->label_15->setDisabled(false);
     ui->label_16->setDisabled(false);
     ui->comboBox_11->setDisabled(false);
@@ -710,6 +713,9 @@ void MainWindow::on_toolButton_8_clicked()
         ui->label_16->setDisabled(true);
         ui->comboBox_11->setDisabled(true);
         ui->comboBox_12->setDisabled(true);
+        ui->toolButton_32->setDisabled(true);
+        ui->toolButton_33->setDisabled(true);
+
     }
     if(test_mode==2)
     {
@@ -719,6 +725,10 @@ void MainWindow::on_toolButton_8_clicked()
             ui->comboBox_11->setDisabled(true);
         }
         ui->label_15->setText("Cal.");
+        ui->toolButton_32->setDisabled(false);
+        ui->toolButton_33->setDisabled(false);
+        ui->toolButton_23->setDisabled(false);
+        ui->toolButton_29->setDisabled(false);
     }
     if(test_mode==3)
     {
@@ -730,12 +740,13 @@ void MainWindow::on_toolButton_8_clicked()
         ui->label_16->setDisabled(true);
         ui->comboBox_12->setDisabled(true);
         ui->label_15->setText("Cont.");
+        ui->toolButton_32->setDisabled(false);
+        ui->toolButton_33->setDisabled(false);
+        ui->toolButton_23->setDisabled(false);
+        ui->toolButton_29->setDisabled(false);
         unit="S/Co";
     }
-    ui->toolButton_32->setDisabled(false);
-    ui->toolButton_33->setDisabled(false);
-    ui->toolButton_23->setDisabled(false);
-    ui->toolButton_29->setDisabled(false);
+
     update_sample_page();
 }
 
@@ -1813,6 +1824,15 @@ void MainWindow::on_toolButton_20_clicked()
 void MainWindow::result_page()
 {
     ui->stackedWidget->setCurrentIndex(6);
+    QDate cd = QDate::currentDate();
+    QTime ct = QTime::currentTime();
+
+    ui->label_17->setText(cd.toString(Qt::LocaleDate));
+    ui->label_40->setText(cd.toString(Qt::LocaleDate));
+    ui->label_38->setText(ct.toString(Qt::LocaleDate));
+    ui->label_39->setText(ct.toString(Qt::LocaleDate));
+
+
     double len = std::ceil(double(total)/8);
     int length=int(len);
     for(int i=0;i<length;i++)
@@ -1853,7 +1873,17 @@ void MainWindow::result_page()
 
     for(int i=0;i<total;i++)
     {
-        samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_avg[i],'f', 3));
+
+        if(test_mode==1)
+            samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_avg[i],'f',3));
+        else
+        {
+            if(invalid==0)
+                samp_buttons[i]->setText(dis[i]+'\n'+res[i]);
+            else
+                samp_buttons[i]->setText(dis[i]+'\n'+"INV");
+        }
+
         if(i<blank)
             samp_buttons[i]->setStyleSheet("background-color: rgb(235, 235, 235)");
         else if(i<blank+nc)
@@ -1865,9 +1895,20 @@ void MainWindow::result_page()
         else if(i<blank+nc+pc+lc+cc)
             samp_buttons[i]->setStyleSheet("background-color: rgb(240, 20, 120)");
         else if(i<blank+nc+pc+lc+cc+total_cal)
-            samp_buttons[i]->setStyleSheet("background-color: rgb(245, 235, 20)");
+            samp_buttons[i]->setStyleSheet("background-color: rgb(240, 240, 20)");
         else if(i<total)
-            samp_buttons[i]->setStyleSheet("background-color: rgb(20, 160, 10)");
+        {
+            if(rem[i]=="OOR")
+                samp_buttons[i]->setStyleSheet("background-color: rgb(20, 120, 240)");
+            else if(rem[i]=="POS" or rem[i]=="HIGH")
+                samp_buttons[i]->setStyleSheet("background-color: rgb(245, 30, 20)");
+            else if(rem[i]=="EQV" or rem[i]=="LOW")
+                samp_buttons[i]->setStyleSheet("background-color: rgb(240, 240, 20)");
+            else
+                samp_buttons[i]->setStyleSheet("background-color: rgb(20, 175, 10)");
+        }
+
+
     }
     result_table();
 
@@ -1876,7 +1917,7 @@ void MainWindow::result_page()
 
 void MainWindow::result_table()
 {
-    ui->tableWidget->clear();
+    ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(total);
     for(int i=0;i<8;i++)
     {
@@ -1933,9 +1974,9 @@ void MainWindow::result_table()
             ui->tableWidget->setCellWidget(j+(i*8), 4, resl);//result
             if(j+(i*8)>=start)
             {
-            ui->tableWidget->setCellWidget(j+(i*8), 5, unt);//unit
-            ui->tableWidget->setCellWidget(j+(i*8), 6, remk);//remark
-            ui->tableWidget->setCellWidget(j+(i*8), 7, pb);//PID
+                ui->tableWidget->setCellWidget(j+(i*8), 5, unt);//unit
+                ui->tableWidget->setCellWidget(j+(i*8), 6, remk);//remark
+                ui->tableWidget->setCellWidget(j+(i*8), 7, pb);//PID
             }
         }
 
@@ -2084,6 +2125,7 @@ void MainWindow::process_result_multistandard()
     }
     if(inc==1 && dec==1)
     {
+        invalid=1;
         ui->textBrowser_5->setText("Invalid");
         ui->textBrowser_6->setText("Invalid");
         ui->toolButton_32->setDisabled(true);
@@ -2094,6 +2136,7 @@ void MainWindow::process_result_multistandard()
     }
     else
     {
+        invalid=0;
         int start=blank+nc+pc+lc+cc;
         int end=blank+nc+pc+lc+cc+total_cal;
         for(int i=start,j=0;i<end;i++,j++)// copying standard conc to the result array
@@ -2248,6 +2291,7 @@ void MainWindow::process_result_cutoff()
         }
         if(msg.length()>1)
         {
+            invalid=1;
             ui->textBrowser_5->setText("Invalid\n"+msg);
             ui->textBrowser_6->setText("Invalid\n"+msg);
             ui->toolButton_32->setDisabled(true);
@@ -2258,6 +2302,7 @@ void MainWindow::process_result_cutoff()
         }
         else
         {
+            invalid=0;
             QString str;
             QSqlQuery Query;
             Query.prepare("select cutoff FROM tests WHERE name = :bname");
@@ -2536,3 +2581,13 @@ void MainWindow::on_toolButton_33_clicked()
     on_toolButton_32_clicked();
 }
 
+
+void MainWindow::on_pushButton_20_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_21_clicked()
+{
+    on_pushButton_20_clicked();
+}

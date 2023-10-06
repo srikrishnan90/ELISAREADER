@@ -12,6 +12,7 @@
 #include "regressionline.h"
 #include <QJSEngine>
 #include <math.h>
+#include <QDialog>
 
 
 namespace Ui {
@@ -213,6 +214,10 @@ private slots:
     void on_toolButton_32_clicked();
 
     void on_toolButton_33_clicked();
+
+    void on_pushButton_21_clicked();
+
+    void on_pushButton_20_clicked();
 
 private:
     Ui::MainWindow *ui;
