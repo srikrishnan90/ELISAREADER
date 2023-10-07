@@ -21,6 +21,24 @@ void Dialog::setPage(int index)
 
 void Dialog::update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd)
 {
+    QString wave[6]={"Nil","405","450","490","630","OPN"};
+    QString valid[2]={"PASS","INVALID"};
+
+    ui->label_8->setText(name);
+
+    ui->label_13->setText(wave[pri]);
+
+    ui->label_14->setText(wave[sec]);
+
+    ui->label_15->setText(cuteqn);
+    ui->label_16->setText(QString::number(cutabs));
+
+    ui->label_22->setText(QString::number(nostd));
+
+    ui->label_17->setText(valid[status]);
+    ui->label_23->setText(valid[status]);
+
+
     QLineSeries *series = new QLineSeries();
 
     for(int i=0;i<nostd;i++)
@@ -44,3 +62,8 @@ void Dialog::update_data(QString name, int pri, int sec, QString cuteqn, double 
 }
 
 
+
+void Dialog::on_pushButton_2_clicked()
+{
+    this->accept();
+}

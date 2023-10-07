@@ -22,6 +22,9 @@ public:
     void setPage(int index);
     void update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd);
 
+private slots:
+    void on_pushButton_2_clicked();
+
 private:
     Ui::Dialog *ui;
 };

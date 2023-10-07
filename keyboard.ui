@@ -68,7 +68,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="page_8">
     <widget class="QFrame" name="frame_3">
@@ -4323,6 +4323,66 @@ color:rgb(255, 255, 255);
       </property>
       <property name="text">
        <string>/</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_142">
+      <property name="geometry">
+       <rect>
+        <x>335</x>
+        <y>215</y>
+        <width>60</width>
+        <height>60</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton:pressed {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255))
+}
+QPushButton {
+     background-color:rgb(59,52,48); border: 1px solid black;
+     border-radius: 5px;
+color:rgb(255, 255, 255);
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_135">
+      <property name="geometry">
+       <rect>
+        <x>335</x>
+        <y>150</y>
+        <width>60</width>
+        <height>60</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton:pressed {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,   stop:0 rgba(60, 186, 162, 255), stop:1 rgba(98, 211, 162, 255))
+}
+QPushButton {
+     background-color:rgb(59,52,48); border: 1px solid black;
+     border-radius: 5px;
+color:rgb(255, 255, 255);
+}
+
+QPushButton:disabled {
+    background-color: rgb(170, 170, 127)
+}</string>
+      </property>
+      <property name="text">
+       <string>&gt;</string>
       </property>
      </widget>
     </widget>

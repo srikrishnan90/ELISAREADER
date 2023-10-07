@@ -17,7 +17,7 @@ static int pri_wave=0,sec_wave=0;
 static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0;
 static QString dis[96],res[96], rem[96];
 static Pi2c arduino(7);
-static QString unit;
+static QString unit, cuteqn;
 static int invalid=0;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -120,7 +120,7 @@ void MainWindow::on_pushButton_46_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(0);
-    key->setData("Experiment Name");
+    key->setData("Experiment Name",ui->pushButton_46->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_46->setText(data);
@@ -131,7 +131,7 @@ void MainWindow::on_pushButton_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(0);
-    key->setData("Experiment Name");
+    key->setData("Experiment Name",ui->pushButton->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton->setText(data);
@@ -142,7 +142,7 @@ void MainWindow::on_pushButton_3_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("No. of Calibrators");
+    key->setData("No. of Calibrators",ui->pushButton_3->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_3->setText(data);
@@ -153,7 +153,7 @@ void MainWindow::on_pushButton_4_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Low Range");
+    key->setData("Low Range",ui->pushButton_4->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_4->setText(data);
@@ -164,7 +164,7 @@ void MainWindow::on_pushButton_5_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("High Range");
+    key->setData("High Range",ui->pushButton_5->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_5->setText(data);
@@ -175,7 +175,7 @@ void MainWindow::on_pushButton_6_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(0);
-    key->setData("Unit");
+    key->setData("Unit",ui->pushButton_6->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_6->setText(data);
@@ -186,7 +186,7 @@ void MainWindow::on_c1_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-1 Conc.");
+    key->setData("STD-1 Conc.",ui->c1->text());
     key->exec();
     QString data = key->getData();
     ui->c1->setText(data);
@@ -197,7 +197,7 @@ void MainWindow::on_c2_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-2 Conc.");
+    key->setData("STD-2 Conc.",ui->c2->text());
     key->exec();
     QString data = key->getData();
     ui->c2->setText(data);
@@ -208,7 +208,7 @@ void MainWindow::on_c3_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-3 Conc.");
+    key->setData("STD-3 Conc.",ui->c3->text());
     key->exec();
     QString data = key->getData();
     ui->c3->setText(data);
@@ -219,7 +219,7 @@ void MainWindow::on_c4_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-4 Conc.");
+    key->setData("STD-4 Conc.",ui->c4->text());
     key->exec();
     QString data = key->getData();
     ui->c4->setText(data);
@@ -230,7 +230,7 @@ void MainWindow::on_c5_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-5 Conc.");
+    key->setData("STD-5 Conc.",ui->c5->text());
     key->exec();
     QString data = key->getData();
     ui->c5->setText(data);
@@ -241,7 +241,7 @@ void MainWindow::on_c6_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-6 Conc.");
+    key->setData("STD-6 Conc.",ui->c6->text());
     key->exec();
     QString data = key->getData();
     ui->c6->setText(data);
@@ -252,7 +252,7 @@ void MainWindow::on_c7_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-7 Conc.");
+    key->setData("STD-7 Conc.",ui->c7->text());
     key->exec();
     QString data = key->getData();
     ui->c7->setText(data);
@@ -263,7 +263,7 @@ void MainWindow::on_c8_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-8 Conc.");
+    key->setData("STD-8 Conc.",ui->c8->text());
     key->exec();
     QString data = key->getData();
     ui->c8->setText(data);
@@ -274,7 +274,7 @@ void MainWindow::on_c9_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-9 Conc.");
+    key->setData("STD-9 Conc.",ui->c9->text());
     key->exec();
     QString data = key->getData();
     ui->c9->setText(data);
@@ -285,7 +285,7 @@ void MainWindow::on_c10_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-10 Conc.");
+    key->setData("STD-10 Conc.",ui->c10->text());
     key->exec();
     QString data = key->getData();
     ui->c10->setText(data);
@@ -296,7 +296,7 @@ void MainWindow::on_a1_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-1 ABS");
+    key->setData("STD-1 ABS",ui->a1->text());
     key->exec();
     QString data = key->getData();
     ui->a1->setText(data);
@@ -307,7 +307,7 @@ void MainWindow::on_a2_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-2 ABS");
+    key->setData("STD-2 ABS",ui->a2->text());
     key->exec();
     QString data = key->getData();
     ui->a2->setText(data);
@@ -318,7 +318,7 @@ void MainWindow::on_a3_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-3 ABS");
+    key->setData("STD-3 ABS",ui->a3->text());
     key->exec();
     QString data = key->getData();
     ui->a3->setText(data);
@@ -329,7 +329,7 @@ void MainWindow::on_a4_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-4 ABS");
+    key->setData("STD-4 ABS",ui->a4->text());
     key->exec();
     QString data = key->getData();
     ui->a4->setText(data);
@@ -340,7 +340,7 @@ void MainWindow::on_a5_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-5 ABS");
+    key->setData("STD-5 ABS",ui->a5->text());
     key->exec();
     QString data = key->getData();
     ui->a5->setText(data);
@@ -351,7 +351,7 @@ void MainWindow::on_a6_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-6 ABS");
+    key->setData("STD-6 ABS",ui->a6->text());
     key->exec();
     QString data = key->getData();
     ui->a6->setText(data);
@@ -362,7 +362,7 @@ void MainWindow::on_a7_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-7 ABS");
+    key->setData("STD-7 ABS",ui->a7->text());
     key->exec();
     QString data = key->getData();
     ui->a7->setText(data);
@@ -373,7 +373,7 @@ void MainWindow::on_a8_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-8 ABS");
+    key->setData("STD-8 ABS",ui->a8->text());
     key->exec();
     QString data = key->getData();
     ui->a8->setText(data);
@@ -384,7 +384,7 @@ void MainWindow::on_a9_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-9 ABS");
+    key->setData("STD-9 ABS",ui->a9->text());
     key->exec();
     QString data = key->getData();
     ui->a9->setText(data);
@@ -395,7 +395,7 @@ void MainWindow::on_a10_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("STD-10 ABS");
+    key->setData("STD-10 ABS",ui->a10->text());
     key->exec();
     QString data = key->getData();
     ui->a10->setText(data);
@@ -406,7 +406,7 @@ void MainWindow::on_pushButton_39_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(0);
-    key->setData("Experiment Name");
+    key->setData("Experiment Name",ui->pushButton_39->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_39->setText(data);
@@ -417,7 +417,7 @@ void MainWindow::on_pushButton_40_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("No. of NC");
+    key->setData("No. of NC",ui->pushButton_40->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_40->setText(data);
@@ -428,7 +428,7 @@ void MainWindow::on_pushButton_41_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("No. of PC");
+    key->setData("No. of PC",ui->pushButton_41->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_41->setText(data);
@@ -439,7 +439,7 @@ void MainWindow::on_pushButton_42_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("No. of LC");
+    key->setData("No. of LC",ui->pushButton_42->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_42->setText(data);
@@ -450,7 +450,7 @@ void MainWindow::on_pushButton_67_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("No. of CC");
+    key->setData("No. of CC",ui->pushButton_67->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_67->setText(data);
@@ -461,7 +461,7 @@ void MainWindow::on_pushButton_64_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("QC of NC");
+    key->setData("QC of NC",ui->pushButton_64->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_64->setText(data);
@@ -472,7 +472,7 @@ void MainWindow::on_pushButton_65_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("QC of PC");
+    key->setData("QC of PC",ui->pushButton_65->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_65->setText(data);
@@ -483,7 +483,7 @@ void MainWindow::on_pushButton_66_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("QC of LC");
+    key->setData("QC of LC",ui->pushButton_66->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_66->setText(data);
@@ -494,7 +494,7 @@ void MainWindow::on_pushButton_68_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("QC of CC");
+    key->setData("QC of CC",ui->pushButton_68->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_68->setText(data);
@@ -505,7 +505,7 @@ void MainWindow::on_pushButton_43_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Cutoff Equation");
+    key->setData("Cutoff Equation",ui->pushButton_43->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_43->setText(data);
@@ -516,7 +516,7 @@ void MainWindow::on_pushButton_44_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Positive Index");
+    key->setData("Positive Index",ui->pushButton_44->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_44->setText(data);
@@ -527,7 +527,7 @@ void MainWindow::on_pushButton_45_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Negative Index");
+    key->setData("Negative Index",ui->pushButton_45->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_45->setText(data);
@@ -538,7 +538,7 @@ void MainWindow::on_pushButton_47_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("% Greyzone");
+    key->setData("% Greyzone",ui->pushButton_47->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_47->setText(data);
@@ -1162,7 +1162,7 @@ void MainWindow::on_pushButton_48_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Number of Blank");
+    key->setData("Number of Blank",ui->pushButton_48->text());
     key->exec();
     QString data = key->getData();
     blank=data.toInt();
@@ -1176,7 +1176,7 @@ void MainWindow::on_pushButton_49_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Number of Blank");
+    key->setData("Number of Blank",ui->pushButton_49->text());
     key->exec();
     QString data = key->getData();
     samp=data.toInt();
@@ -1314,7 +1314,7 @@ void MainWindow::on_pushButton_50_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Cutoff Equation");
+    key->setData("Cutoff Equation",ui->pushButton_50->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_50->setText(data);
@@ -1461,6 +1461,7 @@ void MainWindow::on_toolButton_4_clicked()
 
 void MainWindow::on_pushButton_14_clicked()
 {
+    ADS1263_init_ADC1(ADS1263_100SPS);
     int samples = 4;//should be in even number
     uint32_t ADC[8][4];
     for(int i=0;i<8;i++)
@@ -1510,6 +1511,7 @@ void MainWindow::on_pushButton_14_clicked()
 
 void MainWindow::on_pushButton_13_clicked()
 {
+    ADS1263_init_ADC1(ADS1263_100SPS);
     int samples = 4;
     uint32_t ADC[8][4];
     for(int i=0;i<8;i++)
@@ -1560,6 +1562,7 @@ void MainWindow::on_pushButton_13_clicked()
 void MainWindow::on_pushButton_12_clicked()
 {
 
+    ADS1263_init_ADC1(ADS1263_100SPS);
     int samples = 4;
     uint32_t ADC[8][4];
     for(int i=0;i<8;i++)
@@ -1659,7 +1662,7 @@ void MainWindow::on_pushButton_18_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Forward Steps");
+    key->setData("Forward Steps",ui->pushButton_18->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_18->setText(data);
@@ -1670,7 +1673,7 @@ void MainWindow::on_pushButton_19_clicked()
     keyboard *key=new keyboard(this);
     key->setModal(true);
     key->setPage(2);
-    key->setData("Backward Steps");
+    key->setData("Backward Steps",ui->pushButton_19->text());
     key->exec();
     QString data = key->getData();
     ui->pushButton_19->setText(data);
@@ -1816,6 +1819,7 @@ void MainWindow::on_toolButton_25_clicked()
 
 void MainWindow::on_toolButton_20_clicked()
 {
+    result_table();
     ui->stackedWidget->setCurrentIndex(7);
 
 }
@@ -1850,7 +1854,13 @@ void MainWindow::result_page()
                                       ui->A9_2,ui->B9_2,ui->C9_2,ui->D9_2,ui->E9_2,ui->F9_2,ui->G9_2,ui->H9_2,
                                       ui->A10_2,ui->B10_2,ui->C10_2,ui->D10_2,ui->E10_2,ui->F10_2,ui->G10_2,ui->H10_2,
                                       ui->A11_2,ui->B11_2,ui->C11_2,ui->D11_2,ui->E11_2,ui->F11_2,ui->G11_2,ui->H11_2,
-                                      ui->A12_2,ui->B12_2,ui->C12_2,ui->D12_2,ui->E12_2,ui->F12_2,ui->G12_2,ui->H12_2,};
+                                      ui->A12_2,ui->B12_2,ui->C12_2,ui->D12_2,ui->E12_2,ui->F12_2,ui->G12_2,ui->H12_2};
+
+    for(int i =0;i<96; i++)
+    {
+        connect(samp_buttons[i], &QPushButton::clicked, this, &MainWindow::button_clicked);
+    }
+
     for(int i=0;i<96;i++)
     {
         samp_buttons[i]->setText("");
@@ -1899,13 +1909,13 @@ void MainWindow::result_page()
         else if(i<total)
         {
             if(rem[i]=="OOR")
-                samp_buttons[i]->setStyleSheet("background-color: rgb(20, 120, 240)");
+                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(20, 120, 240), stop:0.2 rgb(20, 120, 240), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
             else if(rem[i]=="POS" or rem[i]=="HIGH")
-                samp_buttons[i]->setStyleSheet("background-color: rgb(245, 30, 20)");
+                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(245, 30, 20), stop:0.2 rgb(245, 30, 20), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
             else if(rem[i]=="EQV" or rem[i]=="LOW")
-                samp_buttons[i]->setStyleSheet("background-color: rgb(240, 240, 20)");
+                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(240, 240, 20), stop:0.2 rgb(240, 240, 20), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
             else
-                samp_buttons[i]->setStyleSheet("background-color: rgb(20, 175, 10)");
+                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(20, 175, 10), stop:0.2 rgb(20, 175, 10), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
         }
 
 
@@ -2183,6 +2193,15 @@ void MainWindow::process_result_cutoff()
     {
         abs_avg[i]=test[i];
     }
+    //Taking cut off equation
+    QSqlQuery Query;
+    Query.prepare("select cutoff FROM tests WHERE name = :bname");
+    Query.bindValue(":bname", btn_name);
+    Query.exec();
+    while(Query.next())
+    {
+        cuteqn=Query.value("cutoff").toString();
+    }
 
     if(controls!=0)//take cutabs from new reading
     {
@@ -2303,15 +2322,7 @@ void MainWindow::process_result_cutoff()
         else
         {
             invalid=0;
-            QString str;
-            QSqlQuery Query;
-            Query.prepare("select cutoff FROM tests WHERE name = :bname");
-            Query.bindValue(":bname", btn_name);
-            Query.exec();
-            while(Query.next())
-            {
-                str=Query.value("cutoff").toString();
-            }
+            QString str=cuteqn;
             str.replace("ABS","Math.abs");
             str.replace("LOG","0.434294482*Math.log");
             str.replace("ALG(","Math.pow(10,");
@@ -2341,7 +2352,6 @@ void MainWindow::process_result_cutoff()
 
     int thresh=0;
     double posidx=0,negidx=0,greyz=0;
-    QSqlQuery Query;
     Query.prepare("select threshold, pos, neg, grey FROM tests WHERE name = :bname");
     Query.bindValue(":bname", btn_name);
     Query.exec();
@@ -2586,13 +2596,54 @@ void MainWindow::on_pushButton_20_clicked()
 {
     Dialog *dia=new Dialog(this);
     dia->setModal(true);
-    dia->setPage(1);
-    dia->update_data(btn_name,pri_wave,sec_wave,"",cutabs,invalid,x_conc,y_abs, nostd);
-    dia->exec();
+    if(test_mode==1)
+    {
+        dia->setPage(2);
+        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+        dia->exec();
+    }
+    else if(test_mode==2)
+    {
+        dia->setPage(1);
+        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+        dia->exec();
+    }
+    else if(test_mode==3)
+    {
+        dia->setPage(0);
+        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+        dia->exec();
+    }
 
+}
+
+void MainWindow::button_clicked()
+{
+    QObject *senderObj = sender();
+    QString senderObjName = senderObj->objectName();
+    QMap<QString, int> map;
+    QString objname[96]={"A1_2","B1_2","C1_2","D1_2","E1_2","F1_2","G1_2","H1_2",
+                         "A2_2","B2_2","C2_2","D2_2","E2_2","F2_2","G2_2","H2_2",
+                         "A3_2","B3_2","C3_2","D3_2","E3_2","F3_2","G3_2","H3_2",
+                         "A4_2","B4_2","C4_2","D4_2","E4_2","F4_2","G4_2","H4_2",
+                         "A5_2","B5_2","C5_2","D5_2","E5_2","F5_2","G5_2","H5_2",
+                         "A6_2","B6_2","C6_2","D6_2","E6_2","F6_2","G6_2","H6_2",
+                         "A7_2","B7_2","C7_2","D7_2","E7_2","F7_2","G7_2","H7_2",
+                         "A8_2","B8_2","C8_2","D8_2","E8_2","F8_2","G8_2","H8_2",
+                         "A9_2","B9_2","C9_2","D9_2","E9_2","F9_2","G9_2","H9_2",
+                         "A10_2","B10_2","C10_2","D10_2","E10_2","F10_2","G10_2","H10_2",
+                         "A11_2","B11_2","C11_2","D11_2","E11_2","F11_2","G11_2","H11_2",
+                         "A12_2","B12_2","C12_2","D12_2","E12_2","F12_2","G12_2","H12_2"};
+    for (int i=0;i<96;i++)
+    {
+        map.insert(objname[i],i);
+    }
+    qDebug()<<map[senderObjName]<<senderObjName;
 }
 
 void MainWindow::on_pushButton_21_clicked()
 {
     on_pushButton_20_clicked();
 }
+
+

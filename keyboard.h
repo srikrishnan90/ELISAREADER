@@ -15,7 +15,7 @@ public:
     explicit keyboard(QWidget *parent = nullptr);
     ~keyboard();
     QString getData();
-    void setData(const QString &labelText);
+    void setData(const QString &labelText, const QString &lineeditText);
     void setPage(int index);
 
 
@@ -283,6 +283,10 @@ private slots:
     void on_pushButton_256_clicked();
 
     void on_pushButton_137_clicked();
+
+    void on_pushButton_135_clicked();
+
+    void on_pushButton_142_clicked();
 
 private:
     Ui::keyboard *ui;

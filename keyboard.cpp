@@ -19,9 +19,10 @@ QString keyboard::getData()
     return(ui->lineEdit->text());
 }
 
-void keyboard::setData(const QString &labelText)
+void keyboard::setData(const QString &labelText, const QString &lineeditText)
 {
     ui->label->setText(labelText);
+    ui->lineEdit->setText(lineeditText);
 }
 
 void keyboard::setPage(int index)
@@ -709,4 +710,14 @@ void keyboard::on_pushButton_256_clicked()
 void keyboard::on_pushButton_137_clicked()
 {
     ui->lineEdit->setText(ui->lineEdit->text()+ui->pushButton_137->text());
+}
+
+void keyboard::on_pushButton_135_clicked()
+{
+    ui->lineEdit->setText(ui->lineEdit->text()+ui->pushButton_135->text());
+}
+
+void keyboard::on_pushButton_142_clicked()
+{
+    ui->lineEdit->setText(ui->lineEdit->text()+ui->pushButton_142->text());
 }

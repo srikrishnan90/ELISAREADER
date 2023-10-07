@@ -13,6 +13,7 @@
 #include <QJSEngine>
 #include <math.h>
 #include "dialog.h"
+#include <QMap>
 
 
 
@@ -220,6 +221,8 @@ private slots:
     void on_pushButton_21_clicked();
 
     void on_pushButton_20_clicked();
+
+    void button_clicked();
 
 private:
     Ui::MainWindow *ui;
