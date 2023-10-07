@@ -21,7 +21,7 @@ public:
     ~Dialog();
     void setPage(int index);
     void update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd);
-
+    void update_results(QString well, QString samp, double abs, double avg_abs, QString result, QString unit, QString remarks,QString sid);
 private slots:
     void on_pushButton_2_clicked();
 

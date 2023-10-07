@@ -15,7 +15,7 @@ static int led_freq=10000;
 static double offset[8], blnk[8], od[8];
 static int pri_wave=0,sec_wave=0;
 static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0;
-static QString dis[96],res[96], rem[96];
+static QString dis[96],res[96], rem[96],pid[96];
 static Pi2c arduino(7);
 static QString unit, cuteqn;
 static int invalid=0;
@@ -977,6 +977,7 @@ void MainWindow::test_menu()
         button->setFixedSize(135,50);
         button->setStyleSheet("QPushButton:hover:!pressed{background-color: rgb(224, 255, 0);}");
         button->setObjectName(query.value(0).toString());
+        disconnect(button, &QPushButton::clicked, this, &MainWindow::sig_button);
         connect(button, &QPushButton::clicked, this, &MainWindow::sig_button);
         mainLayout->addWidget(button, row, col);
         mainLayout->setSpacing(10);
@@ -1858,6 +1859,7 @@ void MainWindow::result_page()
 
     for(int i =0;i<96; i++)
     {
+        disconnect(samp_buttons[i], &QPushButton::clicked, this, &MainWindow::button_clicked);
         connect(samp_buttons[i], &QPushButton::clicked, this, &MainWindow::button_clicked);
     }
 
@@ -1866,7 +1868,7 @@ void MainWindow::result_page()
         samp_buttons[i]->setText("");
         samp_buttons[i]->setStyleSheet("background-color: rgb(255, 255, 255)");
         abs_avg[i]=0;
-        res[i]=rem[i]="";
+        pid[i]=res[i]=rem[i]="";
     }
     process_average();
     if(test_mode==2)
@@ -1917,12 +1919,8 @@ void MainWindow::result_page()
             else
                 samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(20, 175, 10), stop:0.2 rgb(20, 175, 10), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
         }
-
-
     }
     result_table();
-
-
 }
 
 void MainWindow::result_table()
@@ -1940,60 +1938,55 @@ void MainWindow::result_table()
     double len = std::ceil(double(total)/8);
     int length=int(len), start=blank+nc+pc+lc+cc+total_cal;
     QString wel[8]={"A","B","C","D","E","F","G","H"};
-    QLabel *well,*samp, *absr, *absa, *resl, *remk, *unt;
-    QPushButton *pb;
+    QTableWidgetItem *well, *samp, *absr, *absa, *resl, *remk, *unt, *sid;
     for(int i=0;i<length;i++)
     {
         for(int j=0;j<8;j++)
         {
-            well = new QLabel();
-            well->setAlignment(Qt::AlignCenter);
+            well=new QTableWidgetItem;
+            samp=new QTableWidgetItem;
+            absr=new QTableWidgetItem;
+            absa=new QTableWidgetItem;
+            resl=new QTableWidgetItem;
+            unt=new QTableWidgetItem;
+            remk=new QTableWidgetItem;
+            sid= new QTableWidgetItem;
+
+            well->setTextAlignment(Qt::AlignCenter);
+            samp->setTextAlignment(Qt::AlignCenter);
+            absr->setTextAlignment(Qt::AlignCenter);
+            absa->setTextAlignment(Qt::AlignCenter);
+            resl->setTextAlignment(Qt::AlignCenter);
+            unt->setTextAlignment(Qt::AlignCenter);
+            remk->setTextAlignment(Qt::AlignCenter);
+            sid->setTextAlignment(Qt::AlignLeft);
+
             well->setText(wel[j]+QString::number(i+1));
-
-            samp = new QLabel();
-            samp->setAlignment(Qt::AlignCenter);
             samp->setText(dis[j+(i*8)]);
-
-            absr = new QLabel();
-            absr->setAlignment(Qt::AlignCenter);
             absr->setText(QString::number(abs_res[j+(i*8)],'f',3));
-
-            absa = new QLabel();
-            absa->setAlignment(Qt::AlignCenter);
             absa->setText(QString::number(abs_avg[j+(i*8)],'f',3));
-
-            resl = new QLabel();
-            resl->setAlignment(Qt::AlignCenter);
             resl->setText(res[j+(i*8)]);
-
-            remk = new QLabel();
-            remk->setAlignment(Qt::AlignCenter);
             remk->setText(rem[j+(i*8)]);
-
-            unt = new QLabel();
-            unt->setAlignment(Qt::AlignCenter);
             unt->setText(unit);
+            sid->setText(pid[j+(i*8)]);
 
-            pb = new QPushButton();
 
-
-            ui->tableWidget->setCellWidget(j+(i*8), 0, well);//well
-            ui->tableWidget->setCellWidget(j+(i*8), 1, samp);//sample
-            ui->tableWidget->setCellWidget(j+(i*8), 2, absr);//absorbance
-            ui->tableWidget->setCellWidget(j+(i*8), 3, absa);//average
-            ui->tableWidget->setCellWidget(j+(i*8), 4, resl);//result
+            ui->tableWidget->setItem(j+(i*8), 0, well);//well
+            ui->tableWidget->setItem(j+(i*8), 1, samp);//sample
+            ui->tableWidget->setItem(j+(i*8), 2, absr);//absorbance
+            ui->tableWidget->setItem(j+(i*8), 3, absa);//average
+            ui->tableWidget->setItem(j+(i*8), 4, resl);//result
             if(j+(i*8)>=start)
             {
-                ui->tableWidget->setCellWidget(j+(i*8), 5, unt);//unit
-                ui->tableWidget->setCellWidget(j+(i*8), 6, remk);//remark
-                ui->tableWidget->setCellWidget(j+(i*8), 7, pb);//PID
+                ui->tableWidget->setItem(j+(i*8), 5, unt);//unit
+                ui->tableWidget->setItem(j+(i*8), 6, remk);//remark
+                ui->tableWidget->setItem(j+(i*8), 7, sid);//PID
             }
+
         }
 
     }
 }
-
-
 
 void MainWindow::process_average()
 {
@@ -2639,6 +2632,34 @@ void MainWindow::button_clicked()
         map.insert(objname[i],i);
     }
     qDebug()<<map[senderObjName]<<senderObjName;
+
+    if(map[senderObjName]<ui->tableWidget->rowCount())
+    {
+        QString well=ui->tableWidget->item(map[senderObjName],0)->text();
+        Dialog *dia=new Dialog(this);
+        dia->setModal(true);
+        if(test_mode==1)
+        {
+            dia->setPage(2);
+            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+            dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
+            dia->exec();
+        }
+        else if(test_mode==2)
+        {
+            dia->setPage(1);
+            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+            dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
+            dia->exec();
+        }
+        else if(test_mode==3)
+        {
+            dia->setPage(0);
+            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+            dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
+            dia->exec();
+        }
+    }
 }
 
 void MainWindow::on_pushButton_21_clicked()
