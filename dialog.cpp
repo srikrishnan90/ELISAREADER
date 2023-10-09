@@ -1,6 +1,7 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 
+static QString samp_val,pid;
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -11,12 +12,18 @@ Dialog::Dialog(QWidget *parent) :
 
 Dialog::~Dialog()
 {
-    delete ui;
+    delete ui;    
+
 }
 
 void Dialog::setPage(int index)
 {
     ui->stackedWidget->setCurrentIndex(index);
+}
+
+QString Dialog::getdiaData()
+{
+    return pid;
 }
 
 void Dialog::update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd)
@@ -55,7 +62,8 @@ void Dialog::update_data(QString name, int pri, int sec, QString cuteqn, double 
 
 void Dialog::update_results(QString well, QString samp, double abs, double avg_abs, QString result, QString unit, QString remarks, QString sid)
 {
-
+    samp_val=samp;
+    pid=sid;
     ui->label_66->clear();
     ui->label_53->clear();
     ui->label_18->clear();
@@ -119,4 +127,39 @@ void Dialog::update_results(QString well, QString samp, double abs, double avg_a
 void Dialog::on_pushButton_2_clicked()
 {
     this->accept();
+}
+
+
+
+void Dialog::on_pushButton_4_clicked()
+{
+    keyboard *keyb=new keyboard(this);
+    keyb->setModal(true);
+    keyb->setPage(0);
+    keyb->setData("Enter PID/SID for "+samp_val,ui->pushButton_4->text());
+    keyb->exec();
+    pid = keyb->getData();
+    ui->pushButton_4->setText(pid);
+}
+
+void Dialog::on_pushButton_5_clicked()
+{
+    keyboard *keyb=new keyboard(this);
+    keyb->setModal(true);
+    keyb->setPage(0);
+    keyb->setData("Enter PID/SID for "+samp_val,ui->pushButton_5->text());
+    keyb->exec();
+    pid = keyb->getData();
+    ui->pushButton_5->setText(pid);
+}
+
+void Dialog::on_pushButton_6_clicked()
+{
+    keyboard *keyb=new keyboard(this);
+    keyb->setModal(true);
+    keyb->setPage(0);
+    keyb->setData("Enter PID/SID for "+samp_val,ui->pushButton_6->text());
+    keyb->exec();
+    pid = keyb->getData();
+    ui->pushButton_6->setText(pid);
 }

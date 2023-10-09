@@ -18,6 +18,7 @@
 
 
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -139,6 +140,7 @@ private slots:
     int cut_check();
     void test_menu();
     void sig_button();
+    void sid_button();
     void accle(ulong,ulong);
 
 

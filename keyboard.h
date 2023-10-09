@@ -2,6 +2,7 @@
 #define KEYBOARD_H
 
 #include <QDialog>
+#include <QDebug>
 
 namespace Ui {
 class keyboard;

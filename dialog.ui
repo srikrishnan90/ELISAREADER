@@ -31,7 +31,7 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -75,6 +75,9 @@
       <font>
        <pointsize>10</pointsize>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>
@@ -121,7 +124,7 @@
       <rect>
        <x>20</x>
        <y>110</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -139,7 +142,7 @@
       <rect>
        <x>20</x>
        <y>140</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -175,7 +178,7 @@
       <rect>
        <x>20</x>
        <y>170</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -185,7 +188,7 @@
       </font>
      </property>
      <property name="text">
-      <string>S/Co</string>
+      <string>S/Co </string>
      </property>
     </widget>
     <widget class="QLabel" name="label_43">
@@ -193,7 +196,7 @@
       <rect>
        <x>20</x>
        <y>200</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -265,7 +268,7 @@
       <rect>
        <x>20</x>
        <y>260</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -301,7 +304,7 @@
       <rect>
        <x>20</x>
        <y>50</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -311,7 +314,7 @@
       </font>
      </property>
      <property name="text">
-      <string>WELL</string>
+      <string>WELL POS</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_50">
@@ -319,7 +322,7 @@
       <rect>
        <x>20</x>
        <y>230</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -337,7 +340,7 @@
       <rect>
        <x>20</x>
        <y>80</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -347,7 +350,7 @@
       </font>
      </property>
      <property name="text">
-      <string>SAMP</string>
+      <string>SAMP TYPE</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_53">
@@ -373,14 +376,17 @@
       <rect>
        <x>110</x>
        <y>255</y>
-       <width>100</width>
+       <width>150</width>
        <height>25</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>9</pointsize>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">Text-align:left</string>
      </property>
      <property name="text">
       <string/>
@@ -393,7 +399,7 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -403,7 +409,10 @@
       </font>
      </property>
      <property name="text">
-      <string>No. Of Cal</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;No. Of Cal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
      </property>
     </widget>
     <widget class="QWidget" name="verticalLayoutWidget">
@@ -476,7 +485,7 @@
       <rect>
        <x>20</x>
        <y>140</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -512,7 +521,7 @@
       <rect>
        <x>20</x>
        <y>80</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -522,7 +531,7 @@
       </font>
      </property>
      <property name="text">
-      <string>SAMP</string>
+      <string>SAMP TYPE</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_20">
@@ -548,7 +557,7 @@
       <rect>
        <x>20</x>
        <y>200</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -566,7 +575,7 @@
       <rect>
        <x>20</x>
        <y>50</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -576,7 +585,7 @@
       </font>
      </property>
      <property name="text">
-      <string>WELL</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;WELL POS&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_34">
@@ -602,7 +611,7 @@
       <rect>
        <x>20</x>
        <y>260</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -620,7 +629,7 @@
       <rect>
        <x>20</x>
        <y>170</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -674,7 +683,7 @@
       <rect>
        <x>20</x>
        <y>230</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -692,7 +701,7 @@
       <rect>
        <x>20</x>
        <y>110</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -728,14 +737,17 @@
       <rect>
        <x>110</x>
        <y>255</y>
-       <width>100</width>
+       <width>150</width>
        <height>25</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>9</pointsize>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">Text-align:left</string>
      </property>
      <property name="text">
       <string/>
@@ -820,14 +832,17 @@
       <rect>
        <x>110</x>
        <y>235</y>
-       <width>100</width>
+       <width>150</width>
        <height>25</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
+       <pointsize>9</pointsize>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">Text-align:left</string>
      </property>
      <property name="text">
       <string/>
@@ -838,7 +853,7 @@
       <rect>
        <x>20</x>
        <y>90</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -856,7 +871,7 @@
       <rect>
        <x>20</x>
        <y>120</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -892,7 +907,7 @@
       <rect>
        <x>20</x>
        <y>150</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -910,7 +925,7 @@
       <rect>
        <x>20</x>
        <y>180</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -982,7 +997,7 @@
       <rect>
        <x>20</x>
        <y>240</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -1018,7 +1033,7 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -1028,7 +1043,7 @@
       </font>
      </property>
      <property name="text">
-      <string>WELL</string>
+      <string>WELL POS</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_64">
@@ -1036,7 +1051,7 @@
       <rect>
        <x>20</x>
        <y>210</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -1054,7 +1069,7 @@
       <rect>
        <x>20</x>
        <y>60</y>
-       <width>81</width>
+       <width>80</width>
        <height>17</height>
       </rect>
      </property>
@@ -1064,7 +1079,7 @@
       </font>
      </property>
      <property name="text">
-      <string>SAMP</string>
+      <string>SAMP TYPE</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_66">

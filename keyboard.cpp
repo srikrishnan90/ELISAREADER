@@ -16,6 +16,7 @@ keyboard::~keyboard()
 
 QString keyboard::getData()
 {
+    qDebug()<<"from Keyboard"<<ui->lineEdit->text();
     return(ui->lineEdit->text());
 }
 
@@ -429,20 +430,20 @@ void keyboard::on_pushButton_118_clicked()
 
 void keyboard::on_pushButton_136_clicked()
 {
-    getData();
+    //getData();
     this->accept();
 }
 
 
 void keyboard::on_pushButton_94_clicked()
 {
-    getData();
+    //getData();
     this->accept();
 }
 
 void keyboard::on_pushButton_50_clicked()
 {
-    getData();
+    //getData();
     this->accept();
 }
 

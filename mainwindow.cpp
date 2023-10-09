@@ -1930,6 +1930,8 @@ void MainWindow::result_table()
     for(int i=0;i<8;i++)
     {
         ui->tableWidget->setColumnWidth(i,65);
+        if(i==7)
+            ui->tableWidget->setColumnWidth(i,100);
     }
     //    ui->tableWidget->setColumnCount(8);
     //    ui->tableWidget->setColumnWidth(0,50);
@@ -1938,7 +1940,8 @@ void MainWindow::result_table()
     double len = std::ceil(double(total)/8);
     int length=int(len), start=blank+nc+pc+lc+cc+total_cal;
     QString wel[8]={"A","B","C","D","E","F","G","H"};
-    QTableWidgetItem *well, *samp, *absr, *absa, *resl, *remk, *unt, *sid;
+    QTableWidgetItem *well, *samp, *absr, *absa, *resl, *remk, *unt;
+    QPushButton *sid;
     for(int i=0;i<length;i++)
     {
         for(int j=0;j<8;j++)
@@ -1950,7 +1953,7 @@ void MainWindow::result_table()
             resl=new QTableWidgetItem;
             unt=new QTableWidgetItem;
             remk=new QTableWidgetItem;
-            sid= new QTableWidgetItem;
+            sid= new QPushButton;
 
             well->setTextAlignment(Qt::AlignCenter);
             samp->setTextAlignment(Qt::AlignCenter);
@@ -1959,7 +1962,8 @@ void MainWindow::result_table()
             resl->setTextAlignment(Qt::AlignCenter);
             unt->setTextAlignment(Qt::AlignCenter);
             remk->setTextAlignment(Qt::AlignCenter);
-            sid->setTextAlignment(Qt::AlignLeft);
+            sid->setStyleSheet("Text-align:left");
+            sid->setObjectName(QString::number(j+(i*8)));
 
             well->setText(wel[j]+QString::number(i+1));
             samp->setText(dis[j+(i*8)]);
@@ -1969,7 +1973,8 @@ void MainWindow::result_table()
             remk->setText(rem[j+(i*8)]);
             unt->setText(unit);
             sid->setText(pid[j+(i*8)]);
-
+            disconnect(sid, &QPushButton::clicked, this, &MainWindow::sid_button);
+            connect(sid, &QPushButton::clicked, this, &MainWindow::sid_button);
 
             ui->tableWidget->setItem(j+(i*8), 0, well);//well
             ui->tableWidget->setItem(j+(i*8), 1, samp);//sample
@@ -1980,7 +1985,7 @@ void MainWindow::result_table()
             {
                 ui->tableWidget->setItem(j+(i*8), 5, unt);//unit
                 ui->tableWidget->setItem(j+(i*8), 6, remk);//remark
-                ui->tableWidget->setItem(j+(i*8), 7, sid);//PID
+                ui->tableWidget->setCellWidget(j+(i*8), 7, sid);//PID
             }
 
         }
@@ -2644,6 +2649,8 @@ void MainWindow::button_clicked()
             dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
             dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
             dia->exec();
+            pid[map[senderObjName]] = dia->getdiaData();
+
         }
         else if(test_mode==2)
         {
@@ -2651,6 +2658,7 @@ void MainWindow::button_clicked()
             dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
             dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
             dia->exec();
+            pid[map[senderObjName]] = dia->getdiaData();
         }
         else if(test_mode==3)
         {
@@ -2658,6 +2666,7 @@ void MainWindow::button_clicked()
             dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
             dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
             dia->exec();
+            pid[map[senderObjName]] = dia->getdiaData();
         }
     }
 }
@@ -2665,6 +2674,20 @@ void MainWindow::button_clicked()
 void MainWindow::on_pushButton_21_clicked()
 {
     on_pushButton_20_clicked();
+}
+
+void MainWindow::sid_button()
+{
+    QObject *senderObj = sender();
+    QString senderObjName = senderObj->objectName();
+    qDebug()<< "Button: " << senderObjName;
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(0);
+    key->setData("Enter PID/SID for "+dis[senderObjName.toInt()],pid[senderObjName.toInt()]);
+    key->exec();
+    pid[senderObjName.toInt()]=key->getData();
+    result_table();
 }
 
 
