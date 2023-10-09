@@ -50,7 +50,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Utilities</string>
+     <string>Settings</string>
     </property>
    </widget>
    <widget class="QToolButton" name="toolButton_4">
@@ -63,7 +63,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Settings</string>
+     <string>Utilities</string>
     </property>
    </widget>
    <widget class="QStackedWidget" name="stackedWidget">
@@ -6370,9 +6370,9 @@
      <widget class="QLabel" name="label_17">
       <property name="geometry">
        <rect>
-        <x>550</x>
+        <x>540</x>
         <y>10</y>
-        <width>64</width>
+        <width>80</width>
         <height>17</height>
        </rect>
       </property>
@@ -6385,12 +6385,25 @@
        <rect>
         <x>650</x>
         <y>10</y>
-        <width>64</width>
+        <width>80</width>
         <height>17</height>
        </rect>
       </property>
       <property name="text">
        <string>TextLabel</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_42">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>10</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </widget>
@@ -6602,7 +6615,7 @@
        <rect>
         <x>650</x>
         <y>10</y>
-        <width>64</width>
+        <width>80</width>
         <height>17</height>
        </rect>
       </property>
@@ -6613,14 +6626,27 @@
      <widget class="QLabel" name="label_40">
       <property name="geometry">
        <rect>
-        <x>550</x>
+        <x>540</x>
         <y>10</y>
-        <width>64</width>
+        <width>80</width>
         <height>17</height>
        </rect>
       </property>
       <property name="text">
        <string>TextLabel</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_41">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>10</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </widget>
@@ -6854,6 +6880,36 @@
         <string/>
        </property>
       </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_10">
+     <widget class="QPushButton" name="pushButton_22">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>200</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>DB page</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_11">
+     <widget class="QPushButton" name="pushButton_23">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>230</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Settings page</string>
+      </property>
      </widget>
     </widget>
    </widget>

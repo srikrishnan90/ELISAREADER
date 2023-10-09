@@ -18,7 +18,7 @@ static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[9
 static QString dis[96],res[96], rem[96],pid[96];
 static Pi2c arduino(7);
 static QString unit, cuteqn;
-static int invalid=0;
+static int invalid=0, save=0;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QScroller::grabGesture(ui->scrollArea, QScroller::LeftMouseButtonGesture);
     ui->scrollAreaWidgetContents->setLayout(mainLayout);
     QSqlDatabase sqdb = QSqlDatabase::addDatabase("QSQLITE");
-    sqdb.setDatabaseName("/home/pi/Desktop/er.db");
+    sqdb.setDatabaseName("/home/pi/reader/Database/er.db");
     if(!sqdb.open())
         qDebug() << "Can't Connect to DB !";
     else
@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stackedWidget->setCurrentIndex(0);
     ui->stackedWidget->lower();
     test_menu();
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(delete_label()));
 }
 
 MainWindow::~MainWindow()
@@ -685,6 +687,8 @@ void MainWindow::on_toolButton_8_clicked()
     ui->textBrowser_4->setText("");
     ui->textBrowser_5->setText("");
     ui->textBrowser_6->setText("");
+    ui->toolButton_22->setDisabled(false);
+    ui->toolButton_27->setDisabled(false);
 
     QSqlQuery Query;
     Query.prepare("select mode,std,abs1,abs2,nc,pc,lc,cc,pri,sec,cutabs,unit FROM tests WHERE name = :bname");
@@ -1803,14 +1807,18 @@ void MainWindow::mot_backward(ulong range)
 
 void MainWindow::on_toolButton_21_clicked()
 {
+    if(save==1)
+    {
+        save_results();
+        save=0;
+    }
     ui->stackedWidget->setCurrentIndex(0);
     ui->stackedWidget->lower();
 }
 
 void MainWindow::on_toolButton_26_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(0);
-    ui->stackedWidget->lower();
+    on_toolButton_21_clicked();
 }
 
 void MainWindow::on_toolButton_25_clicked()
@@ -1829,13 +1837,15 @@ void MainWindow::on_toolButton_20_clicked()
 void MainWindow::result_page()
 {
     ui->stackedWidget->setCurrentIndex(6);
-    QDate cd = QDate::currentDate();
-    QTime ct = QTime::currentTime();
 
-    ui->label_17->setText(cd.toString(Qt::LocaleDate));
-    ui->label_40->setText(cd.toString(Qt::LocaleDate));
-    ui->label_38->setText(ct.toString(Qt::LocaleDate));
-    ui->label_39->setText(ct.toString(Qt::LocaleDate));
+    QDateTime dt(QDateTime::currentDateTime());
+    ui->label_17->setText(dt.toString("dd-MM-yyyy"));
+    ui->label_40->setText(dt.toString("dd-MM-yyyy"));
+    ui->label_38->setText(dt.toString("hh.mm.ss"));
+    ui->label_39->setText(dt.toString("hh.mm.ss"));
+
+    //ui->label_38->setText(ct.toString(Qt::LocaleDate));
+    //ui->label_39->setText(ct.toString(Qt::LocaleDate));
 
 
     double len = std::ceil(double(total)/8);
@@ -2690,4 +2700,159 @@ void MainWindow::sid_button()
     result_table();
 }
 
+
+void MainWindow::on_toolButton_2_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(9);
+}
+
+void MainWindow::on_toolButton_3_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(10);
+}
+
+
+
+void MainWindow::on_toolButton_22_clicked()
+{
+    //QDateTime dt(QDateTime::currentDateTime());
+    QString path="/home/pi/reader/CSV/"+btn_name+" "+ui->label_17->text()+" "+ui->label_38->text()+".csv";
+    QFile file(path);
+    if (file.open(QFile::WriteOnly | QFile::Truncate))
+    {            QTextStream data( &file );
+        QStringList strList;
+        for( int c = 0; c < ui->tableWidget->columnCount(); ++c )
+        {
+            strList<<ui->tableWidget->horizontalHeaderItem(c)->data(Qt::DisplayRole).toString();
+        }
+        data << strList.join(";") << "\n";
+        for( int r = 0; r < ui->tableWidget->rowCount(); ++r )
+        {
+            strList.clear();
+            for( int c = 0; c < ui->tableWidget->columnCount(); ++c )
+            {
+                if(c==ui->tableWidget->columnCount()-1)
+                {
+                    strList <<pid[r];
+                }
+                else
+                {
+                    QTableWidgetItem* item = ui->tableWidget->item(r,c);
+                    if (!item || item->text().isEmpty())
+                    {
+                        ui->tableWidget->setItem(r,c,new QTableWidgetItem(""));
+                    }
+                    strList <<ui->tableWidget->item( r, c )->text();
+                }
+            }
+            data << strList.join( ";" )+"\n";
+        }
+        file.close();
+    }
+    //ui->toolButton_22->setDisabled(true);
+    //ui->toolButton_27->setDisabled(true);
+    ui->label_41->setText("Saved..");
+    ui->label_42->setText("Saved..");
+    timer->start(2000);
+}
+
+void MainWindow::on_toolButton_27_clicked()
+{
+    on_toolButton_22_clicked();
+}
+
+void MainWindow::on_toolButton_36_clicked()
+{
+    on_toolButton_35_clicked();
+}
+
+void MainWindow::on_toolButton_35_clicked()
+{
+    if(save==1)
+    {
+        save_results1();
+        save=0;
+    }
+    on_toolButton_8_clicked();
+}
+
+
+void MainWindow::delete_label()
+{
+    ui->label_41->clear();
+    ui->label_42->clear();
+    timer->stop();
+
+}
+
+void MainWindow::save_results()
+{
+    QDateTime dt(QDateTime::currentDateTime());
+    qDebug()<<dt.currentDateTime();
+
+    QSqlQuery query;
+    query.prepare("insert into results (name, sid, abs, result, unit, rem, date, time) values(:name,:sid,:abs,:result,:unit,:rem,:date,:time)");
+    QVariantList vname,vsid,vabs,vresult,vunit,vrem,vdate,vtime;
+    for (int i=blank+nc+pc+lc+cc+total_cal; i < total;i++)
+    {
+        vname << btn_name;
+        vsid << pid[i];
+        vabs << QString::number(abs_avg[i],'f',3);
+        vresult << res[i];
+        vunit << unit;
+        vrem << rem[i];
+        vdate<<ui->label_17->text();
+        vtime << ui->label_38->text();
+    }
+
+    query.addBindValue(vname);
+    query.addBindValue(vsid);
+    query.addBindValue(vabs);
+    query.addBindValue(vresult);
+    query.addBindValue(vunit);
+    query.addBindValue(vrem);
+    query.addBindValue(vdate);
+    query.addBindValue(vtime);
+    query.execBatch();
+    qDebug()<<dt.currentDateTime();
+
+
+}
+
+void MainWindow::save_results1()
+{
+    QDateTime dt(QDateTime::currentDateTime());
+    qDebug()<<dt.currentDateTime();
+    QSqlQuery query;
+    query.prepare("insert into results (name, sid, abs, result, unit, rem, date, time) values(:name,:sid,:abs,:result,:unit,:rem,:date,:time)");
+    for (int i=blank+nc+pc+lc+cc+total_cal; i < total; i++)
+    {
+        query.bindValue(":sid", pid[i]);
+        query.bindValue(":abs", QString::number(abs_avg[i],'f',3));
+        query.bindValue(":result", res[i]);
+        query.bindValue(":unit", unit);
+        query.bindValue(":rem", rem[i]);
+        query.bindValue(":date", ui->label_17->text());
+        query.bindValue(":time", ui->label_38->text());
+        query.exec();
+        if(dup_samp==2)
+            i++;
+    }
+    qDebug()<<dt.currentDateTime();
+
+}
+
+
+void MainWindow::on_toolButton_23_clicked()
+{
+    save=1;
+    ui->label_41->setText("Results Saved..");
+    ui->label_42->setText("Results Saved..");
+    timer->start(2000);
+}
+
+void MainWindow::on_toolButton_29_clicked()
+{
+    on_toolButton_23_clicked();
+}
 

@@ -14,6 +14,7 @@
 #include <math.h>
 #include "dialog.h"
 #include <QMap>
+#include <QTimer>
 
 
 
@@ -141,6 +142,7 @@ private slots:
     void test_menu();
     void sig_button();
     void sid_button();
+    void delete_label();
     void accle(ulong,ulong);
 
 
@@ -226,9 +228,30 @@ private slots:
 
     void button_clicked();
 
+    void on_toolButton_2_clicked();
+
+    void on_toolButton_3_clicked();
+
+    
+    void on_toolButton_22_clicked();
+
+    void on_toolButton_27_clicked();
+
+    void on_toolButton_36_clicked();
+
+    void on_toolButton_35_clicked();
+
+    void save_results();
+    void save_results1();
+
+    void on_toolButton_23_clicked();
+
+    void on_toolButton_29_clicked();
+
 private:
     Ui::MainWindow *ui;
     QGridLayout* mainLayout;
+    QTimer *timer;
 };
 
 #endif // MAINWINDOW_H
