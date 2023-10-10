@@ -15,6 +15,8 @@
 #include "dialog.h"
 #include <QMap>
 #include <QTimer>
+#include <QListWidgetItem>
+//#include <QFileDialog>
 
 
 
@@ -242,11 +244,19 @@ private slots:
     void on_toolButton_35_clicked();
 
     void save_results();
-    void save_results1();
+    //void save_results1();
 
     void on_toolButton_23_clicked();
 
     void on_toolButton_29_clicked();
+
+    void on_pushButton_24_clicked();
+
+    void on_pushButton_22_clicked();
+
+    void on_pushButton_25_clicked();
+
+    void on_pushButton_27_clicked();
 
 private:
     Ui::MainWindow *ui;

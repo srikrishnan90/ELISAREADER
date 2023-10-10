@@ -79,7 +79,7 @@
      <string notr="true">background:rgba(255,255,255,1)</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>12</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QScrollArea" name="scrollArea">
@@ -6886,14 +6886,27 @@
      <widget class="QPushButton" name="pushButton_22">
       <property name="geometry">
        <rect>
-        <x>190</x>
-        <y>200</y>
+        <x>130</x>
+        <y>230</y>
         <width>131</width>
         <height>41</height>
        </rect>
       </property>
       <property name="text">
-       <string>DB page</string>
+       <string>Plate Data</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_24">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>230</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Patient Results</string>
       </property>
      </widget>
     </widget>
@@ -6909,6 +6922,179 @@
       </property>
       <property name="text">
        <string>Settings page</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_12">
+     <widget class="QTableWidget" name="tableWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>641</width>
+        <height>321</height>
+       </rect>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>80</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>20</number>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>TEST</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>ABS</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>RESULT</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>UNIT</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>REM</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>DATE</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>TIME</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>PID</string>
+       </property>
+      </column>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_13">
+     <widget class="QListWidget" name="listWidget">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>70</y>
+        <width>256</width>
+        <height>351</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_25">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>160</y>
+        <width>83</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>View</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_26">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>270</y>
+        <width>83</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_14">
+     <widget class="QTableWidget" name="tableWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>591</width>
+        <height>321</height>
+       </rect>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>80</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>20</number>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>WELL</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>SAMP</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>ABS</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>AVG</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>RESULT</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>UNIT</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>REM</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>PID</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QPushButton" name="pushButton_27">
+      <property name="geometry">
+       <rect>
+        <x>650</x>
+        <y>330</y>
+        <width>83</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Back</string>
       </property>
      </widget>
     </widget>

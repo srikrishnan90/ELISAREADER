@@ -1807,13 +1807,14 @@ void MainWindow::mot_backward(ulong range)
 
 void MainWindow::on_toolButton_21_clicked()
 {
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->lower();
+    qApp->processEvents();
     if(save==1)
     {
         save_results();
         save=0;
     }
-    ui->stackedWidget->setCurrentIndex(0);
-    ui->stackedWidget->lower();
 }
 
 void MainWindow::on_toolButton_26_clicked()
@@ -2768,12 +2769,13 @@ void MainWindow::on_toolButton_36_clicked()
 
 void MainWindow::on_toolButton_35_clicked()
 {
+    on_toolButton_8_clicked();
+    qApp->processEvents();
     if(save==1)
     {
-        save_results1();
+        save_results();
         save=0;
     }
-    on_toolButton_8_clicked();
 }
 
 
@@ -2785,7 +2787,7 @@ void MainWindow::delete_label()
 
 }
 
-void MainWindow::save_results()
+/*void MainWindow::save_results1()
 {
     QDateTime dt(QDateTime::currentDateTime());
     qDebug()<<dt.currentDateTime();
@@ -2815,11 +2817,10 @@ void MainWindow::save_results()
     query.addBindValue(vtime);
     query.execBatch();
     qDebug()<<dt.currentDateTime();
-
-
 }
+*/
 
-void MainWindow::save_results1()
+void MainWindow::save_results()
 {
     QDateTime dt(QDateTime::currentDateTime());
     qDebug()<<dt.currentDateTime();
@@ -2827,6 +2828,7 @@ void MainWindow::save_results1()
     query.prepare("insert into results (name, sid, abs, result, unit, rem, date, time) values(:name,:sid,:abs,:result,:unit,:rem,:date,:time)");
     for (int i=blank+nc+pc+lc+cc+total_cal; i < total; i++)
     {
+        query.bindValue(":name", btn_name);
         query.bindValue(":sid", pid[i]);
         query.bindValue(":abs", QString::number(abs_avg[i],'f',3));
         query.bindValue(":result", res[i]);
@@ -2856,3 +2858,163 @@ void MainWindow::on_toolButton_29_clicked()
     on_toolButton_23_clicked();
 }
 
+
+void MainWindow::on_pushButton_24_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(11);
+    ui->tableWidget_2->clearContents();
+    QSqlQuery query;
+    query.prepare("select count(*) from results");
+    query.exec();
+    int length=0;
+    while(query.next())
+    {
+        length=query.value(0).toInt();
+    }
+    qDebug()<<length;
+    ui->tableWidget_2->setRowCount(length);
+
+    QStringList test, abs, result, unit, rem, date, time, psid;
+    query.prepare("select * from results");
+    query.exec();
+    while(query.next())
+    {
+        test<<query.value("name").toString();
+        abs<<query.value("abs").toString();
+        result<<query.value("result").toString();
+        unit<<query.value("unit").toString();
+        rem<<query.value("rem").toString();
+        date<<query.value("date").toString();
+        time<<query.value("time").toString();
+        psid<<query.value("sid").toString();
+    }
+
+    QTableWidgetItem *test_item, *abs_item, *result_item, *unit_item, *rem_item, *date_item, *time_item, *psid_item;
+    for(int i=0;i<length;i++)
+    {
+        test_item=new QTableWidgetItem;
+        abs_item=new QTableWidgetItem;
+        result_item=new QTableWidgetItem;
+        unit_item=new QTableWidgetItem;
+        rem_item=new QTableWidgetItem;
+        date_item=new QTableWidgetItem;
+        time_item=new QTableWidgetItem;
+        psid_item= new QTableWidgetItem;
+
+        test_item->setTextAlignment(Qt::AlignCenter);
+        abs_item->setTextAlignment(Qt::AlignCenter);
+        result_item->setTextAlignment(Qt::AlignCenter);
+        unit_item->setTextAlignment(Qt::AlignCenter);
+        rem_item->setTextAlignment(Qt::AlignCenter);
+        date_item->setTextAlignment(Qt::AlignCenter);
+        time_item->setTextAlignment(Qt::AlignCenter);
+        psid_item->setTextAlignment(Qt::AlignVCenter);
+        psid_item->setTextAlignment(Qt::AlignLeft);
+
+        test_item->setText(test[i]);
+        abs_item->setText(abs[i]);
+        result_item->setText(result[i]);
+        unit_item->setText(unit[i]);
+        rem_item->setText(rem[i]);
+        date_item->setText(date[i]);
+        time_item->setText(time[i]);
+        psid_item->setText(psid[i]);
+
+        ui->tableWidget_2->setItem(length-i-1,0,test_item);
+        ui->tableWidget_2->setItem(length-i-1,1,abs_item);
+        ui->tableWidget_2->setItem(length-i-1,2,result_item);
+        ui->tableWidget_2->setItem(length-i-1,3,unit_item);
+        ui->tableWidget_2->setItem(length-i-1,4,rem_item);
+        ui->tableWidget_2->setItem(length-i-1,5,date_item);
+        ui->tableWidget_2->setItem(length-i-1,6,time_item);
+        ui->tableWidget_2->setItem(length-i-1,7,psid_item);
+    }
+
+}
+
+void MainWindow::on_pushButton_22_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(12);
+    ui->listWidget->clear();
+    QDir dire("/home/pi/reader/CSV");
+    QStringList filters;
+    filters << "*.csv";
+    for (const QFileInfo &file : dire.entryInfoList(filters,QDir::Files))
+    {
+        QListWidgetItem *item = new QListWidgetItem(file.fileName().left(file.fileName().indexOf(".csv")));
+        qDebug()<<file.fileName()<<file.fileName().length()<<file.fileName().left(file.fileName().indexOf(".csv"));
+        item->setData(Qt::UserRole, file.absolutePath()); // if you need absolute path of the file
+        ui->listWidget->addItem(item);
+    }
+    int n=ui->tableWidget->currentRow();
+    int col=ui->tableWidget->columnCount();
+    qDebug()<<n<<col;
+    for(int i=0;i<ui->tableWidget->columnCount();i++)
+    {
+        if(ui->tableWidget->item(n,i))
+        {
+            QString val=ui->tableWidget->item(n,i)->text();
+            qDebug()<<val;
+        }
+        //qDebug()<<n<<i;
+    }
+}
+
+void MainWindow::on_pushButton_25_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(13);
+    ui->tableWidget_3->clearContents();
+    //QString fileName = QFileDialog::getOpenFileName(this, ("Open File"), NULL, ("csv File(*.csv)"));
+    QString fileName="/home/pi/reader/CSV/"+ui->listWidget->currentItem()->text()+".csv";
+    qDebug()<<fileName;
+    QString data;
+    QFile importedCSV(fileName);
+    QStringList rowOfData;
+    QStringList rowData;
+    data.clear();
+    rowOfData.clear();
+    rowData.clear();
+
+    if (importedCSV.open(QFile::ReadOnly))
+    {
+        data = importedCSV.readAll();
+        rowOfData = data.split("\n");           //Value on each row
+        importedCSV.close();
+    }
+    ui->tableWidget_3->setRowCount(rowOfData.size()-2);
+    for(int i=0;i<8;i++)
+    {
+        ui->tableWidget_3->setColumnWidth(i,65);
+        if(i==7)
+            ui->tableWidget_3->setColumnWidth(i,100);
+    }
+
+    for (int x = 0; x < rowOfData.size(); x++)  //rowOfData.size() gives the number of row
+    {
+        if(x==0)
+        {
+            rowData = rowOfData.at(x).split(";");   //Number of collumn
+            //int r=rowData.size();
+            for (int y = 0; y < rowData.size(); y++)
+            {
+                //ui->tableWidget_3->setItem(x-1,y,new QTableWidgetItem(rowData[y]));
+                ui->tableWidget_3->setHorizontalHeaderItem(y, new QTableWidgetItem(rowData[y]));
+            }
+        }
+        else
+        {
+            rowData = rowOfData.at(x).split(";");   //Number of collumn
+            //int r=rowData.size();
+            for (int y = 0; y < rowData.size(); y++)
+            {
+                ui->tableWidget_3->setItem(x-1,y,new QTableWidgetItem(rowData[y]));
+            }
+        }
+    }
+    //statusBar()->showMessage(tr("File successfully loaded."), 3000);
+}
+
+void MainWindow::on_pushButton_27_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(12);
+}
