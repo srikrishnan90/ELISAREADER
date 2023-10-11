@@ -3018,3 +3018,8 @@ void MainWindow::on_pushButton_27_clicked()
 {
     ui->stackedWidget->setCurrentIndex(12);
 }
+
+void MainWindow::on_comboBox_13_currentIndexChanged(int index)
+{
+
+}

@@ -258,6 +258,8 @@ private slots:
 
     void on_pushButton_27_clicked();
 
+    void on_comboBox_13_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     QGridLayout* mainLayout;
