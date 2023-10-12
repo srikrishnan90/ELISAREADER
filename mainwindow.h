@@ -266,9 +266,11 @@ private slots:
 
     void on_toolButton_34_clicked();
 
-    void print_process(int paper_length);
+    void print_process(int paper_length, int individual);
 
     void on_toolButton_24_clicked();
+
+    void on_toolButton_28_clicked();
 
 private:
     Ui::MainWindow *ui;

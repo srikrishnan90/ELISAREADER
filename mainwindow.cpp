@@ -3153,7 +3153,7 @@ void MainWindow::on_toolButton_34_clicked()
     }
     text.append("</tbody></table>");
     doc.setHtml(text);
-    print_process(84);
+    print_process(84,0);
 }
 
 
@@ -3203,11 +3203,59 @@ void MainWindow::on_toolButton_24_clicked()
         text.append("</tr>");
     }
     doc.setHtml(text);
-    print_process(125);
+    print_process(125,0);
 }
 
 
-void MainWindow::print_process(int paper_length)
+void MainWindow::on_toolButton_28_clicked()
+{
+    QStringList head,val;
+    int n=ui->tableWidget->currentRow();
+    for( int i = 0; i < ui->tableWidget->columnCount(); i++ )
+    {
+        head<<ui->tableWidget->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString();
+        if(ui->tableWidget->item(n,i))
+        {
+            val<<ui->tableWidget->item(n,i)->text();
+        }
+        else if(i==ui->tableWidget->columnCount()-1)
+        {
+            val<<pid[n];
+        }
+        else
+        {
+            val<<" ";
+        }
+    }
+    qDebug()<<val;
+    qDebug()<<head;
+
+
+    doc.clear();
+    //QString text("<head><style>table, th, td {border: 1px solid black; }</style></head><body><h1style='font-size:11px'>");
+    QString text("<head><style>table,td,th{border: 1px solid black;}table{border-collapse:collapse;width:100%;} table.center{margin-left:auto;margin-right:auto;}table,td,th{text-align:left;}</style></head><body><h1 style='font-size:10px;text-align:center'>");
+    text.append(btn_name).append("<br>").append(ui->label_40->text()).append("<br>").append(ui->label_39->text());
+    text.append("</h1>");
+    text.append("<table><thead>");
+    for (int i = 0; i < ui->tableWidget->columnCount(); i++)
+    {
+        text.append("<tr>");
+        //text.append("<th style='text-align: center'>").append(head[i]).append(" ").append("</th>");
+        //text.append("<td style='text-align: center'>").append(val[i]).append(" ").append("</td>");
+        text.append("<th>").append(head[i]).append(" ").append("</th>");
+        text.append("<td>").append(val[i]).append(" ").append("</td>");
+        text.append("</tr>");
+    }
+    text.append("</tr></thead>");
+    text.append("</tbody></table>");
+
+    doc.setHtml(text);
+    print_process(65,1);
+
+}
+
+
+void MainWindow::print_process(int paper_length, int individual)
 {
     QPrinter printer;
     QString printername;
@@ -3225,6 +3273,11 @@ void MainWindow::print_process(int paper_length)
         printer.setOrientation(QPrinter::Landscape);
         printer.setPageOrder(QPrinter::LastPageFirst);//not working, need to check
         printer.setPaperSize(QSize(58, paper_length),QPrinter::Millimeter);//paper_length 84 for table and 125 for matrix
+        if(individual==1)
+        {
+            printer.setOrientation(QPrinter::Portrait);
+            printer.setPaperSize(QSize(58, paper_length),QPrinter::Millimeter);//paper_length 84 for table and 125 for matrix
+        }
         QFont font;
         font.setPointSize(6);
         font.setBold(QFont::DemiBold);
@@ -3253,6 +3306,8 @@ void MainWindow::print_process(int paper_length)
     doc.setPageSize(printer.pageRect().size());
     doc.print(&printer);
 }
+
+
 
 
 
