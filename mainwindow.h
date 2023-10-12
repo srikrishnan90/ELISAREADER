@@ -17,6 +17,7 @@
 #include <QTimer>
 #include <QListWidgetItem>
 //#include <QFileDialog>
+#include <QPrinterInfo>
 
 
 
@@ -211,6 +212,7 @@ private slots:
     void on_toolButton_20_clicked();
     void result_page();
     void result_table();
+    void result_matrix();
     void process_average();
     void process_result_multistandard();
     void process_result_cutoff();
@@ -259,6 +261,14 @@ private slots:
     void on_pushButton_27_clicked();
 
     void on_comboBox_13_currentIndexChanged(int index);
+
+    void on_comboBox_14_activated(int index);
+
+    void on_toolButton_34_clicked();
+
+    void print_process(int paper_length);
+
+    void on_toolButton_24_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -14,11 +14,12 @@ static int blank=0,cal=0,dup_cal=1,nc=0,pc=0,cc=0,lc=0,samp=0,dup_samp=1,total=0
 static int led_freq=10000;
 static double offset[8], blnk[8], od[8];
 static int pri_wave=0,sec_wave=0;
-static double pri_res[12][8],sec_res[12][8],fin_res[12][8],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0;
+static double pri_res[12][8],sec_res[12][8],fin_res[12][8],pri[96],sec[96],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0;
 static QString dis[96],res[96], rem[96],pid[96];
 static Pi2c arduino(7);
 static QString unit, cuteqn;
 static int invalid=0, save=0;
+static QTextDocument doc;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -1845,6 +1846,23 @@ void MainWindow::result_page()
     ui->label_38->setText(dt.toString("hh.mm.ss"));
     ui->label_39->setText(dt.toString("hh.mm.ss"));
 
+    ui->comboBox_13->clear();
+    QStringList matrixlist;
+
+    if(test_mode==1)
+    {
+        matrixlist<<"Pri. ABS"<<"Sec. ABS"<<"∆ ABS"<<"AVG. ABS";
+        ui->comboBox_13->addItems(matrixlist);
+        ui->comboBox_13->setCurrentIndex(3);
+    }
+    else
+    {
+        matrixlist<<"PRI. ABS"<<"SEC. ABS"<<"∆ ABS"<<"AVG. ABS"<<"RESULTS"<<"REMARKS";
+        ui->comboBox_13->addItems(matrixlist);
+        ui->comboBox_13->setCurrentIndex(3);
+        ui->comboBox_13->setCurrentIndex(4);
+    }
+
     //ui->label_38->setText(ct.toString(Qt::LocaleDate));
     //ui->label_39->setText(ct.toString(Qt::LocaleDate));
 
@@ -1853,7 +1871,11 @@ void MainWindow::result_page()
     int length=int(len);
     for(int i=0;i<length;i++)
         for(int k=0;k<8;k++)
+        {
             abs_res[k+(i*8)]=fin_res[i][k];
+            pri[k+(i*8)]=pri_res[i][k];
+            sec[k+(i*8)]=sec_res[i][k];
+        }
 
     QPushButton* samp_buttons[96] = { ui->A1_2,ui->B1_2,ui->C1_2,ui->D1_2,ui->E1_2,ui->F1_2,ui->G1_2,ui->H1_2,
                                       ui->A2_2,ui->B2_2,ui->C2_2,ui->D2_2,ui->E2_2,ui->F2_2,ui->G2_2,ui->H2_2,
@@ -1894,43 +1916,7 @@ void MainWindow::result_page()
     }
 
 
-    for(int i=0;i<total;i++)
-    {
-
-        if(test_mode==1)
-            samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_avg[i],'f',3));
-        else
-        {
-            if(invalid==0)
-                samp_buttons[i]->setText(dis[i]+'\n'+res[i]);
-            else
-                samp_buttons[i]->setText(dis[i]+'\n'+"INV");
-        }
-
-        if(i<blank)
-            samp_buttons[i]->setStyleSheet("background-color: rgb(235, 235, 235)");
-        else if(i<blank+nc)
-            samp_buttons[i]->setStyleSheet("background-color: rgb(40, 230, 100)");
-        else if(i<blank+nc+pc)
-            samp_buttons[i]->setStyleSheet("background-color: rgb(245, 30, 20)");
-        else if(i<blank+nc+pc+lc)
-            samp_buttons[i]->setStyleSheet("background-color: rgb(170, 20, 240)");
-        else if(i<blank+nc+pc+lc+cc)
-            samp_buttons[i]->setStyleSheet("background-color: rgb(240, 20, 120)");
-        else if(i<blank+nc+pc+lc+cc+total_cal)
-            samp_buttons[i]->setStyleSheet("background-color: rgb(240, 240, 20)");
-        else if(i<total)
-        {
-            if(rem[i]=="OOR")
-                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(20, 120, 240), stop:0.2 rgb(20, 120, 240), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
-            else if(rem[i]=="POS" or rem[i]=="HIGH")
-                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(245, 30, 20), stop:0.2 rgb(245, 30, 20), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
-            else if(rem[i]=="EQV" or rem[i]=="LOW")
-                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(240, 240, 20), stop:0.2 rgb(240, 240, 20), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
-            else
-                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(20, 175, 10), stop:0.2 rgb(20, 175, 10), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
-        }
-    }
+    result_matrix();
     result_table();
 }
 
@@ -2001,6 +1987,82 @@ void MainWindow::result_table()
 
         }
 
+    }
+}
+
+void MainWindow::result_matrix()
+{
+    QPushButton* samp_buttons[96] = { ui->A1_2,ui->B1_2,ui->C1_2,ui->D1_2,ui->E1_2,ui->F1_2,ui->G1_2,ui->H1_2,
+                                      ui->A2_2,ui->B2_2,ui->C2_2,ui->D2_2,ui->E2_2,ui->F2_2,ui->G2_2,ui->H2_2,
+                                      ui->A3_2,ui->B3_2,ui->C3_2,ui->D3_2,ui->E3_2,ui->F3_2,ui->G3_2,ui->H3_2,
+                                      ui->A4_2,ui->B4_2,ui->C4_2,ui->D4_2,ui->E4_2,ui->F4_2,ui->G4_2,ui->H4_2,
+                                      ui->A5_2,ui->B5_2,ui->C5_2,ui->D5_2,ui->E5_2,ui->F5_2,ui->G5_2,ui->H5_2,
+                                      ui->A6_2,ui->B6_2,ui->C6_2,ui->D6_2,ui->E6_2,ui->F6_2,ui->G6_2,ui->H6_2,
+                                      ui->A7_2,ui->B7_2,ui->C7_2,ui->D7_2,ui->E7_2,ui->F7_2,ui->G7_2,ui->H7_2,
+                                      ui->A8_2,ui->B8_2,ui->C8_2,ui->D8_2,ui->E8_2,ui->F8_2,ui->G8_2,ui->H8_2,
+                                      ui->A9_2,ui->B9_2,ui->C9_2,ui->D9_2,ui->E9_2,ui->F9_2,ui->G9_2,ui->H9_2,
+                                      ui->A10_2,ui->B10_2,ui->C10_2,ui->D10_2,ui->E10_2,ui->F10_2,ui->G10_2,ui->H10_2,
+                                      ui->A11_2,ui->B11_2,ui->C11_2,ui->D11_2,ui->E11_2,ui->F11_2,ui->G11_2,ui->H11_2,
+                                      ui->A12_2,ui->B12_2,ui->C12_2,ui->D12_2,ui->E12_2,ui->F12_2,ui->G12_2,ui->H12_2};
+
+    for(int i=0;i<total;i++)
+    {
+
+        if(test_mode==1)
+        {
+            if(ui->comboBox_13->currentIndex()==0)
+                samp_buttons[i]->setText(dis[i]+'\n'+QString::number(pri[i],'f',3));
+            else if(ui->comboBox_13->currentIndex()==1)
+                samp_buttons[i]->setText(dis[i]+'\n'+QString::number(sec[i],'f',3));
+            else if(ui->comboBox_13->currentIndex()==2)
+                samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_res[i],'f',3));
+            else if(ui->comboBox_13->currentIndex()==3)
+                samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_avg[i],'f',3));
+        }
+        else
+        {
+            if(invalid==0)
+            {
+                if(ui->comboBox_13->currentIndex()==0)
+                    samp_buttons[i]->setText(dis[i]+'\n'+QString::number(pri[i],'f',3));
+                else if(ui->comboBox_13->currentIndex()==1)
+                    samp_buttons[i]->setText(dis[i]+'\n'+QString::number(sec[i],'f',3));
+                else if(ui->comboBox_13->currentIndex()==2)
+                    samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_res[i],'f',3));
+                else if(ui->comboBox_13->currentIndex()==3)
+                    samp_buttons[i]->setText(dis[i]+'\n'+QString::number(abs_avg[i],'f',3));
+                else if(ui->comboBox_13->currentIndex()==4)
+                    samp_buttons[i]->setText(dis[i]+'\n'+res[i]);
+                else if(ui->comboBox_13->currentIndex()==5)
+                    samp_buttons[i]->setText(dis[i]+'\n'+rem[i]);
+            }
+            else
+                samp_buttons[i]->setText(dis[i]+'\n'+"INV");
+        }
+
+        if(i<blank)
+            samp_buttons[i]->setStyleSheet("background-color: rgb(235, 235, 235)");
+        else if(i<blank+nc)
+            samp_buttons[i]->setStyleSheet("background-color: rgb(40, 230, 100)");
+        else if(i<blank+nc+pc)
+            samp_buttons[i]->setStyleSheet("background-color: rgb(245, 30, 20)");
+        else if(i<blank+nc+pc+lc)
+            samp_buttons[i]->setStyleSheet("background-color: rgb(170, 20, 240)");
+        else if(i<blank+nc+pc+lc+cc)
+            samp_buttons[i]->setStyleSheet("background-color: rgb(240, 20, 120)");
+        else if(i<blank+nc+pc+lc+cc+total_cal)
+            samp_buttons[i]->setStyleSheet("background-color: rgb(240, 240, 20)");
+        else if(i<total)
+        {
+            if(rem[i]=="OOR")
+                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(20, 120, 240), stop:0.2 rgb(20, 120, 240), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
+            else if(rem[i]=="POS" or rem[i]=="HIGH")
+                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(245, 30, 20), stop:0.2 rgb(245, 30, 20), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
+            else if(rem[i]=="EQV" or rem[i]=="LOW")
+                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(240, 240, 20), stop:0.2 rgb(240, 240, 20), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
+            else
+                samp_buttons[i]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 rgb(20, 175, 10), stop:0.2 rgb(20, 175, 10), stop:0.205 rgb(20, 175, 10), stop:1 rgb(20, 175, 10))");
+        }
     }
 }
 
@@ -2710,6 +2772,20 @@ void MainWindow::on_toolButton_2_clicked()
 void MainWindow::on_toolButton_3_clicked()
 {
     ui->stackedWidget->setCurrentIndex(10);
+
+    int index=0;
+    ui->comboBox_14->clear();
+    QStringList pnames = QPrinterInfo::availablePrinterNames();
+    pnames<<"Print to PDF";
+    ui->comboBox_14->addItems(pnames);
+    QSqlQuery Query;
+    Query.prepare("select * FROM settings WHERE sno = 1");
+    Query.exec();
+    while(Query.next())
+    {
+        index=ui->comboBox_14->findText(Query.value("printer").toString());
+    }
+    ui->comboBox_14->setCurrentIndex(index);
 }
 
 
@@ -3021,5 +3097,162 @@ void MainWindow::on_pushButton_27_clicked()
 
 void MainWindow::on_comboBox_13_currentIndexChanged(int index)
 {
-
+    result_matrix();
 }
+
+
+void MainWindow::on_comboBox_14_activated(int index)
+{
+    QSqlQuery query;
+    query.prepare("update settings set printer=:printer where sno=1");
+    query.bindValue(":printer",ui->comboBox_14->currentText());
+    query.exec();
+}
+
+void MainWindow::on_toolButton_34_clicked()
+{
+    QString data;
+    doc.clear();
+    QString text("<head><style>table, th, td {border: 1px solid black; }</style></head><body><h1style='font-size:11px'>");
+    text.append(btn_name).append("   ").append(ui->label_40->text()).append("   ").append(ui->label_39->text());
+    text.append("</h1>");
+    text.append("<table><thead>");
+    text.append("<tr>");
+    for (int i = 0; i < ui->tableWidget->columnCount(); i++)
+    {
+        text.append("<th>").append(ui->tableWidget->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()).append(" ").append("</th>");
+    }
+    text.append("</tr></thead>");
+    for (int i = 0; i < ui->tableWidget->rowCount(); i++)
+    {
+        text.append("<tr>");
+        for (int j = 0; j < ui->tableWidget->columnCount(); j++)
+        {
+            if(j==ui->tableWidget->columnCount()-1)
+            {
+                text.append("<td>").append(pid[i]).append("</td>");
+            }
+            else
+            {
+                QTableWidgetItem *item = ui->tableWidget->item(i, j);
+                if (!item || item->text().isEmpty())
+                {
+                    ui->tableWidget->setItem(i, j, new QTableWidgetItem(" "));
+                }
+                data=ui->tableWidget->item(i, j)->text();
+                if(data[0]=="<")
+                    data.replace("<","&lt;");//since html not considering < as character, it affect the printer
+                text.append("<td>").append(data+" ").append("</td>");
+            }
+            if(i!=ui->tableWidget->rowCount()-1)
+            {
+                //text.append("<hr>"); //if required line between each row
+            }
+        }
+        text.append("</tr>");
+    }
+    text.append("</tbody></table>");
+    doc.setHtml(text);
+    print_process(84);
+}
+
+
+void MainWindow::on_toolButton_24_clicked()
+{
+    QString vind[8]={"A","B","C","D","E","F","G","H"};
+    QString hind[13]={" 00 "," 01 "," 02 "," 03 "," 04 "," 05 "," 06 "," 07 "," 08 "," 09 "," 10 "," 11 "," 12 "};
+    doc.clear();
+    QString text("<head><style>table, th, td {border: 1px solid black; }</style></head><body><h1style='font-size:11px'>");
+    text.append(btn_name).append("   ").append(ui->comboBox_13->currentText()).append("   ").append(ui->label_40->text()).append("   ").append(ui->label_39->text());
+    text.append("</h1>");
+    text.append("<table><thead>");
+    text.append("<tr>");
+    for(int j=0;j<13;j++)
+    {
+        text.append("<td>").append(hind[j]).append("</td>");
+    }
+    text.append("</tr>");
+
+    for (int i = 0; i < 8; i++)
+    {
+        text.append("<tr>");
+        for(int j=0;j<12;j++)
+        {
+            if(j==0)
+                text.append("<td>").append(vind[i]).append("</td>");
+            text.append("<td>");
+            if(ui->comboBox_13->currentIndex()==0)
+                text.append(QString::number(pri[i+j*8],'f',3));
+            else if(ui->comboBox_13->currentIndex()==1)
+                text.append(QString::number(sec[i+j*8],'f',3));
+            else if(ui->comboBox_13->currentIndex()==2)
+                text.append(QString::number(abs_res[i+j*8],'f',3));
+            else if(ui->comboBox_13->currentIndex()==3)
+                text.append(QString::number(abs_avg[i+j*8],'f',3));
+            else if(ui->comboBox_13->currentIndex()==4)
+            {
+                if(res[i+j*8][0]=="<")
+                    res[i+j*8].replace("<","&lt;");//since html not considering < as character, it affect the printer
+                text.append(res[i+j*8]);
+            }
+            else if(ui->comboBox_13->currentIndex()==5)
+                text.append(rem[i+j*8]);
+            text.append("</td>");
+            //text.append("<hr>");//if required line between each row
+        }
+        text.append("</tr>");
+    }
+    doc.setHtml(text);
+    print_process(125);
+}
+
+
+void MainWindow::print_process(int paper_length)
+{
+    QPrinter printer;
+    QString printername;
+    QSqlQuery Query;
+    Query.prepare("select * FROM settings WHERE sno = 1");
+    Query.exec();
+    while(Query.next())
+    {
+        printername=Query.value("printer").toString();
+    }
+
+    printer.setPrinterName(printername);
+    if(printername=="Internal")
+    {
+        printer.setOrientation(QPrinter::Landscape);
+        printer.setPageOrder(QPrinter::LastPageFirst);//not working, need to check
+        printer.setPaperSize(QSize(58, paper_length),QPrinter::Millimeter);//paper_length 84 for table and 125 for matrix
+        QFont font;
+        font.setPointSize(6);
+        font.setBold(QFont::DemiBold);
+        font.setFamily("Calibri");
+        font.setLetterSpacing(QFont::PercentageSpacing,100);
+        doc.setDefaultFont(font);
+    }
+    else
+    {
+        printer.setOrientation(QPrinter::Portrait);
+        printer.setPaperSize(QPrinter::A4);
+        printer.setPageOrder(QPrinter::FirstPageFirst);//not working, need to check
+        QFont font;
+        font.setPointSize(10);
+        font.setBold(QFont::DemiBold);
+        font.setFamily("Calibri");
+        font.setLetterSpacing(QFont::PercentageSpacing,100);
+        doc.setDefaultFont(font);
+        if(printername=="Print to PDF")
+        {
+            printer.setOutputFormat(QPrinter::PdfFormat);
+            QString path="/home/pi/reader/PDF/"+btn_name+" "+ui->label_17->text()+" "+ui->label_38->text()+".pdf";
+            printer.setOutputFileName(path);
+        }
+    }
+    doc.setPageSize(printer.pageRect().size());
+    doc.print(&printer);
+}
+
+
+
