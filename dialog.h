@@ -6,6 +6,11 @@
 #include <QtCharts/QChartView>
 #include <QMainWindow>
 #include "keyboard.h"
+#include <QTextDocument>
+#include <QtSql>
+#include <QPrinter>
+
+
 using namespace QtCharts;
 
 
@@ -21,9 +26,10 @@ public:
     explicit Dialog(QWidget *parent = nullptr);
     ~Dialog();
     void setPage(int index);
-    void update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd);
+    void update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd, QString date, QString time);
     void update_results(QString well, QString samp, double abs, double avg_abs, QString result, QString unit, QString remarks,QString sid);
     QString getdiaData();
+
 private slots:
     void on_pushButton_2_clicked();
 
@@ -32,6 +38,11 @@ private slots:
     void on_pushButton_4_clicked();
 
     void on_pushButton_5_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void print_process(int paper_length, int individual);
+
 
 private:
     Ui::Dialog *ui;

@@ -1,7 +1,9 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 
-static QString samp_val,pid;
+static QString samp_val,pid,d_name,d_well,d_date,d_time,d_res,d_unit,d_rem,d_abs,d_avg_abs;
+static QTextDocument doc;
+
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -26,8 +28,12 @@ QString Dialog::getdiaData()
     return pid;
 }
 
-void Dialog::update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd)
+void Dialog::update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd, QString date, QString time)
 {
+    d_name=name;
+    d_date=date;
+    d_time=time;
+
     QString wave[6]={"Nil","405","450","490","630","OPN"};
     QString valid[2]={"PASS","INVALID"};
 
@@ -64,6 +70,12 @@ void Dialog::update_results(QString well, QString samp, double abs, double avg_a
 {
     samp_val=samp;
     pid=sid;
+    d_well=well;
+    d_abs=QString::number(abs,'f',3);
+    d_avg_abs=QString::number(avg_abs,'f',3);
+    d_res=result;
+    d_unit=unit;
+    d_rem=remarks;
     ui->label_66->clear();
     ui->label_53->clear();
     ui->label_18->clear();
@@ -162,4 +174,84 @@ void Dialog::on_pushButton_6_clicked()
     keyb->exec();
     pid = keyb->getData();
     ui->pushButton_6->setText(pid);
+}
+
+void Dialog::on_pushButton_3_clicked()
+{
+    QStringList head,val;
+    head<<"WELL"<<"SAMP"<<"ABS"<<"AVG"<<"RESULT"<<"UNIT"<<"REM"<<"PID";
+    val<<d_well<<samp_val<<d_abs<<d_avg_abs<<d_res<<d_unit<<d_rem<<pid;
+    doc.clear();
+    QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
+    text.append("<body>");
+    text.append("<h1 style='font-size:10px;text-align:center'>");
+    text.append(d_name).append("<br>").append(d_date).append("<br>").append(d_time);
+    text.append("</h1>");
+    text.append("<table class='center' style='width:30%'>");
+    for (int i = 0; i < head.length(); i++)
+    {
+        text.append("<tr>");
+        //text.append("<th style='text-align: center'>").append(head[i]).append(" ").append("</th>");
+        //text.append("<td style='text-align: center'>").append(val[i]).append(" ").append("</td>");
+        text.append("<th>").append(head[i]).append(" ").append("</th>");
+        if(val[i][0]=="<")
+            val[i].replace("<","&lt;");//since html not considering < as character, it affect the printer
+        text.append("<td>").append(val[i]).append(" ").append("</td>");
+        text.append("</tr>");
+    }
+    text.append("</table></body>");
+    doc.setHtml(text);
+    print_process(65,1);
+}
+
+void Dialog::print_process(int paper_length, int individual)
+{
+    QPrinter printer;
+    QString printername;
+    QSqlQuery Query;
+    Query.prepare("select * FROM settings WHERE sno = 1");
+    Query.exec();
+    while(Query.next())
+    {
+        printername=Query.value("printer").toString();
+    }
+
+    printer.setPrinterName(printername);
+    if(printername=="Internal")
+    {
+        printer.setOrientation(QPrinter::Landscape);
+        printer.setPageOrder(QPrinter::LastPageFirst);//not working, need to check
+        printer.setPaperSize(QSize(58, paper_length),QPrinter::Millimeter);//paper_length 84 for table and 125 for matrix
+        if(individual==1)
+        {
+            printer.setOrientation(QPrinter::Portrait);
+            printer.setPaperSize(QSize(58, paper_length),QPrinter::Millimeter);//paper_length 84 for table and 125 for matrix
+        }
+        QFont font;
+        font.setPointSize(6);
+        font.setBold(QFont::DemiBold);
+        font.setFamily("Calibri");
+        font.setLetterSpacing(QFont::PercentageSpacing,100);
+        doc.setDefaultFont(font);
+    }
+    else
+    {
+        printer.setOrientation(QPrinter::Portrait);
+        printer.setPaperSize(QPrinter::A4);
+        printer.setPageOrder(QPrinter::FirstPageFirst);//not working, need to check
+        QFont font;
+        font.setPointSize(10);
+        font.setBold(QFont::DemiBold);
+        font.setFamily("Calibri");
+        font.setLetterSpacing(QFont::PercentageSpacing,100);
+        doc.setDefaultFont(font);
+        if(printername=="Print to PDF")
+        {
+            printer.setOutputFormat(QPrinter::PdfFormat);
+            QString path="/home/pi/reader/PDF/"+d_name+" "+d_date+" "+d_time+".pdf";
+            printer.setOutputFileName(path);
+        }
+    }
+    doc.setPageSize(printer.pageRect().size());
+    doc.print(&printer);
 }

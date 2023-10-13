@@ -2670,19 +2670,19 @@ void MainWindow::on_pushButton_20_clicked()
     if(test_mode==1)
     {
         dia->setPage(2);
-        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd,ui->label_17->text(),ui->label_38->text());
         dia->exec();
     }
     else if(test_mode==2)
     {
         dia->setPage(1);
-        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd,ui->label_17->text(),ui->label_38->text());
         dia->exec();
     }
     else if(test_mode==3)
     {
         dia->setPage(0);
-        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+        dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd,ui->label_17->text(),ui->label_38->text());
         dia->exec();
     }
 
@@ -2719,7 +2719,7 @@ void MainWindow::button_clicked()
         if(test_mode==1)
         {
             dia->setPage(2);
-            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd,ui->label_17->text(),ui->label_38->text());
             dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
             dia->exec();
             pid[map[senderObjName]] = dia->getdiaData();
@@ -2728,7 +2728,7 @@ void MainWindow::button_clicked()
         else if(test_mode==2)
         {
             dia->setPage(1);
-            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd,ui->label_17->text(),ui->label_38->text());
             dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
             dia->exec();
             pid[map[senderObjName]] = dia->getdiaData();
@@ -2736,7 +2736,7 @@ void MainWindow::button_clicked()
         else if(test_mode==3)
         {
             dia->setPage(0);
-            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd);
+            dia->update_data(btn_name,pri_wave,sec_wave,cuteqn,cutabs,invalid,x_conc,y_abs, nostd,ui->label_17->text(),ui->label_38->text());
             dia->update_results(well,dis[map[senderObjName]],abs_res[map[senderObjName]],abs_avg[map[senderObjName]],res[map[senderObjName]],unit,rem[map[senderObjName]],pid[map[senderObjName]]);
             dia->exec();
             pid[map[senderObjName]] = dia->getdiaData();
@@ -3243,6 +3243,8 @@ void MainWindow::on_toolButton_28_clicked()
         //text.append("<th style='text-align: center'>").append(head[i]).append(" ").append("</th>");
         //text.append("<td style='text-align: center'>").append(val[i]).append(" ").append("</td>");
         text.append("<th>").append(head[i]).append(" ").append("</th>");
+        if(val[i][0]=="<")
+            val[i].replace("<","&lt;");//since html not considering < as character, it affect the printer
         text.append("<td>").append(val[i]).append(" ").append("</td>");
         text.append("</tr>");
     }
