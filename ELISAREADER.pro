@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql qml charts printsupport
+QT       += core gui sql qml charts printsupport webkitwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

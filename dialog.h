@@ -6,11 +6,9 @@
 #include <QtCharts/QChartView>
 #include <QMainWindow>
 #include "keyboard.h"
-#include <QTextDocument>
 #include <QtSql>
 #include <QPrinter>
-
-
+#include <QtWebKitWidgets/QWebView>
 
 using namespace QtCharts;
 
@@ -30,6 +28,7 @@ public:
     void update_data(QString name, int pri, int sec, QString cuteqn, double cutabs, int status, double *x, double *y, int nostd, QString date, QString time);
     void update_results(QString well, QString samp, double abs, double avg_abs, QString result, QString unit, QString remarks,QString sid);
     QString getdiaData();
+    QWebView web;
 
 private slots:
     void on_pushButton_2_clicked();

@@ -3111,12 +3111,12 @@ void MainWindow::on_comboBox_14_activated(int index)
 
 void MainWindow::on_toolButton_34_clicked()
 {
-    QString data;
-    doc.clear();
-    QString text("<head><style>table, th, td {border: 1px solid black; }</style></head><body><h1style='font-size:11px'>");
+    QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
+    text.append("<body>");
+    text.append("<h1 style='font-size:10px;text-align:center'>");
     text.append(btn_name).append("   ").append(ui->label_40->text()).append("   ").append(ui->label_39->text());
     text.append("</h1>");
-    text.append("<table><thead>");
+    text.append("<table class='center' style='width:30%'>");
     text.append("<tr>");
     for (int i = 0; i < ui->tableWidget->columnCount(); i++)
     {
@@ -3138,11 +3138,8 @@ void MainWindow::on_toolButton_34_clicked()
                 if (!item || item->text().isEmpty())
                 {
                     ui->tableWidget->setItem(i, j, new QTableWidgetItem(" "));
-                }
-                data=ui->tableWidget->item(i, j)->text();
-                if(data[0]=="<")
-                    data.replace("<","&lt;");//since html not considering < as character, it affect the printer
-                text.append("<td>").append(data+" ").append("</td>");
+                }                
+                text.append("<td>").append(ui->tableWidget->item(i, j)->text()+" ").append("</td>");
             }
             if(i!=ui->tableWidget->rowCount()-1)
             {
@@ -3151,8 +3148,8 @@ void MainWindow::on_toolButton_34_clicked()
         }
         text.append("</tr>");
     }
-    text.append("</tbody></table>");
-    doc.setHtml(text);
+    text.append("</table></body>");
+    web.setHtml(text);
     print_process(84,0);
 }
 
@@ -3161,11 +3158,12 @@ void MainWindow::on_toolButton_24_clicked()
 {
     QString vind[8]={"A","B","C","D","E","F","G","H"};
     QString hind[13]={" 00 "," 01 "," 02 "," 03 "," 04 "," 05 "," 06 "," 07 "," 08 "," 09 "," 10 "," 11 "," 12 "};
-    doc.clear();
-    QString text("<head><style>table, th, td {border: 1px solid black; }</style></head><body><h1style='font-size:11px'>");
+    QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
+    text.append("<body>");
+    text.append("<h1 style='font-size:10px;text-align:center'>");
     text.append(btn_name).append("   ").append(ui->comboBox_13->currentText()).append("   ").append(ui->label_40->text()).append("   ").append(ui->label_39->text());
     text.append("</h1>");
-    text.append("<table><thead>");
+    text.append("<table class='center' style='width:30%'>");
     text.append("<tr>");
     for(int j=0;j<13;j++)
     {
@@ -3191,8 +3189,6 @@ void MainWindow::on_toolButton_24_clicked()
                 text.append(QString::number(abs_avg[i+j*8],'f',3));
             else if(ui->comboBox_13->currentIndex()==4)
             {
-                if(res[i+j*8][0]=="<")
-                    res[i+j*8].replace("<","&lt;");//since html not considering < as character, it affect the printer
                 text.append(res[i+j*8]);
             }
             else if(ui->comboBox_13->currentIndex()==5)
@@ -3202,7 +3198,8 @@ void MainWindow::on_toolButton_24_clicked()
         }
         text.append("</tr>");
     }
-    doc.setHtml(text);
+    text.append("</table></body>");
+    web.setHtml(text);
     print_process(125,0);
 }
 
@@ -3230,28 +3227,21 @@ void MainWindow::on_toolButton_28_clicked()
     qDebug()<<val;
     qDebug()<<head;
 
-
-    doc.clear();
-    //QString text("<head><style>table, th, td {border: 1px solid black; }</style></head><body><h1style='font-size:11px'>");
-    QString text("<head><style>table,td,th{border: 1px solid black;}table{border-collapse:collapse;width:100%;} table.center{margin-left:auto;margin-right:auto;}table,td,th{text-align:left;}</style></head><body><h1 style='font-size:10px;text-align:center'>");
+    QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
+    text.append("<body>");
+    text.append("<h1 style='font-size:10px;text-align:center'>");
     text.append(btn_name).append("<br>").append(ui->label_40->text()).append("<br>").append(ui->label_39->text());
     text.append("</h1>");
-    text.append("<table><thead>");
-    for (int i = 0; i < ui->tableWidget->columnCount(); i++)
+    text.append("<table class='center' style='width:30%'>");
+    for (int i = 0; i < head.length(); i++)
     {
         text.append("<tr>");
-        //text.append("<th style='text-align: center'>").append(head[i]).append(" ").append("</th>");
-        //text.append("<td style='text-align: center'>").append(val[i]).append(" ").append("</td>");
         text.append("<th>").append(head[i]).append(" ").append("</th>");
-        if(val[i][0]=="<")
-            val[i].replace("<","&lt;");//since html not considering < as character, it affect the printer
         text.append("<td>").append(val[i]).append(" ").append("</td>");
         text.append("</tr>");
     }
-    text.append("</tr></thead>");
-    text.append("</tbody></table>");
-
-    doc.setHtml(text);
+    text.append("</table></body>");
+    web.setHtml(text);
     print_process(65,1);
 
 }
@@ -3275,6 +3265,7 @@ void MainWindow::print_process(int paper_length, int individual)
         printer.setOrientation(QPrinter::Landscape);
         printer.setPageOrder(QPrinter::LastPageFirst);//not working, need to check
         printer.setPaperSize(QSize(58, paper_length),QPrinter::Millimeter);//paper_length 84 for table and 125 for matrix
+        printer.setPageMargins(10,10,10,10, QPrinter::Millimeter);
         if(individual==1)
         {
             printer.setOrientation(QPrinter::Portrait);
@@ -3285,7 +3276,7 @@ void MainWindow::print_process(int paper_length, int individual)
         font.setBold(QFont::DemiBold);
         font.setFamily("Calibri");
         font.setLetterSpacing(QFont::PercentageSpacing,100);
-        doc.setDefaultFont(font);
+        //doc.setDefaultFont(font);
     }
     else
     {
@@ -3297,7 +3288,7 @@ void MainWindow::print_process(int paper_length, int individual)
         font.setBold(QFont::DemiBold);
         font.setFamily("Calibri");
         font.setLetterSpacing(QFont::PercentageSpacing,100);
-        doc.setDefaultFont(font);
+        //doc.setDefaultFont(font);
         if(printername=="Print to PDF")
         {
             printer.setOutputFormat(QPrinter::PdfFormat);
@@ -3305,8 +3296,8 @@ void MainWindow::print_process(int paper_length, int individual)
             printer.setOutputFileName(path);
         }
     }
-    doc.setPageSize(printer.pageRect().size());
-    doc.print(&printer);
+    //doc.setPageSize(printer.pageRect().size());
+    web.print(&printer);
 }
 
 

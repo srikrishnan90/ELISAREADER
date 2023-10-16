@@ -2,7 +2,6 @@
 #include "ui_dialog.h"
 
 static QString samp_val,pid,d_name,d_well,d_date,d_time,d_res,d_unit,d_rem,d_abs,d_avg_abs;
-static QTextDocument doc;
 static QChartView *chartView;
 
 
@@ -230,7 +229,6 @@ void Dialog::on_pushButton_3_clicked()
     QStringList head,val;
     head<<"WELL"<<"SAMP"<<"ABS"<<"AVG"<<"RESULT"<<"UNIT"<<"REM"<<"PID";
     val<<d_well<<samp_val<<d_abs<<d_avg_abs<<d_res<<d_unit<<d_rem<<pid;
-    doc.clear();
     QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
     text.append("<body>");
     text.append("<h1 style='font-size:10px;text-align:center'>");
@@ -239,17 +237,13 @@ void Dialog::on_pushButton_3_clicked()
     text.append("<table class='center' style='width:30%'>");
     for (int i = 0; i < head.length(); i++)
     {
-        text.append("<tr>");
-        //text.append("<th style='text-align: center'>").append(head[i]).append(" ").append("</th>");
-        //text.append("<td style='text-align: center'>").append(val[i]).append(" ").append("</td>");
-        text.append("<th>").append(head[i]).append(" ").append("</th>");
-        if(val[i][0]=="<")
-            val[i].replace("<","&lt;");//since html not considering < as character, it affect the printer
+        text.append("<tr>");        
+        text.append("<th>").append(head[i]).append(" ").append("</th>");        
         text.append("<td>").append(val[i]).append(" ").append("</td>");
         text.append("</tr>");
     }
     text.append("</table></body>");
-    doc.setHtml(text);
+    web.setHtml(text);
     print_process(65,1,0);
 }
 
@@ -281,7 +275,7 @@ void Dialog::print_process(int paper_length, int individual, int graph)
         font.setBold(QFont::DemiBold);
         font.setFamily("Calibri");
         font.setLetterSpacing(QFont::PercentageSpacing,100);
-        doc.setDefaultFont(font);
+        //web.setDefaultFont(font);
     }
     else
     {
@@ -293,7 +287,7 @@ void Dialog::print_process(int paper_length, int individual, int graph)
         font.setBold(QFont::DemiBold);
         font.setFamily("Calibri");
         font.setLetterSpacing(QFont::PercentageSpacing,100);
-        doc.setDefaultFont(font);
+        //doc.setDefaultFont(font);
         if(printername=="Print to PDF")
         {
             printer.setOutputFormat(QPrinter::PdfFormat);
@@ -303,8 +297,8 @@ void Dialog::print_process(int paper_length, int individual, int graph)
     }
     if(graph==0)
     {
-        doc.setPageSize(printer.pageRect().size());
-        doc.print(&printer);
+        //doc.setPageSize(printer.pageRect().size());
+        web.print(&printer);
     }
     else
     {

@@ -20,6 +20,8 @@
 #include <QPrinterInfo>
 
 
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -31,6 +33,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QWebView web;
 
 private slots:
     void on_toolButton_5_clicked();
