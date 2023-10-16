@@ -3,6 +3,7 @@
 
 static QString samp_val,pid,d_name,d_well,d_date,d_time,d_res,d_unit,d_rem,d_abs,d_avg_abs;
 static QTextDocument doc;
+static QChartView *chartView;
 
 
 Dialog::Dialog(QWidget *parent) :
@@ -14,7 +15,7 @@ Dialog::Dialog(QWidget *parent) :
 
 Dialog::~Dialog()
 {
-    delete ui;    
+    delete ui;
 
 }
 
@@ -56,14 +57,62 @@ void Dialog::update_data(QString name, int pri, int sec, QString cuteqn, double 
     for(int i=0;i<nostd;i++)
         series->append(x[i],y[i]);
     QChart *chart = new QChart();
+    QPen black(Qt::black);
+    QPen black1(Qt::black);
+    black.setWidth(4);
+    black1.setWidth(2);
+    series->setPen(black);
+
+    QGraphicsRectItem * pItem = new QGraphicsRectItem(0, 0, 0, 0, chart->graphicsItem());
+    pItem->setPen(QPen(Qt::red));
+    pItem->setZValue(3); // points on QScatterSeries covers  this item and this item covers grid lines
+
     chart->legend()->hide();
     chart->addSeries(series);
     chart->createDefaultAxes();
-    chart->setTitle("Simple line chart example");
-    QChartView *chartView = new QChartView(chart);
+    chart->setTitle(name);
+    chart->axisX()->setTitleText("Conc.");
+    chart->axisY()->setTitleText("ABS");
+    //chart->axisX()->setShadesPen(black);
+    //chart->axisY()->setShadesPen(black);
+    chart->axisX()->setGridLinePen(black1);
+    chart->axisY()->setGridLinePen(black1);
+    chart->axisX()->setGridLineColor(QColor(0,0,0));
+    chart->axisY()->setGridLineColor(QColor(0,0,0));
+    QFont labelsFont;
+    labelsFont.setPixelSize(12);
+    chart->axisX()->setLabelsFont(QFont( fontInfo().family(), 14, QFont::Bold ));
+    chart->axisY()->setLabelsFont(labelsFont);
+    chart->axisX()->setTitleFont(labelsFont);
+    chart->axisY()->setTitleFont(labelsFont);
+
+
+
+
+    chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
+    //chartView->setGeometry();
     ui->verticalLayout->removeWidget(chartView);
     ui->verticalLayout->addWidget(chartView);
+    //    chartView->grab().save("/home/pi/123.png");
+    //    QImage img("/home/pi/123.png");
+
+    //    QPrinter printer(QPrinter::ScreenResolution);
+    //    printer.setPrinterName("Internal");
+    //        //printer.setOutputFormat(QPrinter::PdfFormat);
+    //        printer.setFullPage(true);
+    //        printer.setPageOrientation(QPageLayout::Landscape);
+    //        //printer.setOutputFileName("/home/pi/test.pdf");
+    //        printer.setPageMargins(QMarginsF(0,0,0,0), QPageLayout::Point);
+    //        printer.setPageSize(QPageSize(QSizeF(400,700), QPageSize::Point));
+
+    //    QPainter painter(&printer);
+    //    //painter.setRenderHint(QPainter::Antialiasing);
+    //    //chartView->scene()->render(&painter);
+    //    painter.drawImage(QPoint(0,0),img);
+    //    painter.end();
+
+
 }
 
 void Dialog::update_results(QString well, QString samp, double abs, double avg_abs, QString result, QString unit, QString remarks, QString sid)
@@ -201,10 +250,10 @@ void Dialog::on_pushButton_3_clicked()
     }
     text.append("</table></body>");
     doc.setHtml(text);
-    print_process(65,1);
+    print_process(65,1,0);
 }
 
-void Dialog::print_process(int paper_length, int individual)
+void Dialog::print_process(int paper_length, int individual, int graph)
 {
     QPrinter printer;
     QString printername;
@@ -252,6 +301,22 @@ void Dialog::print_process(int paper_length, int individual)
             printer.setOutputFileName(path);
         }
     }
-    doc.setPageSize(printer.pageRect().size());
-    doc.print(&printer);
+    if(graph==0)
+    {
+        doc.setPageSize(printer.pageRect().size());
+        doc.print(&printer);
+    }
+    else
+    {
+        QPainter painter(&printer);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform);
+        chartView->scene()->render(&painter);
+    }
+
+}
+
+void Dialog::on_pushButton_clicked()
+{
+    print_process(65,0,1);
+
 }

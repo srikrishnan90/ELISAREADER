@@ -11,6 +11,7 @@
 #include <QPrinter>
 
 
+
 using namespace QtCharts;
 
 
@@ -41,8 +42,10 @@ private slots:
 
     void on_pushButton_3_clicked();
 
-    void print_process(int paper_length, int individual);
+    void print_process(int paper_length, int individual, int graph);
 
+
+    void on_pushButton_clicked();
 
 private:
     Ui::Dialog *ui;
