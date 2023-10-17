@@ -34,6 +34,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QWebView web;
+    QTextDocument doc;
 
 private slots:
     void on_toolButton_5_clicked();
@@ -271,6 +272,8 @@ private slots:
     void print_process(int paper_length, int individual);
 
     void on_toolButton_24_clicked();
+
+    void on_comboBox_16_activated(int index);
 
 private:
     Ui::MainWindow *ui;

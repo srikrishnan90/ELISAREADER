@@ -9,6 +9,7 @@
 #include <QtSql>
 #include <QPrinter>
 #include <QtWebKitWidgets/QWebView>
+#include <QTextDocument>
 
 using namespace QtCharts;
 
@@ -29,6 +30,8 @@ public:
     void update_results(QString well, QString samp, double abs, double avg_abs, QString result, QString unit, QString remarks,QString sid);
     QString getdiaData();
     QWebView web;
+    QTextDocument doc;
+
 
 private slots:
     void on_pushButton_2_clicked();
