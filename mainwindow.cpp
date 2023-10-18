@@ -49,7 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stackedWidget->lower();
     test_menu();
     timer = new QTimer(this);
+    dttimer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(delete_label()));
+    connect(dttimer, SIGNAL(timeout()), this, SLOT(update_time()));
 }
 
 MainWindow::~MainWindow()
@@ -72,6 +74,7 @@ void MainWindow::on_toolButton_5_clicked()
 void MainWindow::on_toolButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
+    dttimer->stop();
 }
 
 void MainWindow::on_toolButton_9_clicked()
@@ -1462,6 +1465,7 @@ void MainWindow::on_pushButton_11_clicked()
 void MainWindow::on_toolButton_4_clicked()
 {
     ui->stackedWidget->setCurrentIndex(8);
+    dttimer->stop();
 }
 
 void MainWindow::on_pushButton_14_clicked()
@@ -2766,6 +2770,7 @@ void MainWindow::sid_button()
 void MainWindow::on_toolButton_2_clicked()
 {
     ui->stackedWidget->setCurrentIndex(9);
+    dttimer->stop();
 }
 
 void MainWindow::on_toolButton_3_clicked()
@@ -2784,12 +2789,27 @@ void MainWindow::on_toolButton_3_clicked()
     {
         index=ui->comboBox_14->findText(Query.value("printer").toString());
         index1=ui->comboBox_16->findText(Query.value("printformat").toString());
+        ui->pushButton_34->setText(Query.value("lab").toString());
+        ui->pushButton_35->setText(Query.value("add1").toString());
+        ui->pushButton_36->setText(Query.value("add2").toString());
+        ui->pushButton_37->setText(Query.value("user").toString());
     }
     ui->comboBox_14->setCurrentIndex(index);
     ui->comboBox_16->setCurrentIndex(index1);
+
+
+    //date and time
+    QDateTime dt(QDateTime::currentDateTime());
+    ui->dateTimeEdit_2->setDateTime(dt.currentDateTime());
+    ui->dateTimeEdit_3->setDateTime(dt.currentDateTime());
+    dttimer->start(1000);
 }
 
-
+void MainWindow::update_time()
+{
+    QDateTime dt(QDateTime::currentDateTime());
+    ui->dateTimeEdit_2->setDateTime(dt.currentDateTime());
+}
 
 void MainWindow::on_toolButton_22_clicked()
 {
@@ -3035,10 +3055,22 @@ void MainWindow::on_pushButton_22_clicked()
         }
         //qDebug()<<n<<i;
     }
+    if(ui->listWidget->count()==0)
+    {
+        ui->pushButton_25->setDisabled(true);
+        ui->pushButton_26->setDisabled(true);
+    }
+    else
+    {
+        ui->pushButton_25->setDisabled(false);
+        ui->pushButton_26->setDisabled(false);
+        ui->listWidget->setCurrentRow(0);
+    }
 }
 
 void MainWindow::on_pushButton_25_clicked()
 {
+
     ui->stackedWidget->setCurrentIndex(13);
     ui->tableWidget_3->clearContents();
     //QString fileName = QFileDialog::getOpenFileName(this, ("Open File"), NULL, ("csv File(*.csv)"));
@@ -3089,6 +3121,7 @@ void MainWindow::on_pushButton_25_clicked()
         }
     }
     //statusBar()->showMessage(tr("File successfully loaded."), 3000);
+
 }
 
 void MainWindow::on_pushButton_27_clicked()
@@ -3123,7 +3156,7 @@ void MainWindow::on_toolButton_34_clicked()
     text.append("<tr>");
 
     doctext.append("<h1 style='font-size:8px;text-align:center'>");
-    doctext.append(btn_name).append("   ").append(ui->comboBox_13->currentText()).append("   ").append(ui->label_40->text()).append("   ").append(ui->label_39->text());
+    doctext.append(btn_name).append("   ").append(ui->label_40->text()).append("   ").append(ui->label_39->text());
     doctext.append("</h1>");
     doctext.append("<table>");
     doctext.append("<tr>");
@@ -3403,4 +3436,217 @@ void MainWindow::on_comboBox_16_activated(int index)
     query.prepare("update settings set printformat=:printer where sno=1");
     query.bindValue(":printer",ui->comboBox_16->currentText());
     query.exec();
+}
+
+void MainWindow::on_pushButton_26_clicked()
+{
+
+    QString fileName="/home/pi/reader/CSV/"+ui->listWidget->currentItem()->text()+".csv";
+    QFile file (fileName);
+    file.remove();
+    on_pushButton_22_clicked();
+
+}
+
+void MainWindow::on_pushButton_38_clicked()
+{
+    QStringList head,val;
+    int n=ui->tableWidget_3->currentRow();
+    for( int i = 0; i < ui->tableWidget_3->columnCount(); i++ )
+    {
+        head<<ui->tableWidget_3->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString();
+        if(ui->tableWidget_3->item(n,i))
+        {
+            val<<ui->tableWidget_3->item(n,i)->text();
+        }
+        else if(i==ui->tableWidget_3->columnCount()-1)
+        {
+            val<<pid[n];
+        }
+        else
+        {
+            val<<" ";
+        }
+    }
+    qDebug()<<val;
+    qDebug()<<head;
+    QString fileName=ui->listWidget->currentItem()->text();
+    QStringList list1 = fileName.split(QRegExp("\\s+"));
+    btn_name=list1[0];
+    ui->label_17->setText(list1[1]);
+    ui->label_38->setText(list1[2]);
+    doc.clear();
+    QString doctext;
+    QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;font-size:10px;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
+    text.append("<body>");
+    text.append("<h1 style='font-size:10px;text-align:center'>");
+    text.append(list1[0]).append("<br>").append(list1[1]).append("<br>").append(list1[2]);
+    text.append("</h1>");
+    text.append("<table class='center' style='width:30%'>");
+
+    doctext.append("<h1 style='font-size:8px;text-align:center'>");
+    doctext.append(list1[0]).append("<br>").append(list1[1]).append("<br>").append(list1[2]);
+    doctext.append("</h1>");
+    doctext.append("<table>");
+    for (int i = 0; i < head.length(); i++)
+    {
+        text.append("<tr>");
+        text.append("<th>").append(head[i]).append(" ").append("</th>");
+        text.append("<td>").append(val[i]).append(" ").append("</td>");
+        text.append("</tr>");
+
+        doctext.append("<tr>");
+        doctext.append("<th>").append(head[i]).append(" ").append("</th>");
+        if(val[i][0]=="<")
+        {
+            QString data=val[i];
+            data.replace("<","&lt;");
+            doctext.append("<td>").append(data).append(" ").append("</td>");
+        }
+        else
+        {
+            doctext.append("<td>").append(val[i]).append(" ").append("</td>");
+        }
+        doctext.append("</tr>");
+    }
+    text.append("</table></body>");
+    doctext.append("</table>");
+    web.setHtml(text);
+    doc.setHtml(doctext);
+    print_process(65,1);
+}
+
+void MainWindow::on_pushButton_51_clicked()
+{
+    doc.clear();
+    QString doctext;
+    QString fileName=ui->listWidget->currentItem()->text();
+    QStringList list1 = fileName.split(QRegExp("\\s+"));
+    btn_name=list1[0];
+    ui->label_17->setText(list1[1]);
+    ui->label_38->setText(list1[2]);
+    QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;font-size:10px;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
+    text.append("<body>");
+    text.append("<h1 style='font-size:10px;text-align:center'>");
+    text.append(list1[0]).append("   ").append(list1[1]).append("   ").append(list1[2]);
+    text.append("</h1>");
+    text.append("<table class='center' style='width:30%'>");
+    text.append("<tr>");
+
+    doctext.append("<h1 style='font-size:8px;text-align:center'>");
+    doctext.append(list1[0]).append("   ").append(list1[1]).append("   ").append(list1[2]);
+    doctext.append("</h1>");
+    doctext.append("<table>");
+    doctext.append("<tr>");
+
+    for (int i = 0; i < ui->tableWidget_3->columnCount(); i++)
+    {
+        text.append("<th>").append(ui->tableWidget_3->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()).append(" ").append("</th>");
+        doctext.append("<th>").append(ui->tableWidget_3->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()).append(" ").append("</th>");
+    }
+    text.append("</tr>");
+    doctext.append("</tr>");
+    for (int i = 0; i < ui->tableWidget_3->rowCount(); i++)
+    {
+        text.append("<tr>");
+        doctext.append("<tr>");
+        for (int j = 0; j < ui->tableWidget_3->columnCount(); j++)
+        {
+            if(j==ui->tableWidget_3->columnCount()-1)
+            {
+                text.append("<td>").append(pid[i]).append("</td>");
+                doctext.append("<td>").append(pid[i]).append("</td>");
+            }
+            else
+            {
+                QTableWidgetItem *item = ui->tableWidget_3->item(i, j);
+                if (!item || item->text().isEmpty())
+                {
+                    ui->tableWidget_3->setItem(i, j, new QTableWidgetItem(" "));
+                }
+                text.append("<td>").append(ui->tableWidget_3->item(i, j)->text()+" ").append("</td>");
+                QString data=ui->tableWidget_3->item(i, j)->text();
+                if(data[0]=="<")
+                    data.replace("<","&lt;");//since html not considering < as character, it affect the printer
+                doctext.append("<td>").append(data+" ").append("</td>");
+            }
+            if(i!=ui->tableWidget_3->rowCount()-1)
+            {
+                //text.append("<hr>"); //if required line between each row
+            }
+        }
+        text.append("</tr>");
+        doctext.append("</tr>");
+    }
+    text.append("</table></body>");
+    doctext.append("</table>");
+    web.setHtml(text);
+    doc.setHtml(doctext);
+    print_process(84,0);
+}
+
+void MainWindow::on_pushButton_34_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(0);
+    key->setData("Lab Name",ui->pushButton_34->text());
+    key->exec();
+    ui->pushButton_34->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update settings set lab=:lab where sno=1");
+    query.bindValue(":lab",key->getData());
+    query.exec();
+}
+
+void MainWindow::on_pushButton_35_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(0);
+    key->setData("Lab Address 1",ui->pushButton_35->text());
+    key->exec();
+    ui->pushButton_35->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update settings set add1=:lab where sno=1");
+    query.bindValue(":lab",key->getData());
+    query.exec();
+}
+
+void MainWindow::on_pushButton_36_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(0);
+    key->setData("Lab Address 2",ui->pushButton_36->text());
+    key->exec();
+    ui->pushButton_36->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update settings set add2=:lab where sno=1");
+    query.bindValue(":lab",key->getData());
+    query.exec();
+}
+
+void MainWindow::on_pushButton_37_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(0);
+    key->setData("User Info",ui->pushButton_37->text());
+    key->exec();
+    ui->pushButton_37->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update settings set user=:lab where sno=1");
+    query.bindValue(":lab",key->getData());
+    query.exec();
+}
+
+
+
+void MainWindow::on_pushButton_52_clicked()
+{
+    QDateTime newdatetime=ui->dateTimeEdit_3->dateTime();
+    QString changeDT=newdatetime.toString("yyyy-MM-dd HH:mm:ss");
+    QString command = "sudo date -s '"+changeDT+"'";
+    system(command.toUtf8().constData());
 }

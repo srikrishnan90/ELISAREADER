@@ -364,12 +364,12 @@ void keyboard::on_pushButton_114_clicked()
 
 void keyboard::on_pushButton_74_clicked()
 {
-    ui->lineEdit->setText(" ");
+    ui->lineEdit->setText(ui->lineEdit->text()+" ");
 }
 
 void keyboard::on_pushButton_112_clicked()
 {
-    ui->lineEdit->setText(" ");
+    ui->lineEdit->setText(ui->lineEdit->text()+" ");
 
 }
 
