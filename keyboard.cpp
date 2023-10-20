@@ -16,7 +16,6 @@ keyboard::~keyboard()
 
 QString keyboard::getData()
 {
-    qDebug()<<"from Keyboard"<<ui->lineEdit->text();
     return(ui->lineEdit->text());
 }
 

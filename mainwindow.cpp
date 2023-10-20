@@ -14,7 +14,7 @@ static int blank=0,cal=0,dup_cal=1,nc=0,pc=0,cc=0,lc=0,samp=0,dup_samp=1,total=0
 static int led_freq=10000;
 static double offset[8], blnk[8], od[8];
 static int pri_wave=0,sec_wave=0;
-static double pri_res[12][8],sec_res[12][8],fin_res[12][8],pri[96],sec[96],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0;
+static double pri_res[12][8],sec_res[12][8],fin_res[12][8],pri[96],sec[96],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0,factor=0;
 static QString dis[96],res[96], rem[96],pid[96];
 static Pi2c arduino(7);
 static QString unit, cuteqn;
@@ -1359,113 +1359,72 @@ void MainWindow::on_comboBox_11_currentIndexChanged(int index)
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    int pwm[10]={500,500,500,500,500,500,500,500,1,led_freq};
-    pwm[9]=ui->pushButton_10->text().toInt();
-    QString My_String;
-    for(int i=0; i<10; i++)
-    {
-        My_String.append(QString::number(pwm[i]));
-        if(i==9)
-            My_String.append('\0');
-        else
-            My_String.append(" ");
-    }
-    qDebug()<<My_String;
-    int len=My_String.length();
-    char* ch;
-    QByteArray ba=My_String.toLatin1();
-    ch=ba.data();
-    arduino.i2cWrite(ch,len);
+    led_control(1);
 }
 
 void MainWindow::on_pushButton_7_clicked()
 {
-    int pwm[10]={500,500,500,500,500,500,500,500,2,led_freq};
-    pwm[9]=ui->pushButton_10->text().toInt();
-    QString My_String;
-    for(int i=0; i<10; i++)
-    {
-        My_String.append(QString::number(pwm[i]));
-        if(i==9)
-            My_String.append('\0');
-        else
-            My_String.append(" ");
-    }
-    qDebug()<<My_String;
-    int len=My_String.length();
-    char* ch;
-    QByteArray ba=My_String.toLatin1();
-    ch=ba.data();
-    arduino.i2cWrite(ch,len);
+    led_control(2);
 }
 
 void MainWindow::on_pushButton_8_clicked()
 {
-    int pwm[10]={500,500,500,500,500,500,500,500,3,led_freq};
-    pwm[9]=ui->pushButton_10->text().toInt();
-    QString My_String;
-    for(int i=0; i<10; i++)
-    {
-        My_String.append(QString::number(pwm[i]));
-        if(i==9)
-            My_String.append('\0');
-        else
-            My_String.append(" ");
-    }
-    qDebug()<<My_String;
-    int len=My_String.length();
-    char* ch;
-    QByteArray ba=My_String.toLatin1();
-    ch=ba.data();
-    arduino.i2cWrite(ch,len);
+    led_control(3);
 }
 
 void MainWindow::on_pushButton_9_clicked()
 {
-    int pwm[10]={500,500,500,500,500,500,500,500,4,led_freq};
-    pwm[9]=ui->pushButton_10->text().toInt();
-    QString My_String;
-    for(int i=0; i<10; i++)
-    {
-        My_String.append(QString::number(pwm[i]));
-        if(i==9)
-            My_String.append('\0');
-        else
-            My_String.append(" ");
-    }
-    qDebug()<<My_String;
-    int len=My_String.length();
-    char* ch;
-    QByteArray ba=My_String.toLatin1();
-    ch=ba.data();
-    arduino.i2cWrite(ch,len);
+    led_control(4);
+}
+
+void MainWindow::on_pushButton_56_clicked()
+{
+    led_control(5);
 }
 
 void MainWindow::on_pushButton_11_clicked()
 {
-    int pwm[10]={500,500,500,500,500,500,500,500,0,led_freq};
-    pwm[9]=ui->pushButton_10->text().toInt();
-    QString My_String;
-    for(int i=0; i<10; i++)
-    {
-        My_String.append(QString::number(pwm[i]));
-        if(i==9)
-            My_String.append('\0');
-        else
-            My_String.append(" ");
-    }
-    qDebug()<<My_String;
-    int len=My_String.length();
-    char* ch;
-    QByteArray ba=My_String.toLatin1();
-    ch=ba.data();
-    arduino.i2cWrite(ch,len);
+    led_control(0);
 }
 
 void MainWindow::on_toolButton_4_clicked()
 {
+    ui->lineEdit->clear();
     ui->stackedWidget->setCurrentIndex(8);
     dttimer->stop();
+
+    QPushButton* led_buttons[50] = { ui->ch1_405,ui->ch2_405,ui->ch3_405,ui->ch4_405,ui->ch5_405,ui->ch6_405,ui->ch7_405,ui->ch8_405,ui->freq_405,ui->fact_405,
+                                     ui->ch1_450,ui->ch2_450,ui->ch3_450,ui->ch4_450,ui->ch5_450,ui->ch6_450,ui->ch7_450,ui->ch8_450,ui->freq_450,ui->fact_450,
+                                     ui->ch1_490,ui->ch2_490,ui->ch3_490,ui->ch4_490,ui->ch5_490,ui->ch6_490,ui->ch7_490,ui->ch8_490,ui->freq_490,ui->fact_490,
+                                     ui->ch1_630,ui->ch2_630,ui->ch3_630,ui->ch4_630,ui->ch5_630,ui->ch6_630,ui->ch7_630,ui->ch8_630,ui->freq_630,ui->fact_630,
+                                     ui->ch1_op1,ui->ch2_op1,ui->ch3_op1,ui->ch4_op1,ui->ch5_op1,ui->ch6_op1,ui->ch7_op1,ui->ch8_op1,ui->freq_op1,ui->fact_op1};
+
+    QSqlQuery Query;
+    Query.prepare("select pwm1,pwm2,pwm3,pwm4,pwm5,pwm6,pwm7,pwm8,freq,factor from led");
+    Query.exec();
+    int i=0;
+    while(Query.next())
+    {
+        led_buttons[(i*10)+0]->setText(Query.value(0).toString());
+        led_buttons[(i*10)+1]->setText(Query.value(1).toString());
+        led_buttons[(i*10)+2]->setText(Query.value(2).toString());
+        led_buttons[(i*10)+3]->setText(Query.value(3).toString());
+        led_buttons[(i*10)+4]->setText(Query.value(4).toString());
+        led_buttons[(i*10)+5]->setText(Query.value(5).toString());
+        led_buttons[(i*10)+6]->setText(Query.value(6).toString());
+        led_buttons[(i*10)+7]->setText(Query.value(7).toString());
+        led_buttons[(i*10)+8]->setText(Query.value(8).toString());
+        led_buttons[(i*10)+9]->setText(Query.value(9).toString());
+        i++;
+    }
+
+    for(int i =0;i<50; i++)
+    {
+        disconnect(led_buttons[i], &QPushButton::clicked, this, &MainWindow::ledpwm_button);
+        connect(led_buttons[i], &QPushButton::clicked, this, &MainWindow::ledpwm_button);
+    }
+
+
 }
 
 void MainWindow::on_pushButton_14_clicked()
@@ -1622,7 +1581,7 @@ void MainWindow::on_pushButton_12_clicked()
     qDebug()<<od[7]<<od[6]<<od[5]<<od[4]<<od[3]<<od[2]<<od[1]<<od[0];
     for (int i=0;i<8;i++)
     {
-        od[i]=log10(blnk[i]/od[i]);
+        od[i]=log10(blnk[i]/od[i]);//od[i]=log10(blnk[i]/od[i]) * selected wavelength path length factor
     }
     qDebug()<<QString::number(od[7], 'f', 3)
             <<QString::number(od[6], 'f', 3)
@@ -1757,6 +1716,28 @@ void MainWindow::on_toolButton_18_clicked()
 void MainWindow::led_control(int led)
 {
     int pwm[10]={500,500,500,500,500,500,500,500,led,5000};
+    if(led!=0)
+    {
+        QString led_list[6]={"0","405","450","490","630","op1"};
+        QSqlQuery Query;
+        Query.prepare("select * FROM led WHERE led = :wave");
+        Query.bindValue(":wave", led_list[led]);
+        Query.exec();
+        while(Query.next())
+        {
+            pwm[0]=Query.value(1).toInt();
+            pwm[1]=Query.value(2).toInt();
+            pwm[2]=Query.value(3).toInt();
+            pwm[3]=Query.value(4).toInt();
+            pwm[4]=Query.value(5).toInt();
+            pwm[5]=Query.value(6).toInt();
+            pwm[6]=Query.value(7).toInt();
+            pwm[7]=Query.value(8).toInt();
+            pwm[9]=Query.value(9).toInt();
+            factor=Query.value(10).toInt();
+        }
+    }
+
     QString My_String;
     for(int i=0; i<10; i++)
     {
@@ -3280,7 +3261,7 @@ void MainWindow::on_toolButton_24_clicked()
                 }
                 else
                 {
-                   doctext.append(res[i+j*8]);
+                    doctext.append(res[i+j*8]);
                 }
 
             }
@@ -3459,10 +3440,6 @@ void MainWindow::on_pushButton_38_clicked()
         {
             val<<ui->tableWidget_3->item(n,i)->text();
         }
-        else if(i==ui->tableWidget_3->columnCount()-1)
-        {
-            val<<pid[n];
-        }
         else
         {
             val<<" ";
@@ -3552,28 +3529,18 @@ void MainWindow::on_pushButton_51_clicked()
         doctext.append("<tr>");
         for (int j = 0; j < ui->tableWidget_3->columnCount(); j++)
         {
-            if(j==ui->tableWidget_3->columnCount()-1)
+
+            QTableWidgetItem *item = ui->tableWidget_3->item(i, j);
+            if (!item || item->text().isEmpty())
             {
-                text.append("<td>").append(pid[i]).append("</td>");
-                doctext.append("<td>").append(pid[i]).append("</td>");
+                ui->tableWidget_3->setItem(i, j, new QTableWidgetItem(" "));
             }
-            else
-            {
-                QTableWidgetItem *item = ui->tableWidget_3->item(i, j);
-                if (!item || item->text().isEmpty())
-                {
-                    ui->tableWidget_3->setItem(i, j, new QTableWidgetItem(" "));
-                }
-                text.append("<td>").append(ui->tableWidget_3->item(i, j)->text()+" ").append("</td>");
-                QString data=ui->tableWidget_3->item(i, j)->text();
-                if(data[0]=="<")
-                    data.replace("<","&lt;");//since html not considering < as character, it affect the printer
-                doctext.append("<td>").append(data+" ").append("</td>");
-            }
-            if(i!=ui->tableWidget_3->rowCount()-1)
-            {
-                //text.append("<hr>"); //if required line between each row
-            }
+            text.append("<td>").append(ui->tableWidget_3->item(i, j)->text()+" ").append("</td>");
+            QString data=ui->tableWidget_3->item(i, j)->text();
+            if(data[0]=="<")
+                data.replace("<","&lt;");//since html not considering < as character, it affect the printer
+            doctext.append("<td>").append(data+" ").append("</td>");
+
         }
         text.append("</tr>");
         doctext.append("</tr>");
@@ -3649,4 +3616,194 @@ void MainWindow::on_pushButton_52_clicked()
     QString changeDT=newdatetime.toString("yyyy-MM-dd HH:mm:ss");
     QString command = "sudo date -s '"+changeDT+"'";
     system(command.toUtf8().constData());
+}
+
+void MainWindow::on_pushButton_55_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(9);
+}
+
+void MainWindow::on_pushButton_54_clicked()
+{
+    QStringList head,val;
+    int n=ui->tableWidget_2->currentRow();
+    for( int i = 0; i < ui->tableWidget_2->columnCount(); i++ )
+    {
+        head<<ui->tableWidget_2->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString();
+        if(ui->tableWidget_2->item(n,i))
+        {
+            val<<ui->tableWidget_2->item(n,i)->text();
+        }
+        else
+        {
+            val<<" ";
+        }
+    }
+    qDebug()<<val;
+    qDebug()<<head;
+    btn_name=val[0];
+    ui->label_17->setText(val[5]);
+    ui->label_38->setText(val[6]);
+    doc.clear();
+    QString doctext;
+    QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;font-size:10px;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
+    text.append("<body>");
+    text.append("<h1 style='font-size:10px;text-align:center'>");
+    text.append(val[0]).append("<br>").append(val[5]).append("<br>").append(val[6]);
+    text.append("</h1>");
+    text.append("<table class='center' style='width:30%'>");
+
+    doctext.append("<h1 style='font-size:8px;text-align:center'>");
+    doctext.append(val[0]).append("<br>").append(val[5]).append("<br>").append(val[6]);
+    doctext.append("</h1>");
+    doctext.append("<table>");
+    for (int i = 0; i < head.length(); i++)
+    {
+        if(!(i==0 or i==5 or i==6))
+        {
+            text.append("<tr>");
+            text.append("<th>").append(head[i]).append(" ").append("</th>");
+            text.append("<td>").append(val[i]).append(" ").append("</td>");
+            text.append("</tr>");
+
+            doctext.append("<tr>");
+            doctext.append("<th>").append(head[i]).append(" ").append("</th>");
+            if(val[i][0]=="<")
+            {
+                QString data=val[i];
+                data.replace("<","&lt;");
+                doctext.append("<td>").append(data).append(" ").append("</td>");
+            }
+            else
+            {
+                doctext.append("<td>").append(val[i]).append(" ").append("</td>");
+            }
+            doctext.append("</tr>");
+        }
+    }
+    text.append("</table></body>");
+    doctext.append("</table>");
+    web.setHtml(text);
+    doc.setHtml(doctext);
+    print_process(65,1);
+}
+
+void MainWindow::on_pushButton_53_clicked()
+{
+    doc.clear();
+    QString doctext;
+    btn_name="Database";
+    ui->label_17->setText("Total");
+    ui->label_38->setText("Results");
+    QString text("<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;text-align:left;font-size:10px;}table.center { margin-left: auto; margin-right: auto;}</style></head>");
+    text.append("<body>");
+    text.append("<h1 style='font-size:10px;text-align:center'>");
+    text.append(btn_name).append(" ").append(ui->label_17->text()).append(" ").append(ui->label_38->text());
+    text.append("</h1>");
+    text.append("<table class='center' style='width:50%'>");
+    text.append("<tr>");
+
+    doctext.append("<h1 style='font-size:8px;text-align:center'>");
+    doctext.append("Total Results");
+    doctext.append("</h1>");
+    doctext.append("<table>");
+    doctext.append("<tr>");
+
+    for (int i = 0; i < ui->tableWidget_2->columnCount(); i++)
+    {
+        text.append("<th>").append(ui->tableWidget_2->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()).append(" ").append("</th>");
+        doctext.append("<th>").append(ui->tableWidget_2->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()).append(" ").append("</th>");
+    }
+    text.append("</tr>");
+    doctext.append("</tr>");
+    for (int i = 0; i < ui->tableWidget_2->rowCount(); i++)
+    {
+        text.append("<tr>");
+        doctext.append("<tr>");
+        for (int j = 0; j < ui->tableWidget_2->columnCount(); j++)
+        {
+
+            QTableWidgetItem *item = ui->tableWidget_2->item(i, j);
+            if (!item || item->text().isEmpty())
+            {
+                ui->tableWidget_2->setItem(i, j, new QTableWidgetItem(" "));
+            }
+            text.append("<td>").append(ui->tableWidget_2->item(i, j)->text()+" ").append("</td>");
+            QString data=ui->tableWidget_2->item(i, j)->text();
+            if(data[0]=="<")
+                data.replace("<","&lt;");//since html not considering < as character, it affect the printer
+            doctext.append("<td>").append(data+" ").append("</td>");
+
+        }
+        text.append("</tr>");
+        doctext.append("</tr>");
+    }
+    text.append("</table></body>");
+    doctext.append("</table>");
+    web.setHtml(text);
+    doc.setHtml(doctext);
+    print_process(84,0);
+}
+
+void MainWindow::ledpwm_button()
+{
+    QObject *senderObj = sender();
+    QString button_name = senderObj->objectName();
+    QPushButton* led_buttons[50] = { ui->ch1_405,ui->ch2_405,ui->ch3_405,ui->ch4_405,ui->ch5_405,ui->ch6_405,ui->ch7_405,ui->ch8_405,ui->freq_405,ui->fact_405,
+                                     ui->ch1_450,ui->ch2_450,ui->ch3_450,ui->ch4_450,ui->ch5_450,ui->ch6_450,ui->ch7_450,ui->ch8_450,ui->freq_450,ui->fact_450,
+                                     ui->ch1_490,ui->ch2_490,ui->ch3_490,ui->ch4_490,ui->ch5_490,ui->ch6_490,ui->ch7_490,ui->ch8_490,ui->freq_490,ui->fact_490,
+                                     ui->ch1_630,ui->ch2_630,ui->ch3_630,ui->ch4_630,ui->ch5_630,ui->ch6_630,ui->ch7_630,ui->ch8_630,ui->freq_630,ui->fact_630,
+                                     ui->ch1_op1,ui->ch2_op1,ui->ch3_op1,ui->ch4_op1,ui->ch5_op1,ui->ch6_op1,ui->ch7_op1,ui->ch8_op1,ui->freq_op1,ui->fact_op1};
+
+    QString led_buttons_text[50] = { "ch1_405","ch2_405","ch3_405","ch4_405","ch5_405","ch6_405","ch7_405","ch8_405","freq_405","fact_405",
+                                     "ch1_450","ch2_450","ch3_450","ch4_450","ch5_450","ch6_450","ch7_450","ch8_450","freq_450","fact_450",
+                                     "ch1_490","ch2_490","ch3_490","ch4_490","ch5_490","ch6_490","ch7_490","ch8_490","freq_490","fact_490",
+                                     "ch1_630","ch2_630","ch3_630","ch4_630","ch5_630","ch6_630","ch7_630","ch8_630","freq_630","fact_630",
+                                     "ch1_op1","ch2_op1","ch3_op1","ch4_op1","ch5_op1","ch6_op1","ch7_op1","ch8_op1","freq_op1","fact_op1"};
+
+    int n=0;
+    for (int i=0;i<50;i++)
+    {
+        if(button_name==led_buttons_text[i])
+        {
+            n=i;
+            break;
+        }
+    }
+
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(2);
+    key->setData(led_buttons_text[n],led_buttons[n]->text());
+    key->exec();
+    QString data = key->getData();
+    led_buttons[n]->setText(data);
+
+    QStringList list = led_buttons_text[n].split(QRegExp("_"));
+    QMap<QString, QString> map;
+    map.insert("ch1","pwm1");
+    map.insert("ch2","pwm2");
+    map.insert("ch3","pwm3");
+    map.insert("ch4","pwm4");
+    map.insert("ch5","pwm5");
+    map.insert("ch6","pwm6");
+    map.insert("ch7","pwm7");
+    map.insert("ch8","pwm8");
+    map.insert("freq","freq");
+    map.insert("fact","factor");
+
+    QSqlQuery Query;
+    Query.prepare("UPDATE led SET " + map[list[0]] + " =:val WHERE led = :val1");
+    Query.bindValue(":val",data);
+    Query.bindValue(":val1",list[1]);
+    Query.exec();
+
+}
+
+
+void MainWindow::on_pushButton_62_clicked()
+{
+    on_pushButton_13_clicked();
+    ui->lineEdit->setText("  "+QString::number(blnk[7]/500,'f',0)+"        "+QString::number(blnk[6]/500,'f',0)+"       "+QString::number(blnk[5]/500,'f',0)+"       "+QString::number(blnk[4]/500,'f',0)+"        "
+            +QString::number(blnk[3]/500,'f',0)+"       "+QString::number(blnk[2]/500,'f',0)+"        "+QString::number(blnk[1]/500,'f',0)+"       "+QString::number(blnk[0]/500,'f',0));
 }

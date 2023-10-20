@@ -293,6 +293,20 @@ private slots:
 
     void on_pushButton_52_clicked();
 
+    void on_pushButton_55_clicked();
+
+    void on_pushButton_54_clicked();
+
+    void on_pushButton_53_clicked();
+
+    void ledpwm_button();
+
+
+
+    void on_pushButton_56_clicked();
+
+    void on_pushButton_62_clicked();
+
 private:
     Ui::MainWindow *ui;
     QGridLayout* mainLayout;
