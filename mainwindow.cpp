@@ -11,7 +11,6 @@ static int test_mode=0;
 static int test_entry=0;
 static QString btn_name="";
 static int blank=0,cal=0,dup_cal=1,nc=0,pc=0,cc=0,lc=0,samp=0,dup_samp=1,total=0,total_cal=0,total_samp=0,nostd=0;
-static int led_freq=10000;
 static double offset[8], blnk[8], od[8];
 static int pri_wave=0,sec_wave=0;
 static double pri_res[12][8],sec_res[12][8],fin_res[12][8],pri[96],sec[96],abs_res[96],abs_avg[96],x_conc[10],y_abs[10],cutabs=0,factor=0;
@@ -27,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     DEV_Module_Init();
     wiringPiSetup();
+    led_control(0);
     ADS1263_SetMode(0);
     ADS1263_init_ADC1(ADS1263_100SPS);
     on_pushButton_14_clicked();
@@ -75,6 +75,8 @@ void MainWindow::on_toolButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
     dttimer->stop();
+    qApp->processEvents();
+    ADS1263_init_ADC1(ADS1263_100SPS);
 }
 
 void MainWindow::on_toolButton_9_clicked()
@@ -1389,8 +1391,10 @@ void MainWindow::on_pushButton_11_clicked()
 
 void MainWindow::on_toolButton_4_clicked()
 {
+
     ui->lineEdit->clear();
     ui->stackedWidget->setCurrentIndex(8);
+    qApp->processEvents();
     dttimer->stop();
 
     QPushButton* led_buttons[50] = { ui->ch1_405,ui->ch2_405,ui->ch3_405,ui->ch4_405,ui->ch5_405,ui->ch6_405,ui->ch7_405,ui->ch8_405,ui->freq_405,ui->fact_405,
@@ -1423,7 +1427,7 @@ void MainWindow::on_toolButton_4_clicked()
         disconnect(led_buttons[i], &QPushButton::clicked, this, &MainWindow::ledpwm_button);
         connect(led_buttons[i], &QPushButton::clicked, this, &MainWindow::ledpwm_button);
     }
-
+    ADS1263_init_ADC1(ADS1263_400SPS);
 
 }
 
@@ -3803,7 +3807,173 @@ void MainWindow::ledpwm_button()
 
 void MainWindow::on_pushButton_62_clicked()
 {
-    on_pushButton_13_clicked();
+    int samples = 1;
+    uint32_t ADC[8][1];
+    for(int i=0;i<8;i++)
+    {
+        blnk[i]=0;
+    }
+    for(uint8_t j=0;j<8;j++)
+    {
+        for(int i=0;i<samples;i++)
+        {
+
+            ADC[j][i]=ADS1263_GetChannalValue(j);
+            if((ADC[j][i]>>31) == 1)
+                ADC[j][i]=(REF*2 - ADC[j][i]/2147483648.0 * REF);
+            else
+                ADC[j][i]=(ADC[j][i]/2147483648.0 * REF);
+        }
+    }
+    for (int i=0;i<samples;i++)
+    {
+        blnk[7]+=ADC[0][i];
+        blnk[6]+=ADC[1][i];
+        blnk[5]+=ADC[2][i];
+        blnk[4]+=ADC[3][i];
+        blnk[3]+=ADC[4][i];
+        blnk[2]+=ADC[5][i];
+        blnk[1]+=ADC[6][i];
+        blnk[0]+=ADC[7][i];
+        if(i==samples-1)
+        {
+            blnk[0]=(blnk[0]/samples)-offset[0];
+            blnk[1]=(blnk[1]/samples)-offset[1];
+            blnk[2]=(blnk[2]/samples)-offset[2];
+            blnk[3]=(blnk[3]/samples)-offset[3];
+            blnk[4]=(blnk[4]/samples)-offset[4];
+            blnk[5]=(blnk[5]/samples)-offset[5];
+            blnk[6]=(blnk[6]/samples)-offset[6];
+            blnk[7]=(blnk[7]/samples)-offset[7];
+        }
+    }
     ui->lineEdit->setText("  "+QString::number(blnk[7]/500,'f',0)+"        "+QString::number(blnk[6]/500,'f',0)+"       "+QString::number(blnk[5]/500,'f',0)+"       "+QString::number(blnk[4]/500,'f',0)+"        "
             +QString::number(blnk[3]/500,'f',0)+"       "+QString::number(blnk[2]/500,'f',0)+"        "+QString::number(blnk[1]/500,'f',0)+"       "+QString::number(blnk[0]/500,'f',0));
+    qApp->processEvents();
 }
+
+void MainWindow::on_pushButton_59_clicked()
+{
+    led_calibration(1);
+}
+
+void MainWindow::on_pushButton_60_clicked()
+{
+    led_calibration(2);
+}
+
+void MainWindow::on_pushButton_58_clicked()
+{
+    led_calibration(3);
+}
+
+void MainWindow::on_pushButton_61_clicked()
+{
+    led_calibration(4);
+}
+
+void MainWindow::on_pushButton_57_clicked()
+{
+    led_calibration(5);
+}
+
+void MainWindow::led_calibration(int led)
+{
+    int pwm[10]={500,500,500,500,500,500,500,500,led,5000};
+    QString My_String;
+    int len=0,stat=0;
+    char* ch;
+    QByteArray ba;
+    QString led_list[6]={"0","405","450","490","630","op1"};
+
+    QSqlQuery Query;
+    Query.prepare("select * FROM led WHERE led = :wave");
+    Query.bindValue(":wave",led_list[led]);
+    Query.exec();
+    while(Query.next())
+    {
+        pwm[0]=Query.value(1).toInt();
+        pwm[1]=Query.value(2).toInt();
+        pwm[2]=Query.value(3).toInt();
+        pwm[3]=Query.value(4).toInt();
+        pwm[4]=Query.value(5).toInt();
+        pwm[5]=Query.value(6).toInt();
+        pwm[6]=Query.value(7).toInt();
+        pwm[7]=Query.value(8).toInt();
+        pwm[9]=Query.value(9).toInt();
+    }
+
+    for(int n=0;n<=1000;n++)
+    {
+        My_String.clear();
+        for(int i=0; i<10; i++)
+        {
+            My_String.append(QString::number(pwm[i]));
+            if(i==9)
+                My_String.append('\0');
+            else
+                My_String.append(" ");
+        }
+        len=My_String.length();
+        ba=My_String.toLatin1();
+        ch=ba.data();
+        arduino.i2cWrite(ch,len);
+        stat=0;
+        on_pushButton_62_clicked();
+        stat=0;
+        for(int i=0;i<8;i++)
+        {
+            if(blnk[7-i]/500<600 or blnk[7-i]/500>900)
+                stat=1;
+        }
+        if(stat==0 or n==1000)
+        {
+            QSqlQuery Query;
+            Query.prepare("UPDATE led SET pwm1=:pwm1,pwm2=:pwm2,pwm3=:pwm3,pwm4=:pwm4,pwm5=:pwm5,pwm6=:pwm6,pwm7=:pwm7,pwm8=:pwm8 WHERE led = :wave");
+            Query.bindValue(":pwm1",pwm[0]);
+            Query.bindValue(":pwm2",pwm[1]);
+            Query.bindValue(":pwm3",pwm[2]);
+            Query.bindValue(":pwm4",pwm[3]);
+            Query.bindValue(":pwm5",pwm[4]);
+            Query.bindValue(":pwm6",pwm[5]);
+            Query.bindValue(":pwm7",pwm[6]);
+            Query.bindValue(":pwm8",pwm[7]);
+            Query.bindValue(":wave",led_list[led]);
+            Query.exec();
+            led_control(0);//off led
+            on_toolButton_4_clicked();
+            if(n==1000)
+            {
+               ui->lineEdit->setText(led_list[led]+" Tuning Error");
+            }
+            else
+            {
+                ui->lineEdit->setText(led_list[led]+" Tuning Success");
+            }
+            break;
+        }
+        else
+        {
+            for(int i=0;i<8;i++)
+            {
+                if(blnk[7-i]/500<600)
+                {
+                    pwm[i]=pwm[i]+1;
+                    if(pwm[i]>=1000)
+                        pwm[i]=1000;
+                }
+                else if(blnk[7-i]/500>900)
+                {
+                    pwm[i]=pwm[i]-1;
+                    if(pwm[i]<=0)
+                        pwm[i]=0;
+                }
+
+            }
+            qDebug()<<n<<pwm[0]<<pwm[1]<<pwm[2]<<pwm[3]<<pwm[4]<<pwm[5]<<pwm[6]<<pwm[7];
+        }
+
+    }
+}
+
+
