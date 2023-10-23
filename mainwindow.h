@@ -23,6 +23,7 @@
 
 
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -315,6 +316,15 @@ private slots:
      void on_pushButton_61_clicked();
 
      void on_pushButton_57_clicked();
+
+     void init();
+     void motor_init();
+     void adc_init();
+     void led_init();
+
+     void on_pushButton_10_clicked();
+
+     void on_pushButton_63_clicked();
 
 private:
     Ui::MainWindow *ui;

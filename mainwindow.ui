@@ -79,7 +79,7 @@
      <string notr="true">background:rgba(255,255,255,1)</string>
     </property>
     <property name="currentIndex">
-     <number>8</number>
+     <number>14</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QScrollArea" name="scrollArea">
@@ -6674,7 +6674,7 @@
        <string notr="true">QTabBar::tab { height: 40px; width: 120px; }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab_7">
        <attribute name="title">
@@ -7851,6 +7851,24 @@
         </widget>
        </widget>
       </widget>
+      <widget class="QWidget" name="tab_10">
+       <attribute name="title">
+        <string>INIT</string>
+       </attribute>
+       <widget class="QPushButton" name="pushButton_63">
+        <property name="geometry">
+         <rect>
+          <x>320</x>
+          <y>120</y>
+          <width>83</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Initialize</string>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="page_10">
@@ -8599,12 +8617,191 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="page_15">
+     <widget class="QLabel" name="label_79">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>100</y>
+        <width>311</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Initial Checking...</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_80">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>150</y>
+        <width>111</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Checking Moror</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_81">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>190</y>
+        <width>111</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Checking ADC</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_82">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>230</y>
+        <width>111</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Checking 405nm</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_83">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>270</y>
+        <width>111</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Checking 450nm</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_84">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>310</y>
+        <width>111</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Checking 490nm</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_85">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>350</y>
+        <width>111</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Checking 630nm</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_86">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>150</y>
+        <width>271</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_87">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>190</y>
+        <width>271</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_88">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>230</y>
+        <width>271</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_89">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>270</y>
+        <width>271</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_90">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>310</y>
+        <width>271</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_91">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>350</y>
+        <width>271</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_10">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>400</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Skip</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
-   <zorder>stackedWidget</zorder>
-   <zorder>toolButton</zorder>
-   <zorder>toolButton_2</zorder>
-   <zorder>toolButton_3</zorder>
-   <zorder>toolButton_4</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

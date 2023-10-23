@@ -18,6 +18,8 @@ static QString dis[96],res[96], rem[96],pid[96];
 static Pi2c arduino(7);
 static QString unit, cuteqn;
 static int invalid=0, save=0;
+static QString error_msg;
+static int error_stat=0;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,10 +28,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     DEV_Module_Init();
     wiringPiSetup();
-    led_control(0);
-    ADS1263_SetMode(0);
-    ADS1263_init_ADC1(ADS1263_100SPS);
-    on_pushButton_14_clicked();
     pinMode (en, OUTPUT) ;
     pinMode (dir, OUTPUT) ;
     pinMode (steps, OUTPUT) ;
@@ -39,20 +37,206 @@ MainWindow::MainWindow(QWidget *parent) :
     mainLayout=new QGridLayout();
     QScroller::grabGesture(ui->scrollArea, QScroller::LeftMouseButtonGesture);
     ui->scrollAreaWidgetContents->setLayout(mainLayout);
+
+    timer = new QTimer(this);
+    dttimer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(delete_label()));
+    connect(dttimer, SIGNAL(timeout()), this, SLOT(update_time()));
+    QTimer::singleShot(1000, this, SLOT(init()));
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->lower();
+
+}
+
+void MainWindow::init()
+{
+    ui->stackedWidget->setCurrentIndex(14);
+    ui->stackedWidget->raise();
+    ui->pushButton_10->setDisabled(true);
+    ui->label_79->setText("Initial Checking...");
+    qApp->processEvents();
+
+    error_stat=0;
+    led_control(0);
     QSqlDatabase sqdb = QSqlDatabase::addDatabase("QSQLITE");
     sqdb.setDatabaseName("/home/pi/reader/Database/er.db");
     if(!sqdb.open())
         qDebug() << "Can't Connect to DB !";
     else
         qDebug() << "Connected Successfully to DB !";
-    ui->stackedWidget->setCurrentIndex(0);
-    ui->stackedWidget->lower();
     test_menu();
-    timer = new QTimer(this);
-    dttimer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(delete_label()));
-    connect(dttimer, SIGNAL(timeout()), this, SLOT(update_time()));
+    motor_init();
+    adc_init();
+    led_init();
+
 }
+
+void MainWindow::motor_init()
+{
+    //motor init and checking
+    error_msg.clear();
+
+    if(digitalRead(hm_sen)==0)
+    {
+        mot_forward(1000);
+        on_pushButton_17_clicked();
+    }
+    else
+    {
+        on_pushButton_17_clicked();
+    }
+    if(digitalRead(hm_sen)!=0)
+    {
+        error_msg="Motor Homing Error\n";
+    }
+    else
+    {
+        mot_forward(17000);
+    }
+    if(error_msg.length()>1)
+    {
+        qDebug()<<error_msg;
+        ui->label_86->setText(error_msg);
+        error_stat=1;
+    }
+    else
+    {
+        ui->label_86->setText("PASS");
+    }
+}
+
+void MainWindow::adc_init()
+{
+
+    qApp->processEvents();
+    error_msg.clear();
+    ADS1263_SetMode(0);
+    ADS1263_init_ADC1(ADS1263_100SPS);
+    on_pushButton_14_clicked();
+    for(int i=0;i<8;i++)
+    {
+        if(!(offset[i]>0 and offset[i]<3000))
+        {
+            error_msg.append(QString::number(i+1)).append(" ");
+        }
+    }
+    if(error_msg.length()>1)
+    {
+        qDebug()<<error_msg;
+        ui->label_87->setText(error_msg);
+        error_stat=1;
+    }
+    else
+    {
+        ui->label_87->setText("PASS");
+    }
+
+}
+
+void MainWindow::led_init()
+{
+    qApp->processEvents();
+    error_msg.clear();
+    led_control(1);
+    on_pushButton_13_clicked();
+    for(int i=0;i<8;i++)
+    {
+        if(!(blnk[i]>200000 and blnk[i]<450000))
+        {
+            error_msg.append(QString::number(i+1)).append(" ");
+        }
+
+    }
+    if(error_msg.length()>1)
+    {
+        qDebug()<<"405 Ligth Path Error for Channel "<<error_msg;
+        ui->label_88->setText(error_msg);
+        error_stat=1;
+    }
+    else {
+        ui->label_88->setText("PASS");
+    }
+    qApp->processEvents();
+    error_msg.clear();
+    led_control(2);
+    on_pushButton_13_clicked();
+    for(int i=0;i<8;i++)
+    {
+        if(!(blnk[i]>200000 and blnk[i]<450000))
+        {
+            error_msg.append(QString::number(i+1)).append(" ");
+        }
+
+    }
+    if(error_msg.length()>1)
+    {
+        qDebug()<<"450 Ligth Path Error for Channel "<<error_msg;
+        ui->label_89->setText(error_msg);
+        error_stat=1;
+    }
+    else {
+        ui->label_89->setText("PASS");
+    }
+
+    qApp->processEvents();
+    error_msg.clear();
+    led_control(3);
+    on_pushButton_13_clicked();
+    for(int i=0;i<8;i++)
+    {
+        if(!(blnk[i]>200000 and blnk[i]<450000))
+        {
+            error_msg.append(QString::number(i+1)).append(" ");
+        }
+
+    }
+    if(error_msg.length()>1)
+    {
+        qDebug()<<"4901 Ligth Path Error for Channel "<<error_msg;
+        ui->label_90->setText(error_msg);
+        error_stat=1;
+    }
+    else
+    {
+        ui->label_90->setText("PASS");
+    }
+    qApp->processEvents();
+    error_msg.clear();
+    led_control(4);
+    on_pushButton_13_clicked();
+    for(int i=0;i<8;i++)
+    {
+        if(!(blnk[i]>200000 and blnk[i]<450000))
+        {
+            error_msg.append(QString::number(i+1)).append(" ");
+        }
+
+    }
+    if(error_msg.length()>1)
+    {
+        qDebug()<<"630 Ligth Path Error for Channel "<<error_msg;
+        ui->label_91->setText(error_msg);
+        error_stat=1;
+    }
+    else {
+        ui->label_91->setText("PASS");
+    }
+    qApp->processEvents();
+    led_control(0);
+    ui->label_79->setText("Checking Done...");
+    if(error_stat==1)
+    {
+        ui->pushButton_10->setDisabled(false);
+    }
+    else
+    {
+        ui->stackedWidget->setCurrentIndex(0);
+        ui->stackedWidget->lower();
+    }
+}
+
+
+
 
 MainWindow::~MainWindow()
 {
@@ -1602,10 +1786,20 @@ void MainWindow::on_pushButton_17_clicked()
     digitalWrite(en,LOW);
     digitalWrite(dir,HIGH);
     ulong range=70000;
+    int j=0;
     for (ulong i=0;i<range;i++)
     {
         if(digitalRead(hm_sen)==0)
-            break;
+        {
+            j++;
+            digitalWrite(steps, HIGH);
+            accle(range,i);
+            digitalWrite(steps, LOW);
+            accle(range,i);
+            if(j>=10)// for making more homing inward
+                break;
+        }
+
         else
         {
             digitalWrite(steps, HIGH);
@@ -1665,6 +1859,8 @@ void MainWindow::accle(ulong total, ulong current)
 
 void MainWindow::on_toolButton_18_clicked()
 {
+    on_pushButton_17_clicked();
+    //wait for plate load info and process the following code
     mot_forward(17000);
     on_pushButton_13_clicked();//read max
     mot_forward(9750);
@@ -3877,6 +4073,7 @@ void MainWindow::on_pushButton_57_clicked()
     led_calibration(5);
 }
 
+
 void MainWindow::led_calibration(int led)
 {
     int pwm[10]={500,500,500,500,500,500,500,500,led,5000};
@@ -3944,7 +4141,7 @@ void MainWindow::led_calibration(int led)
             on_toolButton_4_clicked();
             if(n==1000)
             {
-               ui->lineEdit->setText(led_list[led]+" Tuning Error");
+                ui->lineEdit->setText(led_list[led]+" Tuning Error");
             }
             else
             {
@@ -3977,3 +4174,20 @@ void MainWindow::led_calibration(int led)
 }
 
 
+
+void MainWindow::on_pushButton_10_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->lower();
+}
+
+void MainWindow::on_pushButton_63_clicked()
+{
+    ui->label_86->clear();
+    ui->label_87->clear();
+    ui->label_88->clear();
+    ui->label_89->clear();
+    ui->label_90->clear();
+    ui->label_91->clear();
+    init();
+}
