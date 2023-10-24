@@ -18,7 +18,7 @@
 #include <QListWidgetItem>
 //#include <QFileDialog>
 #include <QPrinterInfo>
-
+#include <QMessageBox>
 
 
 
@@ -325,6 +325,24 @@ private slots:
      void on_pushButton_10_clicked();
 
      void on_pushButton_63_clicked();
+
+     void on_pushButton_69_clicked();
+
+     void on_comboBox_17_activated(const QString &arg1);
+
+     void on_pushButton_72_clicked();
+
+     void on_pushButton_73_clicked();
+
+     void on_pushButton_31_clicked();
+
+     void on_pushButton_32_clicked();
+
+     void on_pushButton_28_clicked();
+
+     void on_pushButton_74_clicked();
+
+     void on_tabWidget_tabBarClicked(int index);
 
 private:
     Ui::MainWindow *ui;

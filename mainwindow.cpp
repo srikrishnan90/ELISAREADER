@@ -1349,6 +1349,8 @@ void MainWindow::on_toolButton_19_clicked()
     ui->stackedWidget->setCurrentIndex(0);
     ui->stackedWidget->lower();
     led_control(0);
+    on_pushButton_17_clicked();//home the plate
+    mot_forward(17000);//keep the plate carrier in
 }
 
 void MainWindow::on_pushButton_48_clicked()
@@ -1859,58 +1861,74 @@ void MainWindow::accle(ulong total, ulong current)
 
 void MainWindow::on_toolButton_18_clicked()
 {
-    on_pushButton_17_clicked();
-    //wait for plate load info and process the following code
-    mot_forward(17000);
-    on_pushButton_13_clicked();//read max
-    mot_forward(9750);
-    double len = std::ceil(double(total)/8);
-    int length=int(len);
-    ulong end_pos=5800+((12-ulong(length))*2400);
-    for(int i=0;i<length;i++)
-    {
-        on_pushButton_12_clicked();//read OD
-        for(int k=0;k<8;k++)
-            pri_res[i][k]=od[k];
+    on_pushButton_17_clicked();//home the plate
 
-        if(i!=length)
-            mot_forward(2400);
-    }
-    if(sec_wave == 0)
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Load Plate");
+    //msgBox.setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
+    //msgBox.setModal(false);
+    msgBox.setText("Click Run after loading the plate to start the reading..");
+    msgBox.setStandardButtons(msgBox.Yes);
+    msgBox.addButton(msgBox.Cancel);
+    msgBox.setButtonText(msgBox.Yes, "Run");
+    msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:200px; height:50px; font-size: 18px; }");
+    if(msgBox.exec()==msgBox.Yes)
     {
+        mot_forward(1000);//may not require if using second sensor
+        on_pushButton_17_clicked();//may not require if using second sensor
+        mot_forward(17000);
+        on_pushButton_13_clicked();//read max
+        mot_forward(9750);
+        double len = std::ceil(double(total)/8);
+        int length=int(len);
+        ulong end_pos=5800+((12-ulong(length))*2400);
+        for(int i=0;i<length;i++)
+        {
+            on_pushButton_12_clicked();//read OD
+            for(int k=0;k<8;k++)
+                pri_res[i][k]=od[k];
+
+            if(i!=length)
+                mot_forward(2400);
+        }
+        if(sec_wave == 0)
+        {
+            led_control(0);
+            on_pushButton_17_clicked();//home plate
+        }
+        else
+        {
+            mot_forward(end_pos);
+            led_control(sec_wave);
+            on_pushButton_13_clicked();//read max
+            mot_backward(end_pos);
+            for(int i=length-1;i>=0;i--)
+            {
+                on_pushButton_12_clicked();// read OD
+                for(int k=0;k<8;k++)
+                    sec_res[i][k]=od[k];
+                if(i!=0)
+                    mot_backward(2400);
+            }
+        }
         led_control(0);
         on_pushButton_17_clicked();//home plate
-    }
-    else
-    {
-        mot_forward(end_pos);
-        led_control(sec_wave);
-        on_pushButton_13_clicked();//read max
-        mot_backward(end_pos);
-        for(int i=length-1;i>=0;i--)
+        if(sec_wave==0)
         {
-            on_pushButton_12_clicked();// read OD
-            for(int k=0;k<8;k++)
-                sec_res[i][k]=od[k];
-            if(i!=0)
-                mot_backward(2400);
+            for(int i=0;i<length;i++)
+                for(int k=0;k<8;k++)
+                    fin_res[i][k]=pri_res[i][k];
         }
+        else
+        {
+            for(int i=0;i<length;i++)
+                for(int k=0;k<8;k++)
+                    fin_res[i][k]=pri_res[i][k]-sec_res[i][k];
+        }
+        result_page();
     }
-    led_control(0);
-    on_pushButton_17_clicked();//home plate
-    if(sec_wave==0)
-    {
-        for(int i=0;i<length;i++)
-            for(int k=0;k<8;k++)
-                fin_res[i][k]=pri_res[i][k];
-    }
-    else
-    {
-        for(int i=0;i<length;i++)
-            for(int k=0;k<8;k++)
-                fin_res[i][k]=pri_res[i][k]-sec_res[i][k];
-    }
-    result_page();
+
+
 }
 
 void MainWindow::led_control(int led)
@@ -2000,6 +2018,8 @@ void MainWindow::on_toolButton_21_clicked()
         save_results();
         save=0;
     }
+    on_pushButton_17_clicked();//home the plate
+    mot_forward(17000);//keep the plate carrier in
 }
 
 void MainWindow::on_toolButton_26_clicked()
@@ -2957,6 +2977,7 @@ void MainWindow::on_toolButton_2_clicked()
 void MainWindow::on_toolButton_3_clicked()
 {
     ui->stackedWidget->setCurrentIndex(10);
+    ui->tabWidget->setCurrentIndex(0);
 
     int index=0,index1=0;
     ui->comboBox_14->clear();
@@ -2974,6 +2995,9 @@ void MainWindow::on_toolButton_3_clicked()
         ui->pushButton_35->setText(Query.value("add1").toString());
         ui->pushButton_36->setText(Query.value("add2").toString());
         ui->pushButton_37->setText(Query.value("user").toString());
+        ui->pushButton_31->setText(Query.value("server").toString());
+        ui->pushButton_32->setText(Query.value("port").toString());
+        ui->lineEdit_2->setText(Query.value("pwd").toString());
     }
     ui->comboBox_14->setCurrentIndex(index);
     ui->comboBox_16->setCurrentIndex(index1);
@@ -3061,6 +3085,7 @@ void MainWindow::delete_label()
 {
     ui->label_41->clear();
     ui->label_42->clear();
+    ui->label_92->clear();
     timer->stop();
 
 }
@@ -3141,6 +3166,11 @@ void MainWindow::on_pushButton_24_clicked()
 {
     ui->stackedWidget->setCurrentIndex(11);
     ui->tableWidget_2->clearContents();
+    ui->comboBox_17->clear();
+    //QDate cd(QDate::currentDate());
+    //QTime ct(QTime::currentTime());
+    ui->dateEdit->setDate(QDate::currentDate());
+    ui->timeEdit->setTime(QTime::currentTime());
     QSqlQuery query;
     query.prepare("select count(*) from results");
     query.exec();
@@ -3152,7 +3182,7 @@ void MainWindow::on_pushButton_24_clicked()
     qDebug()<<length;
     ui->tableWidget_2->setRowCount(length);
 
-    QStringList test, abs, result, unit, rem, date, time, psid;
+    QStringList test, abs, result, unit, rem, date, time, psid, test_name;
     query.prepare("select * from results");
     query.exec();
     while(query.next())
@@ -3206,7 +3236,16 @@ void MainWindow::on_pushButton_24_clicked()
         ui->tableWidget_2->setItem(length-i-1,5,date_item);
         ui->tableWidget_2->setItem(length-i-1,6,time_item);
         ui->tableWidget_2->setItem(length-i-1,7,psid_item);
+        if(i==0)
+            test_name.append(test[0]);
+        int diff=0;
+        for(int j=0;j<test_name.length();j++)
+            if(test_name[j]==test[i])
+                diff=1;
+        if(diff==0)
+            test_name.append(test[i]);
     }
+    ui->comboBox_17->addItems(test_name);
 
 }
 
@@ -4190,4 +4229,329 @@ void MainWindow::on_pushButton_63_clicked()
     ui->label_90->clear();
     ui->label_91->clear();
     init();
+}
+
+void MainWindow::on_pushButton_69_clicked()
+{
+    //QDateTime dt(QDateTime::currentDateTime());
+    QString path="/home/pi/reader/CSV/Results.csv";
+    QFile file(path);
+    if (file.open(QFile::WriteOnly | QFile::Truncate))
+    {            QTextStream data( &file );
+        QStringList strList;
+        for( int c = 0; c < ui->tableWidget_2->columnCount(); ++c )
+        {
+            strList<<ui->tableWidget_2->horizontalHeaderItem(c)->data(Qt::DisplayRole).toString();
+        }
+        data << strList.join(";") << "\n";
+        for( int r = 0; r < ui->tableWidget_2->rowCount(); ++r )
+        {
+            strList.clear();
+            for( int c = 0; c < ui->tableWidget_2->columnCount(); ++c )
+            {
+                QTableWidgetItem* item = ui->tableWidget_2->item(r,c);
+                if (!item || item->text().isEmpty())
+                {
+                    ui->tableWidget_2->setItem(r,c,new QTableWidgetItem(""));
+                }
+                strList <<ui->tableWidget_2->item( r, c )->text();
+            }
+            data << strList.join( ";" )+"\n";
+        }
+        file.close();
+    }
+    ui->label_92->setText("Export Done");
+    timer->start(2000);
+}
+
+
+void MainWindow::on_comboBox_17_activated(const QString &arg1)
+{
+    ui->tableWidget_2->clearContents();
+    QSqlQuery query;
+    QStringList test, abs, result, unit, rem, date, time, psid;
+    query.prepare("select * from results where name=:name");
+    query.bindValue(":name",arg1);
+    query.exec();
+    int length=0;
+    while(query.next())
+    {
+        test<<query.value("name").toString();
+        abs<<query.value("abs").toString();
+        result<<query.value("result").toString();
+        unit<<query.value("unit").toString();
+        rem<<query.value("rem").toString();
+        date<<query.value("date").toString();
+        time<<query.value("time").toString();
+        psid<<query.value("sid").toString();
+        length++;
+    }
+    ui->tableWidget_2->setRowCount(length);
+    QTableWidgetItem *test_item, *abs_item, *result_item, *unit_item, *rem_item, *date_item, *time_item, *psid_item;
+    for(int i=0;i<length;i++)
+    {
+        test_item=new QTableWidgetItem;
+        abs_item=new QTableWidgetItem;
+        result_item=new QTableWidgetItem;
+        unit_item=new QTableWidgetItem;
+        rem_item=new QTableWidgetItem;
+        date_item=new QTableWidgetItem;
+        time_item=new QTableWidgetItem;
+        psid_item= new QTableWidgetItem;
+
+        test_item->setTextAlignment(Qt::AlignCenter);
+        abs_item->setTextAlignment(Qt::AlignCenter);
+        result_item->setTextAlignment(Qt::AlignCenter);
+        unit_item->setTextAlignment(Qt::AlignCenter);
+        rem_item->setTextAlignment(Qt::AlignCenter);
+        date_item->setTextAlignment(Qt::AlignCenter);
+        time_item->setTextAlignment(Qt::AlignCenter);
+        psid_item->setTextAlignment(Qt::AlignVCenter);
+        psid_item->setTextAlignment(Qt::AlignLeft);
+
+        test_item->setText(test[i]);
+        abs_item->setText(abs[i]);
+        result_item->setText(result[i]);
+        unit_item->setText(unit[i]);
+        rem_item->setText(rem[i]);
+        date_item->setText(date[i]);
+        time_item->setText(time[i]);
+        psid_item->setText(psid[i]);
+
+        ui->tableWidget_2->setItem(length-i-1,0,test_item);
+        ui->tableWidget_2->setItem(length-i-1,1,abs_item);
+        ui->tableWidget_2->setItem(length-i-1,2,result_item);
+        ui->tableWidget_2->setItem(length-i-1,3,unit_item);
+        ui->tableWidget_2->setItem(length-i-1,4,rem_item);
+        ui->tableWidget_2->setItem(length-i-1,5,date_item);
+        ui->tableWidget_2->setItem(length-i-1,6,time_item);
+        ui->tableWidget_2->setItem(length-i-1,7,psid_item);
+    }
+
+}
+
+void MainWindow::on_pushButton_72_clicked()
+{
+    ui->tableWidget_2->clearContents();
+    QSqlQuery query;
+    QStringList test, abs, result, unit, rem, date, time, psid;
+    query.prepare("select * from results where date=:date");
+    query.bindValue(":date",ui->dateEdit->text());
+    query.exec();
+    int length=0;
+    while(query.next())
+    {
+        test<<query.value("name").toString();
+        abs<<query.value("abs").toString();
+        result<<query.value("result").toString();
+        unit<<query.value("unit").toString();
+        rem<<query.value("rem").toString();
+        date<<query.value("date").toString();
+        time<<query.value("time").toString();
+        psid<<query.value("sid").toString();
+        length++;
+    }
+    ui->tableWidget_2->setRowCount(length);
+    QTableWidgetItem *test_item, *abs_item, *result_item, *unit_item, *rem_item, *date_item, *time_item, *psid_item;
+    for(int i=0;i<length;i++)
+    {
+        test_item=new QTableWidgetItem;
+        abs_item=new QTableWidgetItem;
+        result_item=new QTableWidgetItem;
+        unit_item=new QTableWidgetItem;
+        rem_item=new QTableWidgetItem;
+        date_item=new QTableWidgetItem;
+        time_item=new QTableWidgetItem;
+        psid_item= new QTableWidgetItem;
+
+        test_item->setTextAlignment(Qt::AlignCenter);
+        abs_item->setTextAlignment(Qt::AlignCenter);
+        result_item->setTextAlignment(Qt::AlignCenter);
+        unit_item->setTextAlignment(Qt::AlignCenter);
+        rem_item->setTextAlignment(Qt::AlignCenter);
+        date_item->setTextAlignment(Qt::AlignCenter);
+        time_item->setTextAlignment(Qt::AlignCenter);
+        psid_item->setTextAlignment(Qt::AlignVCenter);
+        psid_item->setTextAlignment(Qt::AlignLeft);
+
+        test_item->setText(test[i]);
+        abs_item->setText(abs[i]);
+        result_item->setText(result[i]);
+        unit_item->setText(unit[i]);
+        rem_item->setText(rem[i]);
+        date_item->setText(date[i]);
+        time_item->setText(time[i]);
+        psid_item->setText(psid[i]);
+
+        ui->tableWidget_2->setItem(length-i-1,0,test_item);
+        ui->tableWidget_2->setItem(length-i-1,1,abs_item);
+        ui->tableWidget_2->setItem(length-i-1,2,result_item);
+        ui->tableWidget_2->setItem(length-i-1,3,unit_item);
+        ui->tableWidget_2->setItem(length-i-1,4,rem_item);
+        ui->tableWidget_2->setItem(length-i-1,5,date_item);
+        ui->tableWidget_2->setItem(length-i-1,6,time_item);
+        ui->tableWidget_2->setItem(length-i-1,7,psid_item);
+    }
+}
+
+void MainWindow::on_pushButton_73_clicked()
+{
+    ui->tableWidget_2->clearContents();
+    QSqlQuery query;
+    QStringList test, abs, result, unit, rem, date, time, psid;
+    query.prepare("select * from results where time=:time");
+    query.bindValue(":time",ui->timeEdit->text());
+    query.exec();
+    int length=0;
+    while(query.next())
+    {
+        test<<query.value("name").toString();
+        abs<<query.value("abs").toString();
+        result<<query.value("result").toString();
+        unit<<query.value("unit").toString();
+        rem<<query.value("rem").toString();
+        date<<query.value("date").toString();
+        time<<query.value("time").toString();
+        psid<<query.value("sid").toString();
+        length++;
+    }
+    ui->tableWidget_2->setRowCount(length);
+    QTableWidgetItem *test_item, *abs_item, *result_item, *unit_item, *rem_item, *date_item, *time_item, *psid_item;
+    for(int i=0;i<length;i++)
+    {
+        test_item=new QTableWidgetItem;
+        abs_item=new QTableWidgetItem;
+        result_item=new QTableWidgetItem;
+        unit_item=new QTableWidgetItem;
+        rem_item=new QTableWidgetItem;
+        date_item=new QTableWidgetItem;
+        time_item=new QTableWidgetItem;
+        psid_item= new QTableWidgetItem;
+
+        test_item->setTextAlignment(Qt::AlignCenter);
+        abs_item->setTextAlignment(Qt::AlignCenter);
+        result_item->setTextAlignment(Qt::AlignCenter);
+        unit_item->setTextAlignment(Qt::AlignCenter);
+        rem_item->setTextAlignment(Qt::AlignCenter);
+        date_item->setTextAlignment(Qt::AlignCenter);
+        time_item->setTextAlignment(Qt::AlignCenter);
+        psid_item->setTextAlignment(Qt::AlignVCenter);
+        psid_item->setTextAlignment(Qt::AlignLeft);
+
+        test_item->setText(test[i]);
+        abs_item->setText(abs[i]);
+        result_item->setText(result[i]);
+        unit_item->setText(unit[i]);
+        rem_item->setText(rem[i]);
+        date_item->setText(date[i]);
+        time_item->setText(time[i]);
+        psid_item->setText(psid[i]);
+
+        ui->tableWidget_2->setItem(length-i-1,0,test_item);
+        ui->tableWidget_2->setItem(length-i-1,1,abs_item);
+        ui->tableWidget_2->setItem(length-i-1,2,result_item);
+        ui->tableWidget_2->setItem(length-i-1,3,unit_item);
+        ui->tableWidget_2->setItem(length-i-1,4,rem_item);
+        ui->tableWidget_2->setItem(length-i-1,5,date_item);
+        ui->tableWidget_2->setItem(length-i-1,6,time_item);
+        ui->tableWidget_2->setItem(length-i-1,7,psid_item);
+    }
+}
+
+void MainWindow::on_pushButton_31_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(2);
+    key->setData("LIS Server IP",ui->pushButton_31->text());
+    key->exec();
+    ui->pushButton_31->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update settings set server=:server where sno=1");
+    query.bindValue(":server",key->getData());
+    query.exec();
+}
+
+void MainWindow::on_pushButton_32_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(2);
+    key->setData("LIS Server Port",ui->pushButton_32->text());
+    key->exec();
+    ui->pushButton_32->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update settings set port=:port where sno=1");
+    query.bindValue(":port",key->getData());
+    query.exec();
+}
+
+void MainWindow::on_pushButton_28_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(0);
+    key->setData("Password",ui->lineEdit_2->text());
+    key->exec();
+    ui->lineEdit_2->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update settings set pwd=:pwd where sno=1");
+    query.bindValue(":pwd",key->getData());
+    query.exec();
+}
+
+void MainWindow::on_pushButton_74_clicked()
+{
+    if(ui->pushButton_74->isChecked())
+        ui->lineEdit_2->setEchoMode(QLineEdit::Normal);
+    else
+        ui->lineEdit_2->setEchoMode(QLineEdit::Password);
+
+}
+
+void MainWindow::on_tabWidget_tabBarClicked(int index)
+{
+    if(index==3)
+    {
+        ui->tabWidget->setCurrentIndex(index);
+        ui->label_93->setVisible(true);
+        qApp->processEvents();
+        QStringList list2;
+        QProcess process1;
+        process1.start("sh",QStringList()<<"-c"<<"sudo iwlist wlan0 scan | grep ESSID");//scan list of wifi networks
+        process1.waitForFinished();
+        //ui->page_12->setVisible(true);
+        ui->label_93->hide();
+        QString data = process1.readAllStandardOutput();
+        QString Error= process1.readAllStandardError();
+        ui->comboBox_15->clear();
+        //list2 = (QStringList()<<"------Select-------");//append to dropdownlist
+        //ui->comboBox_15->addItems(list2);
+        data.remove('"');
+        data.remove("\\");
+        QStringList list = data.split("\n");//split data
+        for(int i=0;i<list.count()-1;i++)
+        {
+            if(list[i].split("ESSID:").last().length()>1)
+                list2.append(list[i].split("ESSID:").last());
+        }
+        QStringList list1;
+        for(int i=0;i<list2.length();i++)
+        {
+            if(i==0)
+                list1.append(list2[0]);
+            int diff=0;
+            for(int j=0;j<list1.length();j++)
+                if(list1[j]==list2[i])
+                    diff=1;
+            if(diff==0)
+                list1.append(list2[i]);
+        }
+
+        ui->comboBox_15->addItems(list1);//adding wifi names to dropdownlist
+        process1.start("sh",QStringList()<<"-c"<<"hostname -I");//scan for connection
+        process1.waitForFinished();
+        data = process1.readAllStandardOutput();
+        ui->pushButton_30->setText(data);
+    }
 }
