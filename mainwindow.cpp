@@ -4551,7 +4551,33 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
         ui->comboBox_15->addItems(list1);//adding wifi names to dropdownlist
         process1.start("sh",QStringList()<<"-c"<<"hostname -I");//scan for connection
         process1.waitForFinished();
-        data = process1.readAllStandardOutput();
-        ui->pushButton_30->setText(data);
+        ui->pushButton_30->setText(process1.readAllStandardOutput());
+    }
+}
+
+void MainWindow::on_pushButton_29_clicked()
+{
+    QFile file("/etc/wpa_supplicant/wpa_supplicant.conf");
+    QProcess process;
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream stream(&file);
+        stream<<"ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n";
+        stream<<"update_config=1\n";
+        stream<<"country=IN\n";
+        stream<<"\n";
+        stream<<"network={\n";
+        stream<<"\tssid=\"";
+        stream<<ui->comboBox_15->currentText()+"\"\n";
+        stream<<"\tpsk=\"";
+        stream<<ui->lineEdit_2->text()+"\"\n";
+        stream<<"\tkey_mgmt=WPA-PSK\n";
+        stream<<"}";
+        file.close();
+        process.start("sh",QStringList()<<"-c"<<"sudo wpa_cli -i wlan0 reconfigure");
+        process.waitForFinished();
+        process.start("sh",QStringList()<<"-c"<<"hostname -I");//scan for connection
+        process.waitForFinished();
+        ui->pushButton_30->setText(process.readAllStandardOutput());
     }
 }

@@ -344,6 +344,9 @@ private slots:
 
      void on_tabWidget_tabBarClicked(int index);
 
+     void on_pushButton_29_clicked();
+
+
 private:
     Ui::MainWindow *ui;
     QGridLayout* mainLayout;
