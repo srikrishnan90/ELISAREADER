@@ -347,6 +347,10 @@ private slots:
      void on_pushButton_29_clicked();
 
 
+     void on_pushButton_71_clicked();
+
+     void on_pushButton_70_clicked();
+
 private:
     Ui::MainWindow *ui;
     QGridLayout* mainLayout;

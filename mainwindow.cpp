@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <hl7mllp.h>
 
 #define steps 6
 #define dir 16
@@ -4579,5 +4580,105 @@ void MainWindow::on_pushButton_29_clicked()
         process.start("sh",QStringList()<<"-c"<<"hostname -I");//scan for connection
         process.waitForFinished();
         ui->pushButton_30->setText(process.readAllStandardOutput());
+    }
+}
+
+void MainWindow::on_pushButton_71_clicked()
+{
+    if(ui->tableWidget_2->currentRow()>=0)
+    {
+        QSqlQuery Query;
+        Query.prepare("select * FROM settings WHERE sno = 1");
+        Query.exec();
+        QString lab_name,lab_add1,lab_add2,user,server,port;
+        while(Query.next())
+        {
+            lab_name=Query.value("lab").toString();
+            lab_add1=Query.value("add1").toString();
+            lab_add2=Query.value("add2").toString();
+            user=Query.value("user").toString();
+            server=Query.value("server").toString();
+            port=Query.value("port").toString();
+        }
+        QStringList val;
+        int n=ui->tableWidget_2->currentRow();
+        for( int i = 0; i < ui->tableWidget_2->columnCount(); i++ )
+        {
+            if(ui->tableWidget_2->item(n,i))
+                val<<ui->tableWidget_2->item(n,i)->text();
+            else
+                val<<" ";
+        }
+
+        QString datetime=QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+        QStringList msgdt=val[5].split("-");
+        QString msgdate=msgdt[2]+msgdt[1]+msgdt[0];
+        QString msgtime=val[6].remove(".");
+
+
+        std::string hl7send, hl7received;
+        hl7send.append("MSH|^~\&|ALTA ELISA READER|"+lab_name.toStdString()+"|||"+datetime.toStdString()+"||ORU^R01|ADX110|P|2.3|");
+        hl7send.append("PID|||"+val[7].toStdString()+"|");
+        hl7send.append("OBX||ST|"+val[0].toStdString()+"||"+val[1].toStdString()+"^"+val[2].toStdString()+"^"+val[4].toStdString()+"|"+val[3].toStdString()+"|"+val[4].toStdString()+"||||P|||"+msgdate.toStdString()+msgtime.toStdString()+"|"+user.toStdString()+"||ELISA|");
+
+        HL7MLLP sock(server.toStdString(), port.toStdString()); //IP , Port
+
+        sock.send_msg_mllp(hl7send);
+        sock.read_msg_mllp(hl7received);
+        qDebug()<<hl7received.data();
+        ui->label_92->setText("Transfer Done");
+        timer->start(2000);
+    }
+}
+
+void MainWindow::on_pushButton_70_clicked()
+{
+    int rows=ui->tableWidget_2->rowCount();
+    if(rows>0)
+    {
+        QSqlQuery Query;
+        Query.prepare("select * FROM settings WHERE sno = 1");
+        Query.exec();
+        QString lab_name,lab_add1,lab_add2,user,server,port;
+        while(Query.next())
+        {
+            lab_name=Query.value("lab").toString();
+            lab_add1=Query.value("add1").toString();
+            lab_add2=Query.value("add2").toString();
+            user=Query.value("user").toString();
+            server=Query.value("server").toString();
+            port=Query.value("port").toString();
+        }
+
+        for(int n=0;n<rows;n++)
+        {
+            QStringList val;
+            for( int i = 0; i < ui->tableWidget_2->columnCount(); i++ )
+            {
+                if(ui->tableWidget_2->item(n,i))
+                    val<<ui->tableWidget_2->item(n,i)->text();
+                else
+                    val<<" ";
+            }
+
+            QString datetime=QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+            QStringList msgdt=val[5].split("-");
+            QString msgdate=msgdt[2]+msgdt[1]+msgdt[0];
+            QString msgtime=val[6].remove(".");
+
+            std::string hl7send, hl7received;
+            hl7send.append("MSH|^~\&|ALTA ELISA READER|"+lab_name.toStdString()+"|||"+datetime.toStdString()+"||ORU^R01|ADX110|P|2.3|");
+            hl7send.append("PID|||"+val[7].toStdString()+"|");
+            hl7send.append("OBX||ST|"+val[0].toStdString()+"||"+val[1].toStdString()+"^"+val[2].toStdString()+"^"+val[4].toStdString()+"|"+val[3].toStdString()+"|"+val[4].toStdString()+"||||P|||"+msgdate.toStdString()+msgtime.toStdString()+"|"+user.toStdString()+"||ELISA|");
+
+            HL7MLLP sock(server.toStdString(), port.toStdString()); //IP , Port
+            sock.send_msg_mllp(hl7send);
+            sock.read_msg_mllp(hl7received);
+            qDebug()<<hl7received.data();
+            ui->label_92->setText("Transferring "+QString::number(n)+"of"+QString::number(rows));
+            qApp->processEvents();
+        }
+        ui->label_92->setText("Transfer Done");
+        timer->start(2000);
     }
 }

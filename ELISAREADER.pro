@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql qml charts printsupport webkitwidgets
+QT       += core gui sql qml charts printsupport webkitwidgets network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -41,7 +41,11 @@ HEADERS += \
     DEV_Config.h \
     pi2c.h \
     regressionline.h \
-    dialog.h
+    dialog.h \
+    HL7Exception.h \
+    hl7mllp.h \
+    HL7Object.h \
+    hl7socket.h
 
 FORMS += \
         mainwindow.ui \
