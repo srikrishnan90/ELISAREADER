@@ -19,6 +19,8 @@
 //#include <QFileDialog>
 #include <QPrinterInfo>
 #include <QMessageBox>
+#include <QScrollBar>
+
 
 
 
@@ -350,6 +352,14 @@ private slots:
      void on_pushButton_71_clicked();
 
      void on_pushButton_70_clicked();
+
+     void on_pushButton_75_clicked();
+
+     void on_pushButton_76_clicked();
+
+     void on_pushButton_77_clicked();
+
+     void on_pushButton_78_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -1608,6 +1608,16 @@ void MainWindow::on_toolButton_4_clicked()
         led_buttons[(i*10)+9]->setText(Query.value(9).toString());
         i++;
     }
+    //QString welltowell,hometomax,maxtofirst;
+    on_pushButton_17_clicked();//home the plate
+    Query.prepare("select * FROM mot WHERE sno = 1");
+    Query.exec();
+    while(Query.next())
+    {
+        ui->pushButton_76->setText(Query.value("wtw").toString());
+        ui->pushButton_77->setText(Query.value("htm").toString());
+        ui->pushButton_78->setText(Query.value("pos").toString());
+    }
 
     for(int i =0;i<50; i++)
     {
@@ -1620,7 +1630,7 @@ void MainWindow::on_toolButton_4_clicked()
 
 void MainWindow::on_pushButton_14_clicked()
 {
-    ADS1263_init_ADC1(ADS1263_100SPS);
+    ADS1263_init_ADC1(ADS1263_100SPS);//need to remove if having proper connections
     int samples = 4;//should be in even number
     uint32_t ADC[8][4];
     for(int i=0;i<8;i++)
@@ -1670,7 +1680,7 @@ void MainWindow::on_pushButton_14_clicked()
 
 void MainWindow::on_pushButton_13_clicked()
 {
-    ADS1263_init_ADC1(ADS1263_100SPS);
+    ADS1263_init_ADC1(ADS1263_100SPS);//need to remove if having proper connections
     int samples = 4;
     uint32_t ADC[8][4];
     for(int i=0;i<8;i++)
@@ -1720,8 +1730,7 @@ void MainWindow::on_pushButton_13_clicked()
 
 void MainWindow::on_pushButton_12_clicked()
 {
-
-    ADS1263_init_ADC1(ADS1263_100SPS);
+    ADS1263_init_ADC1(ADS1263_100SPS);//need to remove if having proper connections
     int samples = 4;
     uint32_t ADC[8][4];
     for(int i=0;i<8;i++)
@@ -1772,7 +1781,7 @@ void MainWindow::on_pushButton_12_clicked()
     qDebug()<<od[7]<<od[6]<<od[5]<<od[4]<<od[3]<<od[2]<<od[1]<<od[0];
     for (int i=0;i<8;i++)
     {
-        od[i]=log10(blnk[i]/od[i]);//od[i]=log10(blnk[i]/od[i]) * selected wavelength path length factor
+        od[i]=log10(blnk[i]/od[i])*factor;//od[i]=log10(blnk[i]/od[i]) * selected wavelength path length factor---this factor needs to be checked for polymonial equation
     }
     qDebug()<<QString::number(od[7], 'f', 3)
             <<QString::number(od[6], 'f', 3)
@@ -1862,8 +1871,17 @@ void MainWindow::accle(ulong total, ulong current)
 
 void MainWindow::on_toolButton_18_clicked()
 {
+    ulong welltowell=0,hometomax=0,maxtofirst=0;
     on_pushButton_17_clicked();//home the plate
-
+    QSqlQuery Query;
+    Query.prepare("select * FROM mot WHERE sno = 1");
+    Query.exec();
+    while(Query.next())
+    {
+        welltowell=Query.value("wtw").toUInt();
+        hometomax=Query.value("htm").toUInt();
+        maxtofirst=Query.value("pos").toUInt();
+    }
     QMessageBox msgBox;
     msgBox.setWindowTitle("Load Plate");
     //msgBox.setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
@@ -1877,9 +1895,9 @@ void MainWindow::on_toolButton_18_clicked()
     {
         mot_forward(1000);//may not require if using second sensor
         on_pushButton_17_clicked();//may not require if using second sensor
-        mot_forward(17000);
+        mot_forward(hometomax);//home to read max position
         on_pushButton_13_clicked();//read max
-        mot_forward(9750);
+        mot_forward(maxtofirst);//need second homing sensor
         double len = std::ceil(double(total)/8);
         int length=int(len);
         ulong end_pos=5800+((12-ulong(length))*2400);
@@ -1890,7 +1908,7 @@ void MainWindow::on_toolButton_18_clicked()
                 pri_res[i][k]=od[k];
 
             if(i!=length)
-                mot_forward(2400);
+                mot_forward(welltowell);
         }
         if(sec_wave == 0)
         {
@@ -1909,7 +1927,7 @@ void MainWindow::on_toolButton_18_clicked()
                 for(int k=0;k<8;k++)
                     sec_res[i][k]=od[k];
                 if(i!=0)
-                    mot_backward(2400);
+                    mot_backward(welltowell);
             }
         }
         led_control(0);
@@ -3167,6 +3185,7 @@ void MainWindow::on_pushButton_24_clicked()
 {
     ui->stackedWidget->setCurrentIndex(11);
     ui->tableWidget_2->clearContents();
+    //ui->tableWidget_2->verticalScrollBar()->setStyleSheet("QScrollBar:vertical { width: 25px; }");
     ui->comboBox_17->clear();
     //QDate cd(QDate::currentDate());
     //QTime ct(QTime::currentTime());
@@ -4621,13 +4640,30 @@ void MainWindow::on_pushButton_71_clicked()
         hl7send.append("PID|||"+val[7].toStdString()+"|");
         hl7send.append("OBX||ST|"+val[0].toStdString()+"||"+val[1].toStdString()+"^"+val[2].toStdString()+"^"+val[4].toStdString()+"|"+val[3].toStdString()+"|"+val[4].toStdString()+"||||P|||"+msgdate.toStdString()+msgtime.toStdString()+"|"+user.toStdString()+"||ELISA|");
 
-        HL7MLLP sock(server.toStdString(), port.toStdString()); //IP , Port
+        QTcpSocket socket;
+        socket.connectToHost(server, port.toUShort());
+        ui->label_92->setText("Checking Server..");
+        qApp->processEvents();
+        if (socket.waitForConnected(2000))
+        {
+            socket.close();
+            HL7MLLP sock(server.toStdString(), port.toStdString()); //IP , Port
+            sock.send_msg_mllp(hl7send);
+            sock.read_msg_mllp(hl7received);
+            QString ack=hl7received.c_str();
+            QStringList ackn=ack.split("MSA|");
+            if(ackn[1][1]=="A")
+                ui->label_92->setText("Transfer Done\nACK=AA");
+            else
+                ui->label_92->setText("Transfer Error\nACK=AE");
+            timer->start(2000);
+        }
+        else
+        {
+            ui->label_92->setText("Server Not Available");
+            timer->start(2000);
+        }
 
-        sock.send_msg_mllp(hl7send);
-        sock.read_msg_mllp(hl7received);
-        qDebug()<<hl7received.data();
-        ui->label_92->setText("Transfer Done");
-        timer->start(2000);
     }
 }
 
@@ -4649,36 +4685,107 @@ void MainWindow::on_pushButton_70_clicked()
             server=Query.value("server").toString();
             port=Query.value("port").toString();
         }
-
-        for(int n=0;n<rows;n++)
+        QTcpSocket socket;
+        socket.connectToHost(server, port.toUShort());
+        ui->label_92->setText("Checking Server..");
+        qApp->processEvents();
+        if (socket.waitForConnected(2000))
         {
-            QStringList val;
-            for( int i = 0; i < ui->tableWidget_2->columnCount(); i++ )
+            socket.close();
+            int error=0;
+            for(int n=0;n<rows;n++)
             {
-                if(ui->tableWidget_2->item(n,i))
-                    val<<ui->tableWidget_2->item(n,i)->text();
+                QStringList val;
+                for( int i = 0; i < ui->tableWidget_2->columnCount(); i++ )
+                {
+                    if(ui->tableWidget_2->item(n,i))
+                        val<<ui->tableWidget_2->item(n,i)->text();
+                    else
+                        val<<" ";
+                }
+
+                QString datetime=QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+                QStringList msgdt=val[5].split("-");
+                QString msgdate=msgdt[2]+msgdt[1]+msgdt[0];
+                QString msgtime=val[6].remove(".");
+
+                std::string hl7send, hl7received;
+                hl7send.append("MSH|^~\&|ALTA ELISA READER|"+lab_name.toStdString()+"|||"+datetime.toStdString()+"||ORU^R01|ADX110|P|2.3");
+                hl7send.append("PID|||"+val[7].toStdString()+"|");
+                hl7send.append("OBX||ST|"+val[0].toStdString()+"||"+val[1].toStdString()+"^"+val[2].toStdString()+"^"+val[4].toStdString()+"|"+val[3].toStdString()+"|"+val[4].toStdString()+"||||P|||"+msgdate.toStdString()+msgtime.toStdString()+"|"+user.toStdString()+"||ELISA|");
+
+                HL7MLLP sock(server.toStdString(), port.toStdString()); //IP , Port
+                sock.send_msg_mllp(hl7send);
+                sock.read_msg_mllp(hl7received);
+                QString ack=hl7received.c_str();
+                QStringList ackn=ack.split("MSA|");
+                if(ackn[1][1]=="A")
+                    ui->label_92->setText("Transferring "+QString::number(n)+"of"+QString::number(rows)+"\nACK=AA Errors="+QString::number(error));
                 else
-                    val<<" ";
+                {
+                    error++;
+                    ui->label_92->setText("Transferring "+QString::number(n)+"of"+QString::number(rows)+"\nACK=AE Errors="+QString::number(error));
+                }
+                qApp->processEvents();
             }
-
-            QString datetime=QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
-            QStringList msgdt=val[5].split("-");
-            QString msgdate=msgdt[2]+msgdt[1]+msgdt[0];
-            QString msgtime=val[6].remove(".");
-
-            std::string hl7send, hl7received;
-            hl7send.append("MSH|^~\&|ALTA ELISA READER|"+lab_name.toStdString()+"|||"+datetime.toStdString()+"||ORU^R01|ADX110|P|2.3|");
-            hl7send.append("PID|||"+val[7].toStdString()+"|");
-            hl7send.append("OBX||ST|"+val[0].toStdString()+"||"+val[1].toStdString()+"^"+val[2].toStdString()+"^"+val[4].toStdString()+"|"+val[3].toStdString()+"|"+val[4].toStdString()+"||||P|||"+msgdate.toStdString()+msgtime.toStdString()+"|"+user.toStdString()+"||ELISA|");
-
-            HL7MLLP sock(server.toStdString(), port.toStdString()); //IP , Port
-            sock.send_msg_mllp(hl7send);
-            sock.read_msg_mllp(hl7received);
-            qDebug()<<hl7received.data();
-            ui->label_92->setText("Transferring "+QString::number(n)+"of"+QString::number(rows));
-            qApp->processEvents();
+            ui->label_92->setText("Transfer Done");
+            timer->start(2000);
         }
-        ui->label_92->setText("Transfer Done");
-        timer->start(2000);
+        else
+        {
+            ui->label_92->setText("Server Not Available");
+            timer->start(2000);
+        }
+
     }
+}
+
+void MainWindow::on_pushButton_75_clicked()
+{
+    QSqlQuery Query;
+    Query.prepare("delete from results");
+    Query.exec();
+    on_pushButton_24_clicked();
+}
+
+void MainWindow::on_pushButton_76_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(2);
+    key->setData("Well to Well",ui->pushButton_76->text());
+    key->exec();
+    ui->pushButton_76->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update mot set wtw=:wtw where sno=1");
+    query.bindValue(":wtw",key->getData());
+    query.exec();
+}
+
+void MainWindow::on_pushButton_77_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(2);
+    key->setData("Well to Well",ui->pushButton_77->text());
+    key->exec();
+    ui->pushButton_77->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update mot set htm=:htm where sno=1");
+    query.bindValue(":htm",key->getData());
+    query.exec();
+}
+
+void MainWindow::on_pushButton_78_clicked()
+{
+    keyboard *key=new keyboard(this);
+    key->setModal(true);
+    key->setPage(2);
+    key->setData("Well to Well",ui->pushButton_78->text());
+    key->exec();
+    ui->pushButton_78->setText(key->getData());
+    QSqlQuery query;
+    query.prepare("update mot set pos=:pos where sno=1");
+    query.bindValue(":pos",key->getData());
+    query.exec();
 }
