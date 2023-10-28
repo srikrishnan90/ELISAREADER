@@ -23,6 +23,35 @@
       <height>60</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QToolButton
+{
+	background-color:rgb(157, 178, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+</string>
+    </property>
     <property name="text">
      <string>Experiments</string>
     </property>
@@ -35,6 +64,35 @@
       <width>200</width>
       <height>60</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QToolButton
+{
+	background-color:rgb(157, 178, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+</string>
     </property>
     <property name="text">
      <string>Database</string>
@@ -49,6 +107,35 @@
       <height>60</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QToolButton
+{
+	background-color:rgb(157, 178, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+</string>
+    </property>
     <property name="text">
      <string>Settings</string>
     </property>
@@ -61,6 +148,42 @@
       <width>200</width>
       <height>60</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QToolButton
+{
+	background-color:rgb(157, 178, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+</string>
     </property>
     <property name="text">
      <string>Utilities</string>
@@ -79,7 +202,7 @@
      <string notr="true">background:rgba(255,255,255,1)</string>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QScrollArea" name="scrollArea">
@@ -90,6 +213,9 @@
         <width>600</width>
         <height>350</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
@@ -114,6 +240,9 @@
         <height>350</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -124,10 +253,38 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>10</y>
+         <y>20</y>
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Add</string>
@@ -140,10 +297,38 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>70</y>
+         <y>100</y>
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Edit</string>
@@ -153,10 +338,38 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>130</y>
+         <y>180</y>
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Delete</string>
@@ -166,42 +379,46 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>190</y>
+         <y>260</y>
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(110, 255, 163);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Run</string>
        </property>
       </widget>
-      <widget class="QToolButton" name="toolButton_30">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>260</y>
-         <width>130</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Test Regression</string>
-       </property>
-      </widget>
-      <widget class="QToolButton" name="toolButton_31">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>300</y>
-         <width>130</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Test cut off</string>
-       </property>
-      </widget>
      </widget>
+     <zorder>frame</zorder>
+     <zorder>scrollArea</zorder>
     </widget>
     <widget class="QWidget" name="page_3">
      <widget class="QToolButton" name="toolButton_9">
@@ -212,6 +429,34 @@
         <width>250</width>
         <height>60</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Absorbance</string>
@@ -226,6 +471,34 @@
         <height>60</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Multo-Standard</string>
       </property>
@@ -238,6 +511,34 @@
         <width>250</width>
         <height>60</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Cut-Off</string>
@@ -253,6 +554,9 @@
         <width>350</width>
         <height>161</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -346,8 +650,38 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
        </property>
        <item>
         <property name="text">
@@ -391,8 +725,38 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
        </property>
        <item>
         <property name="text">
@@ -435,6 +799,9 @@
         <height>430</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -450,6 +817,34 @@
          <height>60</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(110, 255, 163);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+       </property>
        <property name="text">
         <string>Save</string>
        </property>
@@ -462,6 +857,34 @@
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Cancel</string>
@@ -581,8 +1004,38 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
        </property>
        <item>
         <property name="text">
@@ -626,8 +1079,38 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
        </property>
        <item>
         <property name="text">
@@ -685,6 +1168,34 @@
          <height>60</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(110, 255, 163);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+       </property>
        <property name="text">
         <string>Save</string>
        </property>
@@ -697,6 +1208,34 @@
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Cancel</string>
@@ -1538,8 +2077,38 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
        </property>
        <item>
         <property name="text">
@@ -1583,8 +2152,38 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>-1</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
        </property>
        <item>
         <property name="text">
@@ -2048,6 +2647,34 @@
          <height>60</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(110, 255, 163);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+       </property>
        <property name="text">
         <string>Save</string>
        </property>
@@ -2060,6 +2687,34 @@
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Cancel</string>
@@ -2289,11 +2944,22 @@
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>5</x>
+        <y>5</y>
         <width>120</width>
-        <height>30</height>
+        <height>40</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+</string>
       </property>
       <property name="text">
        <string/>
@@ -2389,6 +3055,34 @@
         <height>40</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
+      </property>
       <item>
        <property name="text">
         <string>NO</string>
@@ -2418,9 +3112,37 @@
        <rect>
         <x>519</x>
         <y>5</y>
-        <width>101</width>
+        <width>121</width>
         <height>40</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
       </property>
       <item>
        <property name="text">
@@ -2436,7 +3158,7 @@
      <widget class="QLabel" name="label_16">
       <property name="geometry">
        <rect>
-        <x>630</x>
+        <x>650</x>
         <y>10</y>
         <width>21</width>
         <height>30</height>
@@ -2449,11 +3171,39 @@
      <widget class="QComboBox" name="comboBox_12">
       <property name="geometry">
        <rect>
-        <x>670</x>
+        <x>679</x>
         <y>5</y>
         <width>80</width>
         <height>40</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
       </property>
       <item>
        <property name="text">
@@ -2474,6 +3224,16 @@
         <width>621</width>
         <height>341</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">
+QFrame {
+   
+	border:1px solid black;
+}
+
+
+</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -4350,6 +5110,34 @@
          <height>60</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(110, 255, 163);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+       </property>
        <property name="text">
         <string>Run</string>
        </property>
@@ -4362,6 +5150,34 @@
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Cancel</string>
@@ -4388,6 +5204,16 @@
         <width>621</width>
         <height>341</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">
+QFrame{
+   
+	border:1px solid black;
+}
+
+
+</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -6261,6 +7087,34 @@
          <height>60</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+       </property>
        <property name="text">
         <string>View Table</string>
        </property>
@@ -6273,6 +7127,34 @@
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Cancel</string>
@@ -6297,6 +7179,34 @@
          <height>60</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+       </property>
        <property name="text">
         <string>Accept Test</string>
        </property>
@@ -6309,6 +7219,34 @@
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(110, 255, 163);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Run Next</string>
@@ -6324,8 +7262,36 @@
         <height>60</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
-       <string>Save Plate Data</string>
+       <string>Save Plate</string>
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_23">
@@ -6336,6 +7302,34 @@
         <width>130</width>
         <height>60</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Save Results</string>
@@ -6350,6 +7344,34 @@
         <height>60</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Print Matrix</string>
       </property>
@@ -6362,6 +7384,34 @@
         <width>150</width>
         <height>40</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(61, 171, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPushButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>PushButton</string>
@@ -6409,11 +7459,39 @@
      <widget class="QComboBox" name="comboBox_13">
       <property name="geometry">
        <rect>
-        <x>345</x>
+        <x>315</x>
         <y>5</y>
-        <width>141</width>
+        <width>171</width>
         <height>40</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
       </property>
      </widget>
     </widget>
@@ -6442,6 +7520,34 @@
          <height>60</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+       </property>
        <property name="text">
         <string>View Plate</string>
        </property>
@@ -6454,6 +7560,34 @@
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Cancel</string>
@@ -6478,6 +7612,34 @@
          <height>60</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+       </property>
        <property name="text">
         <string>Accept Test</string>
        </property>
@@ -6490,6 +7652,34 @@
          <width>130</width>
          <height>60</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+	background-color:rgb(110, 255, 163);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(38, 191, 61);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
        </property>
        <property name="text">
         <string>Run Next</string>
@@ -6505,8 +7695,36 @@
         <height>60</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
-       <string>Save Plate Data</string>
+       <string>Save Plate</string>
       </property>
      </widget>
      <widget class="QToolButton" name="toolButton_28">
@@ -6517,6 +7735,34 @@
         <width>130</width>
         <height>60</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Print Result</string>
@@ -6531,6 +7777,34 @@
         <height>60</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Save Results</string>
       </property>
@@ -6543,6 +7817,20 @@
         <width>591</width>
         <height>321</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTableWidget {
+   
+	border:1px solid black;
+}
+
+QHeaderView::section {
+    background-color: rgb(83, 193, 199);
+    height: 32px;
+}
+
+
+</string>
       </property>
       <property name="sortingEnabled">
        <bool>true</bool>
@@ -6606,6 +7894,34 @@
         <height>60</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QToolButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QToolButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Print Table</string>
       </property>
@@ -6618,6 +7934,34 @@
         <width>150</width>
         <height>40</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(61, 171, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPushButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>PushButton</string>
@@ -6674,10 +8018,36 @@
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">QTabBar::tab { height: 40px; width: 120px; }</string>
+       <string notr="true">QTabBar::tab { 
+height: 35px;
+width: 120px; 
+background-color:rgb(157, 178, 255);
+	color: black;
+	font-weight: bold;
+	border:1px solid black;}
+
+
+QTabBar::tab::pressed
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QTabBar::tab::hover
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab_7">
        <attribute name="title">
@@ -6707,6 +8077,34 @@
            <height>35</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
           <string>405</string>
          </property>
@@ -6719,6 +8117,34 @@
            <width>70</width>
            <height>35</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
          </property>
          <property name="text">
           <string>450</string>
@@ -6733,6 +8159,34 @@
            <height>35</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
           <string>490</string>
          </property>
@@ -6745,6 +8199,34 @@
            <width>70</width>
            <height>35</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
          </property>
          <property name="text">
           <string>630</string>
@@ -6759,6 +8241,34 @@
            <height>35</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
           <string>off</string>
          </property>
@@ -6771,6 +8281,34 @@
            <width>70</width>
            <height>35</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
          </property>
          <property name="text">
           <string>OP1</string>
@@ -6945,6 +8483,34 @@
            <height>35</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
           <string>Tune</string>
          </property>
@@ -6957,6 +8523,34 @@
            <width>70</width>
            <height>35</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
          </property>
          <property name="text">
           <string>Tune</string>
@@ -6971,6 +8565,34 @@
            <height>35</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
           <string>Tune</string>
          </property>
@@ -6984,6 +8606,34 @@
            <height>35</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
           <string>Tune</string>
          </property>
@@ -6996,6 +8646,34 @@
            <width>70</width>
            <height>35</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
          </property>
          <property name="text">
           <string>Tune</string>
@@ -7702,6 +9380,34 @@
            <height>35</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
           <string>Read</string>
          </property>
@@ -7731,13 +9437,41 @@
          <property name="geometry">
           <rect>
            <x>60</x>
-           <y>180</y>
-           <width>83</width>
-           <height>25</height>
+           <y>190</y>
+           <width>100</width>
+           <height>30</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
-          <string>read OD</string>
+          <string>Read OD</string>
          </property>
         </widget>
         <widget class="QPushButton" name="pushButton_13">
@@ -7745,25 +9479,81 @@
           <rect>
            <x>60</x>
            <y>140</y>
-           <width>83</width>
-           <height>25</height>
+           <width>100</width>
+           <height>30</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
-          <string>read max</string>
+          <string>Read Max</string>
          </property>
         </widget>
         <widget class="QPushButton" name="pushButton_14">
          <property name="geometry">
           <rect>
            <x>60</x>
-           <y>100</y>
-           <width>83</width>
-           <height>25</height>
+           <y>90</y>
+           <width>100</width>
+           <height>30</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+         </property>
          <property name="text">
-          <string>read base</string>
+          <string>Read Base</string>
          </property>
         </widget>
        </widget>
@@ -7790,11 +9580,39 @@
         <widget class="QPushButton" name="pushButton_15">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>150</y>
-           <width>83</width>
-           <height>25</height>
+           <x>10</x>
+           <y>140</y>
+           <width>100</width>
+           <height>30</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
          </property>
          <property name="text">
           <string>Forward</string>
@@ -7803,11 +9621,39 @@
         <widget class="QPushButton" name="pushButton_16">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>190</y>
-           <width>83</width>
-           <height>25</height>
+           <x>10</x>
+           <y>180</y>
+           <width>100</width>
+           <height>30</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
          </property>
          <property name="text">
           <string>Backward</string>
@@ -7816,11 +9662,39 @@
         <widget class="QPushButton" name="pushButton_17">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>110</y>
-           <width>83</width>
-           <height>25</height>
+           <x>10</x>
+           <y>100</y>
+           <width>100</width>
+           <height>30</height>
           </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
          </property>
          <property name="text">
           <string>Home</string>
@@ -7829,8 +9703,8 @@
         <widget class="QPushButton" name="pushButton_18">
          <property name="geometry">
           <rect>
-           <x>110</x>
-           <y>150</y>
+           <x>120</x>
+           <y>140</y>
            <width>83</width>
            <height>25</height>
           </rect>
@@ -7842,8 +9716,8 @@
         <widget class="QPushButton" name="pushButton_19">
          <property name="geometry">
           <rect>
-           <x>110</x>
-           <y>190</y>
+           <x>120</x>
+           <y>180</y>
            <width>83</width>
            <height>25</height>
           </rect>
@@ -7957,9 +9831,37 @@
          <rect>
           <x>320</x>
           <y>120</y>
-          <width>83</width>
-          <height>25</height>
+          <width>131</width>
+          <height>41</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
         </property>
         <property name="text">
          <string>Initialize</string>
@@ -7972,11 +9874,39 @@
      <widget class="QPushButton" name="pushButton_22">
       <property name="geometry">
        <rect>
-        <x>130</x>
-        <y>230</y>
-        <width>131</width>
+        <x>300</x>
+        <y>250</y>
+        <width>151</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Plate Data</string>
@@ -7985,11 +9915,39 @@
      <widget class="QPushButton" name="pushButton_24">
       <property name="geometry">
        <rect>
-        <x>430</x>
-        <y>230</y>
-        <width>131</width>
+        <x>300</x>
+        <y>180</y>
+        <width>151</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Patient Results</string>
@@ -8012,10 +9970,36 @@
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">QTabBar::tab { height: 50px; width: 120px; }</string>
+       <string notr="true">QTabBar::tab { 
+height: 35px;
+width: 120px; 
+background-color:rgb(157, 178, 255);
+	color: black;
+	font-weight: bold;
+	border:1px solid black;}
+
+
+QTabBar::tab::pressed
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QTabBar::tab::hover
+{
+	background-color:rgb(0, 85, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+</string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -8175,6 +10159,18 @@
           <pointsize>10</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QDateTimeEdit{
+	border:1px solid black;
+}
+
+QDateTimeEdit::down-button{
+    width: 25
+}
+QDateTimeEdit::up-button{
+    width: 25
+}</string>
+        </property>
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::UpDownArrows</enum>
         </property>
@@ -8214,6 +10210,34 @@
           <height>31</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+        </property>
         <property name="text">
          <string>Set</string>
         </property>
@@ -8245,6 +10269,34 @@
           <height>31</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
+        </property>
        </widget>
        <widget class="QPushButton" name="pushButton_23">
         <property name="geometry">
@@ -8255,6 +10307,34 @@
           <height>31</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+        </property>
         <property name="text">
          <string>Config New Printer</string>
         </property>
@@ -8262,11 +10342,39 @@
        <widget class="QComboBox" name="comboBox_16">
         <property name="geometry">
          <rect>
-          <x>520</x>
+          <x>500</x>
           <y>70</y>
-          <width>111</width>
+          <width>151</width>
           <height>31</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
         </property>
         <item>
          <property name="text">
@@ -8323,6 +10431,34 @@ border: 0px solid rgb(0, 170, 255);</string>
           <height>31</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QComboBox:item {
+  color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:selected {
+ color:white;
+background-color:rgb(0, 0, 99);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox:item:checked {
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+QComboBox{
+ color:white;
+background-color:rgb(0, 0, 255);
+font-size: 15px;
+	font-weight: bold;
+}
+
+</string>
+        </property>
        </widget>
        <widget class="QLabel" name="label_48">
         <property name="geometry">
@@ -8345,6 +10481,34 @@ border: 0px solid rgb(0, 170, 255);</string>
           <width>221</width>
           <height>31</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
         </property>
         <property name="text">
          <string>Connect</string>
@@ -8413,6 +10577,34 @@ border: 0px solid rgb(0, 170, 255);</string>
           <width>41</width>
           <height>41</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
         </property>
         <property name="text">
          <string>*</string>
@@ -8515,6 +10707,34 @@ border: 0px solid rgb(0, 170, 255);</string>
           <height>31</height>
          </rect>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+        </property>
         <property name="text">
          <string>Check for updates</string>
         </property>
@@ -8548,8 +10768,15 @@ border: 0px solid rgb(0, 170, 255);</string>
       <property name="styleSheet">
        <string notr="true">
 QTableWidget {
-   QSrcollBar::vertical{width:50px;}
+   
+	border:1px solid black;
 }
+
+QHeaderView::section {
+    background-color: rgb(83, 193, 199);
+    height: 32px;
+}
+
 
 </string>
       </property>
@@ -8639,6 +10866,34 @@ QTableWidget {
         <height>35</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Print Table</string>
       </property>
@@ -8651,6 +10906,34 @@ QTableWidget {
         <width>110</width>
         <height>35</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Print Result</string>
@@ -8665,6 +10948,34 @@ QTableWidget {
         <height>35</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Back</string>
       </property>
@@ -8677,6 +10988,34 @@ QTableWidget {
         <width>120</width>
         <height>35</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Exp. Table to CSV</string>
@@ -8691,6 +11030,34 @@ QTableWidget {
         <height>35</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Exp. Table to LIS</string>
       </property>
@@ -8703,6 +11070,34 @@ QTableWidget {
         <width>120</width>
         <height>35</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Exp. Result to LIS</string>
@@ -8746,7 +11141,11 @@ QTableWidget {
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">QDateEdit::down-button{
+       <string notr="true">QDateEdit{
+	border:1px solid black;
+}
+
+QDateEdit::down-button{
     width: 25
 }
 QDateEdit::up-button{
@@ -8761,10 +11160,38 @@ QDateEdit::up-button{
       <property name="geometry">
        <rect>
         <x>670</x>
-        <y>170</y>
+        <y>173</y>
         <width>110</width>
         <height>35</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Apply Date</string>
@@ -8774,7 +11201,7 @@ QDateEdit::up-button{
       <property name="geometry">
        <rect>
         <x>670</x>
-        <y>210</y>
+        <y>215</y>
         <width>115</width>
         <height>55</height>
        </rect>
@@ -8785,7 +11212,10 @@ QDateEdit::up-button{
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">QTimeEdit::down-button{
+       <string notr="true">QTimeEdit{
+	border:1px solid black;
+}
+QTimeEdit::down-button{
     width: 25
 }
 QTimeEdit::up-button{
@@ -8805,6 +11235,34 @@ QTimeEdit::up-button{
         <height>35</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 12px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Apply Time</string>
       </property>
@@ -8818,6 +11276,34 @@ QTimeEdit::up-button{
         <height>35</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 11px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Delete All</string>
       </property>
@@ -8827,21 +11313,59 @@ QTimeEdit::up-button{
      <widget class="QListWidget" name="listWidget">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>210</x>
         <y>70</y>
         <width>256</width>
         <height>351</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">
+QListWidget {
+   
+	border:1px solid black;
+}
+
+
+</string>
+      </property>
      </widget>
      <widget class="QPushButton" name="pushButton_25">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>160</y>
-        <width>83</width>
-        <height>25</height>
+        <x>500</x>
+        <y>180</y>
+        <width>101</width>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>View</string>
@@ -8850,11 +11374,39 @@ QTimeEdit::up-button{
      <widget class="QPushButton" name="pushButton_26">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>500</x>
         <y>270</y>
-        <width>83</width>
-        <height>25</height>
+        <width>101</width>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Delete</string>
@@ -8870,6 +11422,21 @@ QTimeEdit::up-button{
         <width>591</width>
         <height>321</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">
+QTableWidget {
+   
+	border:1px solid black;
+}
+
+QHeaderView::section {
+    background-color: rgb(83, 193, 199);
+    height: 32px;
+}
+
+
+</string>
       </property>
       <property name="sortingEnabled">
        <bool>true</bool>
@@ -8929,9 +11496,37 @@ QTimeEdit::up-button{
        <rect>
         <x>640</x>
         <y>290</y>
-        <width>111</width>
-        <height>31</height>
+        <width>121</width>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(255, 139, 124);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusButton::hover
+{
+	background-color:rgb(255, 0, 0);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Back</string>
@@ -8942,9 +11537,37 @@ QTimeEdit::up-button{
        <rect>
         <x>640</x>
         <y>150</y>
-        <width>111</width>
-        <height>31</height>
+        <width>121</width>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Print Result</string>
@@ -8955,9 +11578,37 @@ QTimeEdit::up-button{
        <rect>
         <x>640</x>
         <y>220</y>
-        <width>111</width>
-        <height>31</height>
+        <width>121</width>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
       </property>
       <property name="text">
        <string>Print Table</string>
@@ -8965,175 +11616,6 @@ QTimeEdit::up-button{
      </widget>
     </widget>
     <widget class="QWidget" name="page_15">
-     <widget class="QLabel" name="label_79">
-      <property name="geometry">
-       <rect>
-        <x>260</x>
-        <y>100</y>
-        <width>311</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Initial Checking...</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_80">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>150</y>
-        <width>111</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Checking Moror</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_81">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>190</y>
-        <width>111</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Checking ADC</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_82">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>230</y>
-        <width>111</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Checking 405nm</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_83">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>270</y>
-        <width>111</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Checking 450nm</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_84">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>310</y>
-        <width>111</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Checking 490nm</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_85">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>350</y>
-        <width>111</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Checking 630nm</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_86">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>150</y>
-        <width>271</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_87">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>190</y>
-        <width>271</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_88">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>230</y>
-        <width>271</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_89">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>270</y>
-        <width>271</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_90">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>310</y>
-        <width>271</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_91">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>350</y>
-        <width>271</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
      <widget class="QPushButton" name="pushButton_10">
       <property name="geometry">
        <rect>
@@ -9143,9 +11625,241 @@ QTimeEdit::up-button{
         <height>41</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton
+{
+	background-color:rgb(196, 227, 255);
+	color: black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}
+
+QPushButton::pressed
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+
+}
+QPusgButton::hover
+{
+	background-color:rgb(69, 140, 255);
+	color: Black;
+	font-size: 15px;
+	font-weight: bold;
+	border:1px solid black;
+}</string>
+      </property>
       <property name="text">
        <string>Skip</string>
       </property>
+     </widget>
+     <widget class="QFrame" name="frame_22">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>40</y>
+        <width>521</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#frame_22 { 
+
+
+background-color:qlineargradient(spread:pad, x1:0.465, y1:1, x2:0.509612, y2:0, stop:0 rgba(0, 0, 255, 255), stop:1 rgba(255, 255, 255, 255));
+
+}
+QFrame{
+background-color:rgab(0,0,0,0);
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_79">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>30</y>
+         <width>311</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgab(0,0,0,0);</string>
+       </property>
+       <property name="text">
+        <string>Initializing Please Wait..</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_85">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>290</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Checking 630nm</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_88">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>170</y>
+         <width>271</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_82">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>170</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Checking 405nm</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_83">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>210</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Checking 450nm</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_86">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>90</y>
+         <width>271</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_90">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>250</y>
+         <width>271</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_91">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>290</y>
+         <width>271</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_89">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>210</y>
+         <width>271</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_87">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>130</y>
+         <width>271</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_80">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>90</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Checking Moror</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_81">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>130</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Checking ADC</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_84">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>250</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Checking 490nm</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>

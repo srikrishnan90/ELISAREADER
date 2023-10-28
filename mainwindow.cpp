@@ -54,7 +54,7 @@ void MainWindow::init()
     ui->stackedWidget->setCurrentIndex(14);
     ui->stackedWidget->raise();
     ui->pushButton_10->setDisabled(true);
-    ui->label_79->setText("Initial Checking...");
+    ui->label_79->setText("Initializing Please Wait..");
     qApp->processEvents();
 
     error_stat=0;
@@ -224,7 +224,7 @@ void MainWindow::led_init()
     }
     qApp->processEvents();
     led_control(0);
-    ui->label_79->setText("Checking Done...");
+    ui->label_79->setText("Initialization Done...");
     if(error_stat==1)
     {
         ui->pushButton_10->setDisabled(false);
@@ -235,8 +235,6 @@ void MainWindow::led_init()
         ui->stackedWidget->lower();
     }
 }
-
-
 
 
 MainWindow::~MainWindow()
@@ -1169,7 +1167,7 @@ void MainWindow::test_menu()
         QPushButton *button = new QPushButton();
         button->setText(query.value(0).toString());
         button->setFixedSize(135,50);
-        button->setStyleSheet("QPushButton:hover:!pressed{background-color: rgb(224, 255, 0);}");
+        button->setStyleSheet("QPushButton:hover:!pressed{background-color: rgb(57, 60, 255);}");
         button->setObjectName(query.value(0).toString());
         disconnect(button, &QPushButton::clicked, this, &MainWindow::sig_button);
         connect(button, &QPushButton::clicked, this, &MainWindow::sig_button);
@@ -3185,7 +3183,7 @@ void MainWindow::on_pushButton_24_clicked()
 {
     ui->stackedWidget->setCurrentIndex(11);
     ui->tableWidget_2->clearContents();
-    //ui->tableWidget_2->verticalScrollBar()->setStyleSheet("QScrollBar:vertical { width: 25px; }");
+    ui->tableWidget_2->verticalScrollBar()->setStyleSheet(styleSheet().append(QString("QScrollBar:vertical { width: 25px; }")));
     ui->comboBox_17->clear();
     //QDate cd(QDate::currentDate());
     //QTime ct(QTime::currentTime());
