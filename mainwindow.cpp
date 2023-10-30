@@ -1880,7 +1880,7 @@ void MainWindow::on_toolButton_18_clicked()
         hometomax=Query.value("htm").toUInt();
         maxtofirst=Query.value("pos").toUInt();
     }
-    QMessageBox msgBox;
+    QMessageBox msgBox, promsgBox;
     msgBox.setWindowTitle("Load Plate");
     //msgBox.setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
     //msgBox.setModal(false);
@@ -1891,9 +1891,18 @@ void MainWindow::on_toolButton_18_clicked()
     msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:200px; height:50px; font-size: 18px; }");
     if(msgBox.exec()==msgBox.Yes)
     {
+
+        promsgBox.setWindowTitle("Processing");
+        promsgBox.setText("<p align='center'>First Line<br>Second Line<br>Thirth Line</p>");
+        promsgBox.setStandardButtons(QMessageBox::NoButton);
+        promsgBox.setWindowModality(Qt::NonModal);
+        promsgBox.setStyleSheet("QLabel{min-width: 600px; min-height:300px}");
+        promsgBox.setAttribute( Qt::WA_DeleteOnClose );
+        promsgBox.show();
         mot_forward(1000);//may not require if using second sensor
         on_pushButton_17_clicked();//may not require if using second sensor
         mot_forward(hometomax);//home to read max position
+        promsgBox.close();
         on_pushButton_13_clicked();//read max
         mot_forward(maxtofirst);//need second homing sensor
         double len = std::ceil(double(total)/8);
@@ -1998,6 +2007,7 @@ void MainWindow::mot_forward(ulong range)
     digitalWrite(dir,LOW);
     for (ulong i=0;i<range;i++)
     {
+        qApp->processEvents();
         digitalWrite(steps, HIGH);
         accle(range,i);
         digitalWrite(steps, LOW);
@@ -4786,4 +4796,15 @@ void MainWindow::on_pushButton_78_clicked()
     query.prepare("update mot set pos=:pos where sno=1");
     query.bindValue(":pos",key->getData());
     query.exec();
+}
+
+void MainWindow::show_progress(QString string)
+{
+    QMessageBox promsgBox;
+    promsgBox.setWindowTitle("Processing");
+    promsgBox.setText(string);
+    promsgBox.setStandardButtons(QMessageBox::NoButton);
+    promsgBox.setWindowModality(Qt::NonModal);
+    promsgBox.show();
+    qApp->processEvents();
 }

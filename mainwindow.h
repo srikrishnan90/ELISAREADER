@@ -21,11 +21,6 @@
 #include <QMessageBox>
 #include <QScrollBar>
 
-
-
-
-
-
 namespace Ui {
 class MainWindow;
 }
@@ -360,6 +355,7 @@ private slots:
      void on_pushButton_77_clicked();
 
      void on_pushButton_78_clicked();
+     void show_progress(QString);
 
 private:
     Ui::MainWindow *ui;
