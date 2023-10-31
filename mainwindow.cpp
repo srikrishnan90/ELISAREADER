@@ -856,90 +856,93 @@ void MainWindow::on_toolButton_12_clicked()
 
 void MainWindow::on_toolButton_8_clicked()
 {
-    blank=cal=nc=pc=cc=lc=samp=total=total_cal=total_samp=0;
-    dup_cal=dup_samp=1;
-    double abs1=0,abs2=0,cutabs=0;
-    ui->stackedWidget->setCurrentIndex(5);
-    ui->stackedWidget->raise();
-    ui->label_4->setText(btn_name);
-    ui->pushButton_20->setText(btn_name);
-    ui->pushButton_21->setText(btn_name);
-    ui->label_15->setDisabled(false);
-    ui->label_16->setDisabled(false);
-    ui->comboBox_11->setDisabled(false);
-    ui->comboBox_12->setDisabled(false);
-    ui->comboBox_11->setCurrentIndex(0);
-    ui->comboBox_10->setCurrentIndex(0);
-    ui->pushButton_48->setText("");
-    ui->pushButton_49->setText("");
-    ui->textBrowser_4->setText("");
-    ui->textBrowser_5->setText("");
-    ui->textBrowser_6->setText("");
-    ui->toolButton_22->setDisabled(false);
-    ui->toolButton_27->setDisabled(false);
-
-    QSqlQuery Query;
-    Query.prepare("select mode,std,abs1,abs2,nc,pc,lc,cc,pri,sec,cutabs,unit FROM tests WHERE name = :bname");
-    Query.bindValue(":bname", btn_name);
-    Query.exec();
-    while(Query.next())
+    if(btn_name.length()>=1)
     {
-        test_mode=Query.value("mode").toInt();
-        nostd=cal=Query.value("std").toInt();
-        abs1=Query.value("abs1").toDouble();
-        abs2=Query.value("abs2").toDouble();
-        nc=Query.value("nc").toInt();
-        pc=Query.value("pc").toInt();
-        lc=Query.value("lc").toInt();
-        cc=Query.value("cc").toInt();
-        pri_wave=Query.value("pri").toInt();
-        sec_wave=Query.value("sec").toInt();
-        cutabs=Query.value("cutabs").toDouble();
-        unit=Query.value("unit").toString();
-    }
-    led_control(pri_wave);
+        blank=cal=nc=pc=cc=lc=samp=total=total_cal=total_samp=0;
+        dup_cal=dup_samp=1;
+        double abs1=0,abs2=0,cutabs=0;
+        ui->stackedWidget->setCurrentIndex(5);
+        ui->stackedWidget->raise();
+        ui->label_4->setText(btn_name);
+        ui->pushButton_20->setText(btn_name);
+        ui->pushButton_21->setText(btn_name);
+        ui->label_15->setDisabled(false);
+        ui->label_16->setDisabled(false);
+        ui->comboBox_11->setDisabled(false);
+        ui->comboBox_12->setDisabled(false);
+        ui->comboBox_11->setCurrentIndex(0);
+        ui->comboBox_10->setCurrentIndex(0);
+        ui->pushButton_48->setText("");
+        ui->pushButton_49->setText("");
+        ui->textBrowser_4->setText("");
+        ui->textBrowser_5->setText("");
+        ui->textBrowser_6->setText("");
+        ui->toolButton_22->setDisabled(false);
+        ui->toolButton_27->setDisabled(false);
 
-    if(test_mode==1)
-    {
-        ui->label_15->setDisabled(true);
-        ui->label_16->setDisabled(true);
-        ui->comboBox_11->setDisabled(true);
-        ui->comboBox_12->setDisabled(true);
-        ui->toolButton_32->setDisabled(true);
-        ui->toolButton_33->setDisabled(true);
+        QSqlQuery Query;
+        Query.prepare("select mode,std,abs1,abs2,nc,pc,lc,cc,pri,sec,cutabs,unit FROM tests WHERE name = :bname");
+        Query.bindValue(":bname", btn_name);
+        Query.exec();
+        while(Query.next())
+        {
+            test_mode=Query.value("mode").toInt();
+            nostd=cal=Query.value("std").toInt();
+            abs1=Query.value("abs1").toDouble();
+            abs2=Query.value("abs2").toDouble();
+            nc=Query.value("nc").toInt();
+            pc=Query.value("pc").toInt();
+            lc=Query.value("lc").toInt();
+            cc=Query.value("cc").toInt();
+            pri_wave=Query.value("pri").toInt();
+            sec_wave=Query.value("sec").toInt();
+            cutabs=Query.value("cutabs").toDouble();
+            unit=Query.value("unit").toString();
+        }
+        led_control(pri_wave);
 
-    }
-    if(test_mode==2)
-    {
-        if(abs1==0.0 && abs2==0.0)
+        if(test_mode==1)
         {
             ui->label_15->setDisabled(true);
+            ui->label_16->setDisabled(true);
             ui->comboBox_11->setDisabled(true);
-        }
-        ui->label_15->setText("Cal.");
-        ui->toolButton_32->setDisabled(false);
-        ui->toolButton_33->setDisabled(false);
-        ui->toolButton_23->setDisabled(false);
-        ui->toolButton_29->setDisabled(false);
-    }
-    if(test_mode==3)
-    {
-        if(!(cutabs>0.0))
-        {
-            ui->label_15->setDisabled(true);
-            ui->comboBox_11->setDisabled(true);
-        }
-        ui->label_16->setDisabled(true);
-        ui->comboBox_12->setDisabled(true);
-        ui->label_15->setText("Cont.");
-        ui->toolButton_32->setDisabled(false);
-        ui->toolButton_33->setDisabled(false);
-        ui->toolButton_23->setDisabled(false);
-        ui->toolButton_29->setDisabled(false);
-        unit="S/Co";
-    }
+            ui->comboBox_12->setDisabled(true);
+            ui->toolButton_32->setDisabled(true);
+            ui->toolButton_33->setDisabled(true);
 
-    update_sample_page();
+        }
+        if(test_mode==2)
+        {
+            if(abs1==0.0 && abs2==0.0)
+            {
+                ui->label_15->setDisabled(true);
+                ui->comboBox_11->setDisabled(true);
+            }
+            ui->label_15->setText("Cal.");
+            ui->toolButton_32->setDisabled(false);
+            ui->toolButton_33->setDisabled(false);
+            ui->toolButton_23->setDisabled(false);
+            ui->toolButton_29->setDisabled(false);
+        }
+        if(test_mode==3)
+        {
+            if(!(cutabs>0.0))
+            {
+                ui->label_15->setDisabled(true);
+                ui->comboBox_11->setDisabled(true);
+            }
+            ui->label_16->setDisabled(true);
+            ui->comboBox_12->setDisabled(true);
+            ui->label_15->setText("Cont.");
+            ui->toolButton_32->setDisabled(false);
+            ui->toolButton_33->setDisabled(false);
+            ui->toolButton_23->setDisabled(false);
+            ui->toolButton_29->setDisabled(false);
+            unit="S/Co";
+        }
+
+        update_sample_page();
+    }
 }
 
 void MainWindow::on_toolButton_14_clicked()
@@ -1194,151 +1197,168 @@ void MainWindow::sig_button()
 
 void MainWindow::on_toolButton_7_clicked()
 {
-    QSqlQuery deleteQuery;
-    deleteQuery.prepare("DELETE FROM tests WHERE name = :bname");
-    deleteQuery.bindValue(":bname", btn_name);
-    deleteQuery.exec();
-    while(mainLayout->count() > 0)
+    if(btn_name.length()>=1)
     {
-        QWidget* widget = mainLayout->itemAt(0)->widget();
-        mainLayout->removeWidget(widget);
-        delete widget;
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Warning");
+        //msgBox.setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
+        //msgBox.setModal(false);
+        msgBox.setText("Confirm delete test "+btn_name);
+        msgBox.setStandardButtons(msgBox.Yes);
+        msgBox.addButton(msgBox.Cancel);
+        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:200px; height:50px; font-size: 18px; }");
+        if(msgBox.exec()==msgBox.Yes)
+        {
+            QSqlQuery deleteQuery;
+            deleteQuery.prepare("DELETE FROM tests WHERE name = :bname");
+            deleteQuery.bindValue(":bname", btn_name);
+            deleteQuery.exec();
+            while(mainLayout->count() > 0)
+            {
+                QWidget* widget = mainLayout->itemAt(0)->widget();
+                mainLayout->removeWidget(widget);
+                delete widget;
+            }
+            test_menu();
+        }
     }
-    test_menu();
 }
 
 void MainWindow::on_toolButton_6_clicked()
 {
-    test_entry=1;
-    ui->toolButton_12->setText("Update");
-    ui->toolButton_14->setText("Update");
-    ui->toolButton_16->setText("Update");
-    ui->textBrowser->clear();
-    ui->textBrowser_2->clear();
-    ui->textBrowser_3->clear();
-    QSqlQuery Query;
-    Query.prepare("select mode FROM tests WHERE name = :bname");
-    Query.bindValue(":bname", btn_name);
-    Query.exec();
-    while(Query.next())
+    if(btn_name.length()>=1)
     {
-        test_mode=Query.value("mode").toInt();
-    }
-    if(test_mode==1)
-    {
-        on_toolButton_9_clicked();
-        ui->pushButton_46->setDisabled(true);
-        int pri=0, sec=0;
-        Query.prepare("select pri, sec FROM tests WHERE name = :bname");
+        test_entry=1;
+        ui->toolButton_12->setText("Update");
+        ui->toolButton_14->setText("Update");
+        ui->toolButton_16->setText("Update");
+        ui->textBrowser->clear();
+        ui->textBrowser_2->clear();
+        ui->textBrowser_3->clear();
+        QSqlQuery Query;
+        Query.prepare("select mode FROM tests WHERE name = :bname");
         Query.bindValue(":bname", btn_name);
         Query.exec();
         while(Query.next())
         {
-            pri=Query.value("pri").toInt();
-            sec=Query.value("sec").toInt();
-            qDebug()<<Query.value("pri");
+            test_mode=Query.value("mode").toInt();
         }
-        ui->pushButton_46->setText(btn_name);
-        ui->comboBox_8->setCurrentIndex(pri);
-        ui->comboBox_9->setCurrentIndex(sec);
-        qDebug()<<pri<<sec;
-    }
-
-    if(test_mode==2)
-    {
-        on_toolButton_10_clicked();
-        ui->pushButton->setDisabled(true);
-        int pri=0,sec=0,std=0,graph=0,axis=0;
-        double norl=0,norh=0,c[10],a[10];
-        QString constr[10]={"conc1","conc2","conc3","conc4","conc5","conc6","conc7","conc8","conc9","conc10"};
-        QString absstr[10]={"abs1","abs2","abs3","abs4","abs5","abs6","abs7","abs8","abs9","abs10"};
-        QPushButton* concb[] = { ui->c1,ui->c2,ui->c3,ui->c4,ui->c5,ui->c6,ui->c7,ui->c8,ui->c9,ui->c10};
-        QPushButton* absb[] = { ui->a1,ui->a2,ui->a3,ui->a4,ui->a5,ui->a6,ui->a7,ui->a8,ui->a9,ui->a10};
-
-        Query.prepare("select * FROM tests WHERE name = :bname");
-        Query.bindValue(":bname", btn_name);
-        Query.exec();
-        while(Query.next())
+        if(test_mode==1)
         {
-            pri=Query.value("pri").toInt();
-            sec=Query.value("sec").toInt();
-            std=Query.value("std").toInt();
-            graph=Query.value("graph").toInt();
-            axis=Query.value("axis").toInt();
-            unit=Query.value("unit").toString();
-            norl=Query.value("norl").toDouble();
-            norh=Query.value("norh").toDouble();
+            on_toolButton_9_clicked();
+            ui->pushButton_46->setDisabled(true);
+            int pri=0, sec=0;
+            Query.prepare("select pri, sec FROM tests WHERE name = :bname");
+            Query.bindValue(":bname", btn_name);
+            Query.exec();
+            while(Query.next())
+            {
+                pri=Query.value("pri").toInt();
+                sec=Query.value("sec").toInt();
+                qDebug()<<Query.value("pri");
+            }
+            ui->pushButton_46->setText(btn_name);
+            ui->comboBox_8->setCurrentIndex(pri);
+            ui->comboBox_9->setCurrentIndex(sec);
+            qDebug()<<pri<<sec;
+        }
+
+        if(test_mode==2)
+        {
+            on_toolButton_10_clicked();
+            ui->pushButton->setDisabled(true);
+            int pri=0,sec=0,std=0,graph=0,axis=0;
+            double norl=0,norh=0,c[10],a[10];
+            QString constr[10]={"conc1","conc2","conc3","conc4","conc5","conc6","conc7","conc8","conc9","conc10"};
+            QString absstr[10]={"abs1","abs2","abs3","abs4","abs5","abs6","abs7","abs8","abs9","abs10"};
+            QPushButton* concb[] = { ui->c1,ui->c2,ui->c3,ui->c4,ui->c5,ui->c6,ui->c7,ui->c8,ui->c9,ui->c10};
+            QPushButton* absb[] = { ui->a1,ui->a2,ui->a3,ui->a4,ui->a5,ui->a6,ui->a7,ui->a8,ui->a9,ui->a10};
+
+            Query.prepare("select * FROM tests WHERE name = :bname");
+            Query.bindValue(":bname", btn_name);
+            Query.exec();
+            while(Query.next())
+            {
+                pri=Query.value("pri").toInt();
+                sec=Query.value("sec").toInt();
+                std=Query.value("std").toInt();
+                graph=Query.value("graph").toInt();
+                axis=Query.value("axis").toInt();
+                unit=Query.value("unit").toString();
+                norl=Query.value("norl").toDouble();
+                norh=Query.value("norh").toDouble();
+                for(int i=0;i<std;i++)
+                {
+                    c[i]=Query.value(constr[i]).toDouble();
+                    a[i]=Query.value(absstr[i]).toDouble();
+                }
+
+            }
+            ui->pushButton->setText(btn_name);
+            ui->comboBox->setCurrentIndex(pri);
+            ui->comboBox_2->setCurrentIndex(sec);
+            ui->pushButton_3->setText(QString::number(std));
+            ui->comboBox_3->setCurrentIndex(graph);
+            ui->comboBox_4->setCurrentIndex(axis);
+            ui->pushButton_4->setText(QString::number(norl));
+            ui->pushButton_5->setText(QString::number(norh));
+            ui->pushButton_6->setText(unit);
             for(int i=0;i<std;i++)
             {
-                c[i]=Query.value(constr[i]).toDouble();
-                a[i]=Query.value(absstr[i]).toDouble();
+                concb[i]->setText(QString::number(c[i]));
+                absb[i]->setText(QString::number(a[i]));
             }
 
         }
-        ui->pushButton->setText(btn_name);
-        ui->comboBox->setCurrentIndex(pri);
-        ui->comboBox_2->setCurrentIndex(sec);
-        ui->pushButton_3->setText(QString::number(std));
-        ui->comboBox_3->setCurrentIndex(graph);
-        ui->comboBox_4->setCurrentIndex(axis);
-        ui->pushButton_4->setText(QString::number(norl));
-        ui->pushButton_5->setText(QString::number(norh));
-        ui->pushButton_6->setText(unit);
-        for(int i=0;i<std;i++)
+        if(test_mode==3)
         {
-            concb[i]->setText(QString::number(c[i]));
-            absb[i]->setText(QString::number(a[i]));
+            on_toolButton_11_clicked();
+            ui->pushButton_39->setDisabled(true);
+            int pri=0,sec=0,nc=0,pc=0,lc=0,cc=0,thresh=0;
+            double pos=0,neg=0,grey=0,cuta=0;;
+            QString cut,ncq,pcq,lcq,ccq;
+
+            Query.prepare("select * FROM tests WHERE name = :bname");
+            Query.bindValue(":bname", btn_name);
+            Query.exec();
+            while(Query.next())
+            {
+                pri=Query.value("pri").toInt();
+                sec=Query.value("sec").toInt();
+                nc=Query.value("nc").toInt();
+                pc=Query.value("pc").toInt();
+                lc=Query.value("lc").toInt();
+                cc=Query.value("cc").toInt();
+                thresh=Query.value("threshold").toInt();
+                ncq=Query.value("ncqc").toString();
+                pcq=Query.value("pcqc").toString();
+                lcq=Query.value("lcqc").toString();
+                ccq=Query.value("ccqc").toString();
+                pos=Query.value("pos").toDouble();
+                neg=Query.value("neg").toDouble();
+                grey=Query.value("grey").toDouble();
+                cut=Query.value("cutoff").toString();
+                cuta=Query.value("cutabs").toDouble();
+            }
+
+            ui->pushButton_39->setText(btn_name);
+            ui->comboBox_5->setCurrentIndex(pri);
+            ui->comboBox_6->setCurrentIndex(sec);
+            ui->pushButton_40->setText(QString::number(nc));
+            ui->pushButton_41->setText(QString::number(pc));
+            ui->pushButton_42->setText(QString::number(lc));
+            ui->pushButton_67->setText(QString::number(cc));
+            ui->pushButton_64->setText(ncq);
+            ui->pushButton_65->setText(pcq);
+            ui->pushButton_66->setText(lcq);
+            ui->pushButton_68->setText(ccq);
+            ui->pushButton_43->setText(cut);
+            ui->comboBox_7->setCurrentIndex(thresh);
+            ui->pushButton_44->setText(QString::number(pos));
+            ui->pushButton_45->setText(QString::number(neg));
+            ui->pushButton_47->setText(QString::number(grey));
+            ui->pushButton_50->setText(QString::number(cuta));
         }
-
-    }
-    if(test_mode==3)
-    {
-        on_toolButton_11_clicked();
-        ui->pushButton_39->setDisabled(true);
-        int pri=0,sec=0,nc=0,pc=0,lc=0,cc=0,thresh=0;
-        double pos=0,neg=0,grey=0,cuta=0;;
-        QString cut,ncq,pcq,lcq,ccq;
-
-        Query.prepare("select * FROM tests WHERE name = :bname");
-        Query.bindValue(":bname", btn_name);
-        Query.exec();
-        while(Query.next())
-        {
-            pri=Query.value("pri").toInt();
-            sec=Query.value("sec").toInt();
-            nc=Query.value("nc").toInt();
-            pc=Query.value("pc").toInt();
-            lc=Query.value("lc").toInt();
-            cc=Query.value("cc").toInt();
-            thresh=Query.value("threshold").toInt();
-            ncq=Query.value("ncqc").toString();
-            pcq=Query.value("pcqc").toString();
-            lcq=Query.value("lcqc").toString();
-            ccq=Query.value("ccqc").toString();
-            pos=Query.value("pos").toDouble();
-            neg=Query.value("neg").toDouble();
-            grey=Query.value("grey").toDouble();
-            cut=Query.value("cutoff").toString();
-            cuta=Query.value("cutabs").toDouble();
-        }
-
-        ui->pushButton_39->setText(btn_name);
-        ui->comboBox_5->setCurrentIndex(pri);
-        ui->comboBox_6->setCurrentIndex(sec);
-        ui->pushButton_40->setText(QString::number(nc));
-        ui->pushButton_41->setText(QString::number(pc));
-        ui->pushButton_42->setText(QString::number(lc));
-        ui->pushButton_67->setText(QString::number(cc));
-        ui->pushButton_64->setText(ncq);
-        ui->pushButton_65->setText(pcq);
-        ui->pushButton_66->setText(lcq);
-        ui->pushButton_68->setText(ccq);
-        ui->pushButton_43->setText(cut);
-        ui->comboBox_7->setCurrentIndex(thresh);
-        ui->pushButton_44->setText(QString::number(pos));
-        ui->pushButton_45->setText(QString::number(neg));
-        ui->pushButton_47->setText(QString::number(grey));
-        ui->pushButton_50->setText(QString::number(cuta));
     }
 
 }
@@ -1869,92 +1889,97 @@ void MainWindow::accle(ulong total, ulong current)
 
 void MainWindow::on_toolButton_18_clicked()
 {
-    ulong welltowell=0,hometomax=0,maxtofirst=0;
-    on_pushButton_17_clicked();//home the plate
-    QSqlQuery Query;
-    Query.prepare("select * FROM mot WHERE sno = 1");
-    Query.exec();
-    while(Query.next())
+    if(total>0 and total<97)
     {
-        welltowell=Query.value("wtw").toUInt();
-        hometomax=Query.value("htm").toUInt();
-        maxtofirst=Query.value("pos").toUInt();
-    }
-    QMessageBox msgBox, promsgBox;
-    msgBox.setWindowTitle("Load Plate");
-    //msgBox.setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
-    //msgBox.setModal(false);
-    msgBox.setText("Click Run after loading the plate to start the reading..");
-    msgBox.setStandardButtons(msgBox.Yes);
-    msgBox.addButton(msgBox.Cancel);
-    msgBox.setButtonText(msgBox.Yes, "Run");
-    msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:200px; height:50px; font-size: 18px; }");
-    if(msgBox.exec()==msgBox.Yes)
-    {
-
-        promsgBox.setWindowTitle("Processing");
-        promsgBox.setText("<p align='center'>First Line<br>Second Line<br>Thirth Line</p>");
-        promsgBox.setStandardButtons(QMessageBox::NoButton);
-        promsgBox.setWindowModality(Qt::NonModal);
-        promsgBox.setStyleSheet("QLabel{min-width: 600px; min-height:300px}");
-        promsgBox.setAttribute( Qt::WA_DeleteOnClose );
-        promsgBox.show();
-        mot_forward(1000);//may not require if using second sensor
-        on_pushButton_17_clicked();//may not require if using second sensor
-        mot_forward(hometomax);//home to read max position
-        promsgBox.close();
-        on_pushButton_13_clicked();//read max
-        mot_forward(maxtofirst);//need second homing sensor
-        double len = std::ceil(double(total)/8);
-        int length=int(len);
-        ulong end_pos=5800+((12-ulong(length))*2400);
-        for(int i=0;i<length;i++)
+        ulong welltowell=0,hometomax=0,maxtofirst=0;
+        on_pushButton_17_clicked();//home the plate
+        QSqlQuery Query;
+        Query.prepare("select * FROM mot WHERE sno = 1");
+        Query.exec();
+        while(Query.next())
         {
-            on_pushButton_12_clicked();//read OD
-            for(int k=0;k<8;k++)
-                pri_res[i][k]=od[k];
-
-            if(i!=length)
-                mot_forward(welltowell);
+            welltowell=Query.value("wtw").toUInt();
+            hometomax=Query.value("htm").toUInt();
+            maxtofirst=Query.value("pos").toUInt();
         }
-        if(sec_wave == 0)
+        QMessageBox msgBox, promsgBox;
+        msgBox.setWindowTitle("Load Plate");
+        //msgBox.setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
+        //msgBox.setModal(false);
+        msgBox.setText("Click Run after loading the plate to start the reading..");
+        msgBox.setStandardButtons(msgBox.Yes);
+        msgBox.addButton(msgBox.Cancel);
+        msgBox.setButtonText(msgBox.Yes, "Run");
+        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:200px; height:50px; font-size: 18px; }");
+        if(msgBox.exec()==msgBox.Yes)
         {
+
+            promsgBox.setWindowTitle("Processing");
+            //promsgBox.setWindowOpacity(0.5);
+            promsgBox.setText("<p align='center'>Measuring OD...<br>Please Wait<br></p>");
+            promsgBox.setStandardButtons(QMessageBox::NoButton);
+            promsgBox.setWindowModality(Qt::NonModal);
+            promsgBox.setStyleSheet("QLabel{min-width: 700px; min-height:400px;background-color: rgba(0,0,240,0.6);color: black;font-size: 25px;font-weight: bold;border:1px solid black;}");
+            //promsgBox.setStyleSheet("background:transparent;");
+            promsgBox.setAttribute(Qt::WA_TranslucentBackground);
+            promsgBox.setWindowFlags(Qt::FramelessWindowHint);
+            //promsgBox.setStyleSheet(styleSheet().append(QString("background-color: rgba(200,150,100,0.5)")));
+            promsgBox.show();
+            mot_forward(1000);//may not require if using second sensor
+            on_pushButton_17_clicked();//may not require if using second sensor
+            mot_forward(hometomax);//home to read max position
+            promsgBox.close();
+            on_pushButton_13_clicked();//read max
+            mot_forward(maxtofirst);//need second homing sensor
+            double len = std::ceil(double(total)/8);
+            int length=int(len);
+            ulong end_pos=5800+((12-ulong(length))*2400);
+            for(int i=0;i<length;i++)
+            {
+                on_pushButton_12_clicked();//read OD
+                for(int k=0;k<8;k++)
+                    pri_res[i][k]=od[k];
+
+                if(i!=length)
+                    mot_forward(welltowell);
+            }
+            if(sec_wave == 0)
+            {
+                led_control(0);
+                on_pushButton_17_clicked();//home plate
+            }
+            else
+            {
+                mot_forward(end_pos);
+                led_control(sec_wave);
+                on_pushButton_13_clicked();//read max
+                mot_backward(end_pos);
+                for(int i=length-1;i>=0;i--)
+                {
+                    on_pushButton_12_clicked();// read OD
+                    for(int k=0;k<8;k++)
+                        sec_res[i][k]=od[k];
+                    if(i!=0)
+                        mot_backward(welltowell);
+                }
+            }
             led_control(0);
             on_pushButton_17_clicked();//home plate
-        }
-        else
-        {
-            mot_forward(end_pos);
-            led_control(sec_wave);
-            on_pushButton_13_clicked();//read max
-            mot_backward(end_pos);
-            for(int i=length-1;i>=0;i--)
+            if(sec_wave==0)
             {
-                on_pushButton_12_clicked();// read OD
-                for(int k=0;k<8;k++)
-                    sec_res[i][k]=od[k];
-                if(i!=0)
-                    mot_backward(welltowell);
+                for(int i=0;i<length;i++)
+                    for(int k=0;k<8;k++)
+                        fin_res[i][k]=pri_res[i][k];
             }
+            else
+            {
+                for(int i=0;i<length;i++)
+                    for(int k=0;k<8;k++)
+                        fin_res[i][k]=pri_res[i][k]-sec_res[i][k];
+            }
+            result_page();
         }
-        led_control(0);
-        on_pushButton_17_clicked();//home plate
-        if(sec_wave==0)
-        {
-            for(int i=0;i<length;i++)
-                for(int k=0;k<8;k++)
-                    fin_res[i][k]=pri_res[i][k];
-        }
-        else
-        {
-            for(int i=0;i<length;i++)
-                for(int k=0;k<8;k++)
-                    fin_res[i][k]=pri_res[i][k]-sec_res[i][k];
-        }
-        result_page();
     }
-
-
 }
 
 void MainWindow::led_control(int led)

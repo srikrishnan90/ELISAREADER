@@ -202,7 +202,7 @@ QToolButton::hover
      <string notr="true">background:rgba(255,255,255,1)</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QScrollArea" name="scrollArea">
@@ -11863,11 +11863,6 @@ background-color:rgab(0,0,0,0);
      </widget>
     </widget>
    </widget>
-   <zorder>stackedWidget</zorder>
-   <zorder>toolButton</zorder>
-   <zorder>toolButton_2</zorder>
-   <zorder>toolButton_3</zorder>
-   <zorder>toolButton_4</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

@@ -28,6 +28,7 @@ Pi2c::Pi2c(int address, bool rev0){
 	}
 	if (ioctl(i2cHandle_, I2C_SLAVE, address) < 0) { //Using ioctl set the i2c device to talk to address in the "addr" variable.
 		std::cout << "Can't set the I2C address for the slave device" << std::endl; //Display error setting the address for the slave.
+
 	}
 }
 

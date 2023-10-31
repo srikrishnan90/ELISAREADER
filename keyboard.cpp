@@ -6,6 +6,7 @@ keyboard::keyboard(QWidget *parent) :
     ui(new Ui::keyboard)
 {
     ui->setupUi(this);
+
 }
 
 keyboard::~keyboard()
